@@ -7,16 +7,16 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.WindowCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import its.dart.com.presentation.ui.screens.LoginScreen
 import its.dart.com.presentation.ui.theme.JetpackComposeAuthUITheme
-import its.dart.com.presentation.ui.theme.statusBar
+import its.dart.com.presentation.ui.theme.appColorBlack
 
 
 class MainActivity : ComponentActivity() {
@@ -33,8 +33,10 @@ class MainActivity : ComponentActivity() {
                 if(!view.isInEditMode){
                     SideEffect {
                         val window = (view.context as Activity).window
-                        val statusBarColor = Color(0xFF09af00)
+                        val statusBarColor = appColorBlack
                         window.statusBarColor = statusBarColor.toArgb()
+                        // Optionally, you can also make sure the status bar content is light/dark depending on the background color
+                        WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = statusBarColor.luminance() > 0.5
                     }
                 }
 

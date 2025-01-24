@@ -112,7 +112,8 @@ dependencies {
     // Optional dependency for testing if needed
     testImplementation("io.ktor:ktor-client-mock:2.3.4")
 
-
+    //Mutable State
+    implementation ("androidx.compose.runtime:runtime:1.6.0")
 
 
 }

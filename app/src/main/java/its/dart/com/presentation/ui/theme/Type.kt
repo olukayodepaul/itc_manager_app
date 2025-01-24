@@ -10,13 +10,13 @@ import its.dart.com.R
 
 
 val dartFontFamily = FontFamily(
-    Font(R.font.alegreya_bold, FontWeight.Bold),
-    Font(R.font.alegreya_semibold, FontWeight.SemiBold)
+    Font(R.font.ubuntu_bold, FontWeight.Bold),
+    Font(R.font.ubuntu_regular, FontWeight.SemiBold)
 )
 
 val dartSansFontFamily = FontFamily(
-    Font(R.font.alegreyasans_regular, FontWeight.Normal),
-    Font(R.font.alegreyasans_medium, FontWeight.Medium)
+    Font(R.font.ubuntu_bold, FontWeight.Bold),
+    Font(R.font.ubuntu_regular, FontWeight.SemiBold)
 )
 
 // Set of Material typography styles to start with
