@@ -100,6 +100,9 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.4")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
+    // Ktor Client Serialization (for JSON serialization)
+    implementation("io.ktor:ktor-client-serialization:2.3.0")
+
     // Logging for HTTP calls
     implementation("io.ktor:ktor-client-logging:2.3.4")
 
@@ -108,4 +111,8 @@ dependencies {
 
     // Optional dependency for testing if needed
     testImplementation("io.ktor:ktor-client-mock:2.3.4")
+
+
+
+
 }

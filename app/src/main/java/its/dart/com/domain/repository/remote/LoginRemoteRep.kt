@@ -1,6 +1,10 @@
 package its.dart.com.domain.repository.remote
 
 
+import its.dart.com.domain.repository.remote.model.LoginModel
+import kotlinx.coroutines.flow.Flow
+
+
 interface LoginRemoteRep {
-    fun login(username: String, password: String)
+    suspend fun login(username: String, password: String): LoginModel
 }
