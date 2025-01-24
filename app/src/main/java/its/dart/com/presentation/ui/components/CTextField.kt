@@ -4,7 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -26,7 +30,6 @@ import androidx.compose.runtime.setValue
 
 
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CTextField(
@@ -34,7 +37,6 @@ fun CTextField(
     onValueChange: (String) -> Unit,
     hint: String,
     isPassword: Boolean = false,
-    paddingTop: Int = 0
 ) {
 
     var passwordVisible by remember { mutableStateOf(false) }
@@ -56,17 +58,19 @@ fun CTextField(
         trailingIcon = if (isPassword) {
             {
                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
-//                    Icon(
-//                        imageVector = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-//                        contentDescription = if (passwordVisible) "Hide password" else "Show password"
-//                    )
+                    Icon(
+                        imageVector = if (passwordVisible)
+                            Icons.Filled.Visibility
+                        else
+                            Icons.Default.VisibilityOff,
+                        contentDescription = if (passwordVisible) "Hide password" else "Show password"
+                    )
                 }
             }
         } else null,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = paddingTop.dp)
-            .background(Color(0xFFEEEEEE), shape = RoundedCornerShape(12.dp)), // Light gray background with rounded corners
+            .background(Color(0xFFEEEEEE), shape = RoundedCornerShape(8.dp)), // Light gray background with rounded corners
         colors = TextFieldDefaults.textFieldColors(
             containerColor = Color(0xFFEEEEEE), // Light gray background color
             focusedIndicatorColor = Color.Transparent, // Removes the underline when focused

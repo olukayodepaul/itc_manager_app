@@ -115,5 +115,6 @@ dependencies {
     //Mutable State
     implementation ("androidx.compose.runtime:runtime:1.6.0")
 
-
+    //using Icon
+    implementation("androidx.compose.material:material-icons-extended:1.6.0")
 }
