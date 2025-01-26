@@ -1,9 +1,7 @@
 package its.dart.com.presentation.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,11 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,27 +22,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import its.dart.com.R
 import its.dart.com.presentation.ui.components.CButton
 import its.dart.com.presentation.ui.components.CTextField
-import its.dart.com.presentation.ui.components.forgetPassword
+import its.dart.com.presentation.ui.components.DontHaveAccountRow
 import its.dart.com.presentation.ui.theme.appColorBlack
-import its.dart.com.presentation.ui.theme.appColorGray
-import its.dart.com.presentation.ui.theme.appColorWhite
 import its.dart.com.presentation.ui.theme.dartFontFamily
 import its.dart.com.presentation.ui.theme.dartSansFontFamily
 
@@ -70,7 +54,7 @@ fun LoginScreen(
 
         Box(
             modifier = Modifier
-                .height(90.dp)
+                .height(60.dp)
                 .fillMaxWidth()
         ) {
             Text(
@@ -102,7 +86,7 @@ fun LoginScreen(
                 .weight(1f)
         ) {
 
-            Spacer(modifier = Modifier.height(25.dp))
+            Spacer(modifier = Modifier.height(120.dp))
 
             Column (
                 Modifier.padding(
@@ -110,15 +94,12 @@ fun LoginScreen(
                 ),
                 verticalArrangement = Arrangement.SpaceEvenly
             ){
+
                 Text(
-                    modifier = Modifier
-                        .padding(
-                            top = 25.dp
-                        ),
                     text = "Welcome Back!",
                     fontWeight = FontWeight(weight = 900),
                     style = TextStyle(
-                        fontSize = 22.sp,
+                        fontSize = 20.sp,
                         fontFamily = dartSansFontFamily,
                         color = Color(0xFF424242)),
                 )
@@ -126,7 +107,7 @@ fun LoginScreen(
                 Text(
                     modifier = Modifier
                         .padding(
-                            top = 8.dp,
+                            top =10.dp,
                         ),
                     fontWeight = FontWeight(weight = 500),
                     text = "To keep connected with us please login with your credential",
@@ -159,19 +140,32 @@ fun LoginScreen(
 
                     Row (
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End, // Aligns content to the left
+                        horizontalArrangement = Arrangement.End,
                         verticalAlignment = Alignment.CenterVertically
                     ){
-                        forgetPassword(
-                            onSignupTap = {
-                                navController.navigate("signup")
+                        DontHaveAccountRow(
+                            onClick = {
+                                navController.navigate("password")
                             }
                         )
+                    }
+
+                    Row (
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+
                     }
 
                     Spacer(modifier = Modifier.height(25.dp))
 
                     CButton(
+                        onClick = {
+                            navController.navigate("main") {
+                                popUpTo("login") { inclusive = true } // Remove LoginScreen from back stack
+                            }
+                        },
                         text = "Sign Up",
                         containerColor = appColorBlack
                     )
@@ -182,18 +176,12 @@ fun LoginScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                // Add your click action here
+
                             },
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
 
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.dartogo),
-                            contentDescription = "Hide password",
-                            modifier = Modifier
-                                .size(25.dp)
-                        )
 
                         Text(
                             text = "Build by dartSpatial Nig Ltd",
@@ -204,7 +192,6 @@ fun LoginScreen(
                                 color = Color(0xFF424242),
                             )
                         )
-
                     }
                 }
             }
@@ -212,9 +199,11 @@ fun LoginScreen(
     }
 }
 
-
 @Preview(showBackground = true, widthDp = 320, heightDp = 640)
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen(rememberNavController())
+    val navController = rememberNavController()
+    LoginScreen(
+        navController = navController
+    )
 }
