@@ -8,6 +8,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import its.dart.com.R
 
+val robotoFamily = FontFamily(
+    Font(R.font.roboto)
+)
+
 
 val dartFontFamily = FontFamily(
     Font(R.font.ubuntu_bold, FontWeight.Bold),
@@ -28,6 +32,7 @@ val Typography = Typography(
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     )
+
     /* Other default text styles to override
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,

@@ -14,4 +14,5 @@ val appColorBlack = Color(0xFF008b00)
 val lightGray = Color(0xFFBEC2C2)
 val appColorWhite = Color(0xFFFFFFFF)
 val appColorGray = Color(0xFFBEC2C2)
+val appColor = Color(0xFF000000)
 
