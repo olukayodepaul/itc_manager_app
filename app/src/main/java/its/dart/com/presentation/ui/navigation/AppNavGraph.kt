@@ -11,19 +11,25 @@ import its.dart.com.presentation.ui.screens.LoginScreen
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = "login") {
+    NavHost(
+        navController = navController,
+        startDestination = "homePage"
+    ) {
 
-        composable(route = "login") {
-            LoginScreen(navController = navController)
+        composable(route = "homePage") {
+            LoginScreen(
+                navController = navController
+            )
         }
 
-        composable(route = "main") {
-            MainScreen(navController = navController)
-        }
-
-        composable(route = "password") {
-            ChangePassword(navController = navController)
-        }
-
+//        composable(route = "MainPage") {
+//            MainScreen(
+//                navController = navController
+//            )
+//        }
+//
+//        composable(route = "resetPasswordPage") {
+//            ChangePassword(navController = navController)
+//        }
     }
 }

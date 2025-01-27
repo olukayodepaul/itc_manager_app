@@ -11,14 +11,7 @@ fun ChangePassword (
     navController: NavHostController
 ){
 
-    Button(
-        onClick = {
-            // Navigate back to LoginScreen
-            navController.popBackStack()
-        }
-    ) {
-        Text("Back to Login")
-    }
+
 
 
 }

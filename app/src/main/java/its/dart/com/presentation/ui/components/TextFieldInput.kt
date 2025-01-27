@@ -2,7 +2,6 @@ package  its.dart.com.presentation.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -24,26 +23,25 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import its.dart.com.presentation.ui.theme.dartSansFontFamily
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-
 
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CTextField(
+fun TextFieldInput(
     value: String,
-    onValueChange: (String) -> Unit,
+    click: (String) -> Unit,
     hint: String,
-    isPassword: Boolean = false,
+    type: Boolean = false,
 ) {
 
-    var passwordVisible by remember { mutableStateOf(false) }
+    var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
     TextField(
         value = value,
-        onValueChange = onValueChange,
+        onValueChange = click,
         placeholder = {
             Text(
                 text = hint,
@@ -54,8 +52,8 @@ fun CTextField(
                 )
             )
         },
-        visualTransformation = if (isPassword && !passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
-        trailingIcon = if (isPassword) {
+        visualTransformation = if (type && !passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
+        trailingIcon = if (type) {
             {
                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
                     Icon(
@@ -70,12 +68,12 @@ fun CTextField(
         } else null,
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFEEEEEE), shape = RoundedCornerShape(8.dp)), // Light gray background with rounded corners
+            .background(Color(0xFFEEEEEE), shape = RoundedCornerShape(8.dp)),
         colors = TextFieldDefaults.textFieldColors(
-            containerColor = Color(0xFFEEEEEE), // Light gray background color
-            focusedIndicatorColor = Color.Transparent, // Removes the underline when focused
-            unfocusedIndicatorColor = Color.Transparent // Removes the underline when unfocused
+            containerColor = Color(0xFFEEEEEE),
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent
         ),
-        shape = RoundedCornerShape(12.dp) // Rounded corners for the TextField
+        shape = RoundedCornerShape(12.dp)
     )
 }

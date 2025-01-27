@@ -5,18 +5,18 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
 import its.dart.com.presentation.ui.navigation.AppNavGraph
 import its.dart.com.presentation.ui.theme.JetpackComposeAuthUITheme
 import its.dart.com.presentation.ui.theme.appColorBlack
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,14 +35,13 @@ class MainActivity : ComponentActivity() {
                         WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = statusBarColor.luminance() > 0.5
                     }
                 }
-                NavigationView()
+
+                AppNavGraph(
+                    navController = rememberNavController()
+                )
             }
         }
     }
 }
 
-@Composable
-fun NavigationView() {
-    val navController = rememberNavController()
-    AppNavGraph(navController = navController)
-}
+

@@ -2,7 +2,6 @@ package its.dart.com.presentation.ui.screens
 
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,197 +12,120 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import its.dart.com.presentation.ui.components.CButton
-import its.dart.com.presentation.ui.components.CTextField
-import its.dart.com.presentation.ui.components.DontHaveAccountRow
+import its.dart.com.presentation.ui.components.NavigationText
+import its.dart.com.presentation.ui.components.TextFieldInput
 import its.dart.com.presentation.ui.theme.appColorBlack
-import its.dart.com.presentation.ui.theme.dartFontFamily
-import its.dart.com.presentation.ui.theme.dartSansFontFamily
+import its.dart.com.presentation.ui.theme.appColorWhite
+import its.dart.com.presentation.viewmodel.LoginViewModel
 
 
 @Composable
 fun LoginScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
 
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var username by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .graphicsLayer()
             .background(color = appColorBlack)
-//            .paint(painter = backgroundImage, contentScale = ContentScale.Crop)
+
     ) {
 
-        Box(
+        Column(
             modifier = Modifier
-                .height(60.dp)
                 .fillMaxWidth()
+                .height(100.dp)
+                .padding(start = 12.dp, end = 12.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.Start,
         ) {
-            Text(
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(
-                        start = 15.dp
-                    ),
-                text = "Sign In",
-                style = TextStyle(
-                    fontSize = 22.sp,
-                    fontFamily = dartSansFontFamily,
-                    fontWeight = FontWeight(weight = 700),
-                    color = Color.White),
-            )
 
         }
 
+        Spacer(modifier = Modifier.height(16.dp))
+
         Box(
             modifier = Modifier
-                .clip(
-                    RoundedCornerShape(
-                        topStart = 15.dp,  // Radius for the top-left corner
-                        topEnd = 15.dp
-                    )
-                )
-                .background(color = Color(0xFFFFFFFF))
+                .clip(RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp))
                 .fillMaxWidth()
                 .weight(1f)
+                .background(appColorWhite)
         ) {
+            Column(
+                modifier = Modifier.padding(
+                    start = 16.dp,
+                    end = 16.dp
+                )
+            ) {
 
-            Spacer(modifier = Modifier.height(120.dp))
-
-            Column (
-                Modifier.padding(
-                    16.dp
-                ),
-                verticalArrangement = Arrangement.SpaceEvenly
-            ){
-
-                Text(
-                    text = "Welcome Back!",
-                    fontWeight = FontWeight(weight = 900),
-                    style = TextStyle(
-                        fontSize = 20.sp,
-                        fontFamily = dartSansFontFamily,
-                        color = Color(0xFF424242)),
+                TextFieldInput(
+                    value = username,
+                    click = { username = it },
+                    hint = "Username"
                 )
 
-                Text(
-                    modifier = Modifier
-                        .padding(
-                            top =10.dp,
-                        ),
-                    fontWeight = FontWeight(weight = 500),
-                    text = "To keep connected with us please login with your credential",
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        fontFamily = dartFontFamily,
-                        color = Color(0xFF424242)),
+                Spacer(modifier = Modifier.height(16.dp))
+
+                TextFieldInput(
+                    value = password,
+                    click = { password = it },
+                    hint = "Password",
+                    type = true
                 )
 
-                Spacer(modifier = Modifier.height(70.dp))
+                Spacer(modifier = Modifier.height(23.dp))
 
-                Column {
-                    CTextField(
-                        value = username,
-                        onValueChange = { username = it },
-                        hint = "Username",
-                        isPassword = false
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    NavigationText(
+                        onClick = {},
                     )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    CTextField(
-                        value = password,
-                        onValueChange = { password = it },
-                        hint = "Password",
-                        isPassword = true
-                    )
-
-                    Spacer(modifier = Modifier.height(25.dp))
-
-                    Row (
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically
-                    ){
-                        DontHaveAccountRow(
-                            onClick = {
-                                navController.navigate("password")
-                            }
-                        )
-                    }
-
-                    Row (
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically
-                    ){
-
-                    }
-
-                    Spacer(modifier = Modifier.height(25.dp))
-
-                    CButton(
-                        onClick = {
-                            navController.navigate("main") {
-                                popUpTo("login") { inclusive = true } // Remove LoginScreen from back stack
-                            }
-                        },
-                        text = "Sign Up",
-                        containerColor = appColorBlack
-                    )
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-
-                            },
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-
-                    ) {
-
-                        Text(
-                            text = "Build by dartSpatial Nig Ltd",
-                            style = TextStyle(
-                                fontSize = 12.sp,
-                                fontFamily = dartSansFontFamily,
-                                fontWeight = FontWeight(700),
-                                color = Color(0xFF424242),
-                            )
-                        )
-                    }
                 }
+
+                Spacer(modifier = Modifier.height(23.dp))
+
+                CButton(
+                    onClick = {},
+                    text= "Login",
+                )
+
             }
         }
     }
 }
 
+
 @Preview(showBackground = true, widthDp = 320, heightDp = 640)
 @Composable
 fun LoginScreenPreview() {
     val navController = rememberNavController()
+    val  viewModel: LoginViewModel = hiltViewModel()
     LoginScreen(
-        navController = navController
+        navController = navController,
+        viewModel = viewModel
     )
 }
