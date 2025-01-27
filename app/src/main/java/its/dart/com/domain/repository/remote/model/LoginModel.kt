@@ -9,6 +9,7 @@ data class LoginModel(
     val transDate: String
 ) {
     class Builder {
+
         private var status: Int? = null
         private var message: String? = null
         private var data: DataModel? = null

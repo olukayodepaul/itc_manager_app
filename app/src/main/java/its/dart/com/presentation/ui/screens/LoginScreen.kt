@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +34,7 @@ import its.dart.com.presentation.ui.components.TextFieldInput
 import its.dart.com.presentation.ui.theme.appColorBlack
 import its.dart.com.presentation.ui.theme.appColorWhite
 import its.dart.com.presentation.viewmodel.LoginViewModel
+import its.dart.com.presentation.viewmodel.event.LoginUIEvent
 
 
 @Composable
@@ -41,8 +43,7 @@ fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel()
 ) {
 
-    var username by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
+    val uiState by viewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -80,16 +81,16 @@ fun LoginScreen(
             ) {
 
                 TextFieldInput(
-                    value = username,
-                    click = { username = it },
+                    value = uiState.username,
+                    onValueChange = {username -> viewModel.eventHandler(LoginUIEvent.OnUsername(username))},
                     hint = "Username"
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 TextFieldInput(
-                    value = password,
-                    click = { password = it },
+                    value = uiState.password,
+                    onValueChange = {password -> viewModel.eventHandler(LoginUIEvent.OnPassword(password))},
                     hint = "Password",
                     type = true
                 )
@@ -109,7 +110,8 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(23.dp))
 
                 CButton(
-                    onClick = {},
+                    onClick = { viewModel.eventHandler(LoginUIEvent.OnLoginClick) },
+                    buttonState = uiState.buttonState,
                     text= "Login",
                 )
 

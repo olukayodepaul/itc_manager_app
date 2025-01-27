@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-//no any business logic, just alone fetch the data
+
 class LoginRemoteRepImpl @Inject constructor(private val httpClient: HttpClient) : LoginRemoteRep {
 
     override suspend fun login(username: String, password: String): LoginModel {
@@ -35,4 +35,5 @@ class LoginRemoteRepImpl @Inject constructor(private val httpClient: HttpClient)
                 throw Exception("Login request failed: ${e.message}", e)
             }
     }
+
 }

@@ -3,9 +3,11 @@ package  its.dart.com.presentation.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -28,10 +30,10 @@ import its.dart.com.presentation.ui.theme.robotoFamily
 fun CButton(
     onClick: () -> Unit = {},
     text: String,
+    buttonState: Boolean,
     containerColor: Color = appColorBlack,
     fontWeight: FontWeight = FontWeight(600),
-    fontSize: Int = 20
-
+    fontSize: Int = 20,
 ) {
 
     val configuration = LocalConfiguration.current
@@ -45,28 +47,32 @@ fun CButton(
             containerColor = containerColor),
         modifier = Modifier
             .fillMaxWidth()
-            .height(buttonHeight)
+            .height(buttonHeight),
+        enabled = buttonState
     ) {
 
-        Text(
-            text = text,
-            style = TextStyle(
-                fontFamily = robotoFamily,
-                fontWeight = FontWeight(700),
-                color = Color.White
-            ),
-            fontWeight= fontWeight,
-            fontSize = fontSize.sp
-        )
-
+        if(buttonState) {
+            Text(
+                text = text,
+                style = TextStyle(
+                    fontFamily = robotoFamily,
+                    fontWeight = FontWeight(700),
+                    color = Color.White
+                ),
+                fontWeight= fontWeight,
+                fontSize = fontSize.sp
+            )
+        }else{
+            Text(
+                text = "dc dn jcjdwnj",
+                style = TextStyle(
+                    fontFamily = robotoFamily,
+                    fontWeight = FontWeight(700),
+                    color = Color.White
+                ),
+                fontWeight= fontWeight,
+                fontSize = fontSize.sp
+            )
+        }
     }
-}
-
-@Preview
-@Composable
-fun cButtonPreview() {
-    CButton(
-        text = "Sign In",
-        containerColor = Color(0xFF000000)
-    )
 }

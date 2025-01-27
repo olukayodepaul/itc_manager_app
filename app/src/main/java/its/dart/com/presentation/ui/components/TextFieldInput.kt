@@ -1,5 +1,6 @@
 package  its.dart.com.presentation.ui.components
 
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,7 +33,7 @@ import androidx.compose.runtime.setValue
 @Composable
 fun TextFieldInput(
     value: String,
-    click: (String) -> Unit,
+    onValueChange: (String) -> Unit,
     hint: String,
     type: Boolean = false,
 ) {
@@ -41,7 +42,7 @@ fun TextFieldInput(
 
     TextField(
         value = value,
-        onValueChange = click,
+        onValueChange = onValueChange,
         placeholder = {
             Text(
                 text = hint,
