@@ -7,14 +7,12 @@ import javax.inject.Inject
 class LoginUseCases @Inject constructor(
     private val loginRemoteRep: LoginRemoteRep
 ) {
-
     suspend fun invokeLogin(username: String, password: String): Result<LoginModel> {
         return try {
             val getLoginResponse = loginRemoteRep.login(username, password)
             Result.success(getLoginResponse)
-        }catch (e: Exception) {
+        }catch(e: Exception) {
             Result.failure(e)
         }
     }
-
 }

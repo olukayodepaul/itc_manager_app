@@ -22,11 +22,11 @@ fun AppNavGraph(navController: NavHostController) {
             )
         }
 
-//        composable(route = "MainPage") {
-//            MainScreen(
-//                navController = navController
-//            )
-//        }
+        composable(route = "MainPage") {
+            MainScreen(
+                navController = navController
+            )
+        }
 //
 //        composable(route = "resetPasswordPage") {
 //            ChangePassword(navController = navController)

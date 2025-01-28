@@ -16,6 +16,7 @@ data class LoginUIState(
     val password: String = "",
     val buttonState: Boolean = true,
     val isLoading: Boolean = false,
+    val isErrorMessage: String = "",
 )
 
 sealed class LoginUIEvent {
@@ -24,9 +25,7 @@ sealed class LoginUIEvent {
     class OnButtonState(val buttonState: Boolean): LoginUIEvent()
     data object OnLoginClick : LoginUIEvent()
     data class OnLoading(val isLoading: Boolean) : LoginUIEvent()
+    class OnErrorMessage(val message: String) : LoginUIEvent()
 }
-
-
-
 
 

@@ -63,16 +63,7 @@ fun CButton(
                 fontSize = fontSize.sp
             )
         }else{
-            Text(
-                text = "dc dn jcjdwnj",
-                style = TextStyle(
-                    fontFamily = robotoFamily,
-                    fontWeight = FontWeight(700),
-                    color = Color.White
-                ),
-                fontWeight= fontWeight,
-                fontSize = fontSize.sp
-            )
+
         }
     }
 }

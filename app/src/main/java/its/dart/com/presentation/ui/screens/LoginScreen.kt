@@ -11,7 +11,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,8 +46,17 @@ fun LoginScreen(
     navController: NavHostController,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
-
     val uiState by viewModel.uiState.collectAsState()
+    val navigateToHome by viewModel.navigateToHome.collectAsState()
+
+    LaunchedEffect(navigateToHome) {
+        if (navigateToHome) {
+            navController.navigate("MainPage") {
+                popUpTo("homePage") { inclusive = true }
+            }
+            viewModel.resetNavigation()
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -82,15 +95,16 @@ fun LoginScreen(
 
                 TextFieldInput(
                     value = uiState.username,
-                    onValueChange = {username -> viewModel.eventHandler(LoginUIEvent.OnUsername(username))},
+                    onValueChange = {username -> viewModel.onEvent(LoginUIEvent.OnUsername(username))},
                     hint = "Username"
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+
                 TextFieldInput(
                     value = uiState.password,
-                    onValueChange = {password -> viewModel.eventHandler(LoginUIEvent.OnPassword(password))},
+                    onValueChange = {password -> viewModel.onEvent(LoginUIEvent.OnPassword(password))},
                     hint = "Password",
                     type = true
                 )
@@ -110,11 +124,10 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(23.dp))
 
                 CButton(
-                    onClick = { viewModel.eventHandler(LoginUIEvent.OnLoginClick) },
+                    onClick = { viewModel.onEvent(LoginUIEvent.OnLoginClick) },
                     buttonState = uiState.buttonState,
                     text= "Login",
                 )
-
             }
         }
     }
