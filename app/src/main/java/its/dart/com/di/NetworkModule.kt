@@ -23,20 +23,13 @@ object NetworkModule {
     fun provideKtorClient(): HttpClient {
         return HttpClient {
             install(DefaultRequest) {
-                // Set your base URL or default headers if needed
-                url("https://example.com/api/")
+                url("http://159.65.30.221:9300")
                 header("Content-Type", "application/json")
             }
             install(ContentNegotiation) {
-                // Add JSON serialization support
-                json(Json {
-                    ignoreUnknownKeys = true
-                    isLenient = true
-                })
+                json()
             }
-            // Optionally add logging for debugging
             install(Logging) {
-//                logger = Logger.SIMPLE
                 level = LogLevel.ALL
             }
         }

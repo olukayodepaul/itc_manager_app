@@ -2,17 +2,12 @@ package its.dart.com.data.repository.remote
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.request.post
-import io.ktor.client.request.setBody
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import its.dart.com.data.repository.remote.dto.LoginDto
 import its.dart.com.domain.repository.remote.LoginRemoteRep
 import its.dart.com.domain.repository.remote.model.LoginModel
-import its.dart.com.mapper.toLoginModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.withContext
+import its.dart.com.mapper.mapToLoginModel
 import javax.inject.Inject
 
 
@@ -20,16 +15,15 @@ class LoginRemoteRepImpl @Inject constructor(private val httpClient: HttpClient)
 
     override suspend fun login(username: String, password: String): LoginModel {
            return  try {
-                val response: LoginDto = httpClient.post("v3/login") {
-                    setBody(
-                        mapOf(
-                            "username" to username,
-                            "password" to password
-                        )
-                    )
-                }.body()
 
-               response.toLoginModel()
+                val response = httpClient.get("/v3/login") {
+                   url{
+                       parameter("username", username)
+                       parameter("password", password)
+                   }
+                }
+
+               response.body<LoginDto>().mapToLoginModel()
 
             }catch (e: Exception) {
                 throw Exception("Login request failed: ${e.message}", e)

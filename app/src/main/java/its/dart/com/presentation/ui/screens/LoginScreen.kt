@@ -133,14 +133,3 @@ fun LoginScreen(
     }
 }
 
-
-@Preview(showBackground = true, widthDp = 320, heightDp = 640)
-@Composable
-fun LoginScreenPreview() {
-    val navController = rememberNavController()
-    val  viewModel: LoginViewModel = hiltViewModel()
-    LoginScreen(
-        navController = navController,
-        viewModel = viewModel
-    )
-}

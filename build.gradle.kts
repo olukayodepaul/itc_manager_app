@@ -4,6 +4,7 @@
 plugins {
     id("com.android.application") version "8.1.3" apply false
     id("org.jetbrains.kotlin.android") version "1.9.0" apply false
-    id("com.google.dagger.hilt.android") version "2.48" apply false // Apply in module-level build.gradle.kts
+    id("com.google.dagger.hilt.android") version "2.48" apply false
+    kotlin("plugin.serialization") version "1.6.0"
 }
 

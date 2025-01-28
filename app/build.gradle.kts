@@ -4,6 +4,7 @@ plugins {
     id ("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android") // Apply Hilt plugin here
     kotlin("kapt") // Required for annotation processing
+    kotlin("plugin.serialization")
 }
 
 android {
