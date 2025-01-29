@@ -2,9 +2,12 @@
 plugins {
     id ("com.android.application")
     id ("org.jetbrains.kotlin.android")
-    id("com.google.dagger.hilt.android") // Apply Hilt plugin here
-    kotlin("kapt") // Required for annotation processing
+    id("com.google.dagger.hilt.android")
+    id ("kotlin-kapt")
+    kotlin("kapt")
     kotlin("plugin.serialization")
+
+
 }
 
 android {
@@ -92,8 +95,8 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.5.3")
 
     //stateFlow
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
 
     // Ktor Core Dependencies
     implementation("io.ktor:ktor-client-core:2.3.4")
@@ -121,4 +124,11 @@ dependencies {
     //using Icon
     implementation("androidx.compose.material:material-icons-extended:1.6.0")
     implementation ("androidx.compose.foundation:foundation:1.4.0")
+
+    //room
+    implementation("androidx.room:room-runtime:2.6.0")
+    implementation("androidx.room:room-ktx:2.6.0")
+    kapt("androidx.room:room-compiler:2.6.0")
+
+
 }

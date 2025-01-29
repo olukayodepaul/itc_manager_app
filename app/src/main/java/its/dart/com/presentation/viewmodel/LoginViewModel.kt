@@ -4,9 +4,12 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import its.dart.com.data.repository.local.configuration.RoomDatabaseTable
 import its.dart.com.domain.usecases.LoginUseCases
+import its.dart.com.mapper.toSalesRepsList
 import its.dart.com.presentation.viewmodel.event.LoginUIEvent
 import its.dart.com.presentation.viewmodel.event.LoginUIState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -14,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCases
+    private val loginUseCase: LoginUseCases,
+    private val localCache: RoomDatabaseTable
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginUIState())
@@ -81,13 +85,13 @@ class LoginViewModel @Inject constructor(
         val result = loginUseCase.invokeLogin(uiState.value.username, uiState.value.password)
 
 
-
         result.onSuccess {
 
-            Log.d("epokhai", it.data.toString())
-
             if (it.status == 200) {
-                navigateToHomeScreen()
+                    localCache.insertLogins(it.data.rep.toSalesRepsList())
+                Log.d("epoka", it.data.rep.toString())
+//                navigateToHomeScreen()
+
             } else {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
@@ -101,8 +105,6 @@ class LoginViewModel @Inject constructor(
                 buttonState = true,
                 isErrorMessage = error.message ?: "An error occurred. Please try again."
             )
-
-
         }
     }
 }

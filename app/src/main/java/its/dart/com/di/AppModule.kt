@@ -5,8 +5,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
-import its.dart.com.data.repository.remote.LoginRemoteRepImpl
-import its.dart.com.domain.repository.remote.LoginRemoteRep
+import its.dart.com.data.repository.remote.LoginRemoteDataImpl
+import its.dart.com.domain.repository.remote.LoginRemoteRepositoryDataInterface
 import its.dart.com.domain.usecases.LoginUseCases
 import javax.inject.Singleton
 
@@ -16,17 +16,18 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideLoginRepositoryModule(
-        httpClient: HttpClient
-    ): LoginRemoteRep
+    fun provideLoginRemoteRepositoryData(
+        httpClient: HttpClient,
+    ): LoginRemoteRepositoryDataInterface
     {
-        return LoginRemoteRepImpl(httpClient);
+        return LoginRemoteDataImpl(httpClient);
     }
 
+    //provide use case. use cases is depending on the local repository data
     @Provides
     @Singleton
     fun provideLoginUseCase(
-        loginRemoteRep: LoginRemoteRep
+        loginRemoteRep: LoginRemoteRepositoryDataInterface,
     ) : LoginUseCases {
         return LoginUseCases(loginRemoteRep)
     }

@@ -1,6 +1,7 @@
 package its.dart.com.domain.repository.remote.model
 
 
+
 data class LoginModel(
     val status: Int,
     val message: String,
@@ -23,35 +24,36 @@ data class LoginModel(
         // Build method to create LoginModel object
         fun build(): LoginModel {
             if (data == null) {
-                throw IllegalStateException("User data must be provided.")
+                throw IllegalStateException("UserDataModel must be provided.")
             }
             return LoginModel(status, message, transDate, data!!)
         }
     }
 }
 
-// UserDataModel with Builder pattern
 data class UserDataModel(
-    val users: UserModel
+    val users: UserModel,
+    val rep: List<RepsModel>
 ) {
     // Builder class for UserDataModel
     class Builder {
         private var users: UserModel? = null
+        private var rep: List<RepsModel> = emptyList() // Default to an empty list
 
-        // Setter for user
+        // Setters for each property
         fun users(users: UserModel) = apply { this.users = users }
+        fun rep(rep: List<RepsModel>) = apply { this.rep = rep }
 
         // Build method to create UserDataModel object
         fun build(): UserDataModel {
             if (users == null) {
                 throw IllegalStateException("UserModel must be provided.")
             }
-            return UserDataModel(users!!)
+            return UserDataModel(users!!, rep)
         }
     }
 }
 
-// UserModel with Builder pattern
 data class UserModel(
     val fullName: String,
     val id: Int,
@@ -80,6 +82,38 @@ data class UserModel(
         // Build method to create UserModel object
         fun build(): UserModel {
             return UserModel(fullName, id, depotId, systemCategoryId, depotLat, depotLng)
+        }
+    }
+}
+
+data class RepsModel(
+    val id: Int,
+    val routeId: Int,
+    val fullName: String,
+    val staffCode: String,
+    val phoneNo: String? = null,
+    val routeName: String? = null,
+) {
+    // Builder class for RepsModel
+    class Builder {
+        private var id: Int = 0
+        private var routeId: Int = 0
+        private var fullName: String = ""
+        private var staffCode: String = ""
+        private var phoneNo: String? = null
+        private var routeName: String? = null
+
+        // Setters for each property
+        fun id(id: Int) = apply { this.id = id }
+        fun routeId(routeId: Int) = apply { this.routeId = routeId }
+        fun fullName(fullName: String) = apply { this.fullName = fullName }
+        fun staffCode(staffCode: String) = apply { this.staffCode = staffCode }
+        fun phoneNo(phoneNo: String?) = apply { this.phoneNo = phoneNo }
+        fun routeName(routeName: String?) = apply { this.routeName = routeName }
+
+        // Build method to create RepsModel object
+        fun build(): RepsModel {
+            return RepsModel(id, routeId, fullName, staffCode, phoneNo, routeName)
         }
     }
 }

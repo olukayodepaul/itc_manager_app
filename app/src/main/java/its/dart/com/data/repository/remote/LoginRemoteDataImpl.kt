@@ -5,13 +5,13 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import its.dart.com.data.repository.remote.dto.LoginDto
-import its.dart.com.domain.repository.remote.LoginRemoteRep
+import its.dart.com.domain.repository.remote.LoginRemoteRepositoryDataInterface
 import its.dart.com.domain.repository.remote.model.LoginModel
 import its.dart.com.mapper.mapToLoginModel
 import javax.inject.Inject
 
 
-class LoginRemoteRepImpl @Inject constructor(private val httpClient: HttpClient) : LoginRemoteRep {
+class LoginRemoteDataImpl @Inject constructor(private val httpClient: HttpClient) : LoginRemoteRepositoryDataInterface {
 
     override suspend fun login(username: String, password: String): LoginModel {
            return  try {
