@@ -11,7 +11,6 @@ sealed class BottomBar (
     val title: String,
     val icon: ImageVector
 ) {
-
     data object SalesRep : BottomBar(
         route = "Reps",
         title = "Reps",
@@ -29,5 +28,4 @@ sealed class BottomBar (
         title = "Customers",
         icon = Icons.Default.Reorder
     )
-
 }

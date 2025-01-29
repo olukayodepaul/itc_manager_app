@@ -33,84 +33,83 @@ import its.dart.com.presentation.ui.theme.appColorWhite
 fun MainScreen(
     navController: NavHostController
 ) {
-//    // Define the tab items
-//    val tabItems = remember {
-//        listOf(
-//            TabItem(
-//                title = "Attendant",
-//                unselectedIcon = Icons.Outlined.AccessTime,
-//                selectedIcon = Icons.Filled.AccessTimeFilled,
-//                content = { AttendantScreen() }
-//            ),
-//            TabItem(
-//                title = "Sales",
-//                unselectedIcon = Icons.Outlined.Shop,
-//                selectedIcon = Icons.Filled.Shop,
-//                content = { SalesRepScreen() }
-//            ),
-//            TabItem(
-//                title = "Order",
-//                unselectedIcon = Icons.Outlined.ShoppingCart,
-//                selectedIcon = Icons.Filled.ShoppingCart,
-//                content = { CustomersScreen() }
-//            ),
-//        )
-//    }
-//
-//    // Track selected tab
-//    var selectedTabIndex by remember { mutableStateOf(0) }
-//
-//    // Scaffold layout for top content and bottom navigation
-//    Scaffold(
-//        modifier = Modifier.fillMaxSize(),
-//        bottomBar = {
-//            // Bottom Navigation stays fixed at the bottom
-//            NavigationBar(
-//                containerColor = appColorWhite
-//            ) {
-//                tabItems.forEachIndexed { index, item ->
-//                    NavigationBarItem(
-//                        selected = index == selectedTabIndex,
-//                        onClick = {
-//                            selectedTabIndex = index // Directly update the selected tab index
-//                        },
-//                        icon = {
-//                            Icon(
-//                                imageVector = if (index == selectedTabIndex) item.selectedIcon else item.unselectedIcon,
-//                                contentDescription = item.title,
-//                                tint = appColorBlack
-//                            )
-//                        },
-//                        label = {
-//                            Text(
-//                                text = item.title,
-//                                style = TextStyle(
-//                                    fontWeight = if (index == selectedTabIndex) FontWeight.Bold else FontWeight.Normal,
-//                                    color = Color(0xFF008b00),
-//                                )
-//                            )
-//                        },
-//                    )
-//                }
-//            }
-//        }
-//    ) { paddingValues ->
-//        // Main content above the bottom navigation
-//        Column(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .padding(paddingValues) // To account for the bottom bar space
-//        ) {
-//            // Display content based on the current tab
-//            tabItems[selectedTabIndex].content()
-//        }
-//    }
+    val tabItems = remember {
+        listOf(
+            TabItem(
+                title = "Attendant",
+                unselectedIcon = Icons.Outlined.AccessTime,
+                selectedIcon = Icons.Filled.AccessTimeFilled,
+                content = { AttendantScreen() }
+            ),
+            TabItem(
+                title = "Sales",
+                unselectedIcon = Icons.Outlined.Shop,
+                selectedIcon = Icons.Filled.Shop,
+                content = { SalesRepScreen() }
+            ),
+            TabItem(
+                title = "Order",
+                unselectedIcon = Icons.Outlined.ShoppingCart,
+                selectedIcon = Icons.Filled.ShoppingCart,
+                content = { CustomersScreen() }
+            ),
+        )
+    }
+
+    // Track selected tab
+    var selectedTabIndex by remember { mutableStateOf(0) }
+
+    // Scaffold layout for top content and bottom navigation
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        bottomBar = {
+            // Bottom Navigation stays fixed at the bottom
+            NavigationBar(
+                containerColor = appColorWhite
+            ) {
+                tabItems.forEachIndexed { index, item ->
+                    NavigationBarItem(
+                        selected = index == selectedTabIndex,
+                        onClick = {
+                            selectedTabIndex = index // Directly update the selected tab index
+                        },
+                        icon = {
+                            Icon(
+                                imageVector = if (index == selectedTabIndex) item.selectedIcon else item.unselectedIcon,
+                                contentDescription = item.title,
+                                tint = appColorBlack
+                            )
+                        },
+                        label = {
+                            Text(
+                                text = item.title,
+                                style = TextStyle(
+                                    fontWeight = if (index == selectedTabIndex) FontWeight.Bold else FontWeight.Normal,
+                                    color = Color(0xFF008b00),
+                                )
+                            )
+                        },
+                    )
+                }
+            }
+        }
+    ) { paddingValues ->
+        // Main content above the bottom navigation
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues) // To account for the bottom bar space
+        ) {
+            // Display content based on the current tab
+            tabItems[selectedTabIndex].content()
+        }
+    }
 }
 
-//data class TabItem(
-//    val title: String,
-//    val unselectedIcon: ImageVector,
-//    val selectedIcon: ImageVector,
-//    val content: @Composable () -> Unit
-//)
+data class TabItem(
+    val title: String,
+    val unselectedIcon: ImageVector,
+    val selectedIcon: ImageVector,
+    val content: @Composable () -> Unit
+)
 
