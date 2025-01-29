@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import its.dart.com.presentation.ui.screens.ChangePassword
+import its.dart.com.presentation.ui.screens.CustomersScreen
 import its.dart.com.presentation.ui.screens.MainScreen
 import its.dart.com.presentation.ui.screens.LoginScreen
 
@@ -24,6 +25,12 @@ fun AppNavGraph(navController: NavHostController) {
 
         composable(route = "MainPage") {
             MainScreen(
+                navController = navController
+            )
+        }
+
+        composable(route = "CustomersScreen") {
+            CustomersScreen(
                 navController = navController
             )
         }

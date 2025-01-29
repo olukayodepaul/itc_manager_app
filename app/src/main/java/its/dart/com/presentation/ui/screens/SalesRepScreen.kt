@@ -1,8 +1,6 @@
 package its.dart.com.presentation.ui.screens
 
 import android.util.Log
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,31 +17,31 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import its.dart.com.domain.repository.remote.model.RepsModel
 import its.dart.com.presentation.ui.theme.appColor
 import its.dart.com.presentation.ui.theme.appColorBlack
 import its.dart.com.presentation.ui.theme.appColorWhite
+import its.dart.com.presentation.ui.theme.dartFontFamily
+import its.dart.com.presentation.ui.theme.robotoFamily
 import its.dart.com.presentation.viewmodel.SalesRepViewModel
-import kotlin.random.Random
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SalesRepScreen(
+fun  SalesRepScreen(
+    navController: NavHostController,
     viewModel: SalesRepViewModel = hiltViewModel()
 ) {
     val salesReps = viewModel.salesReps.collectAsState().value
 
     Column(modifier = Modifier.fillMaxSize()) {
-        // Top App Bar
+
         TopAppBar(
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = appColorBlack,
@@ -65,29 +63,38 @@ fun SalesRepScreen(
         )
 
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxWidth()
         ) {
-            items(salesReps) { rep ->
-                ContactListItem(rep) { eachItem ->
-                    Log.d("Clicked on", "${eachItem.fullName}")
+            items(items = salesReps)
+            {   // Use `items()` instead of `forEach`
+                    salesRep ->
+                // Wrap each item in a clickable component
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            navController.navigate("CustomersScreen")
+                        } // Handle item click
+                        .padding(16.dp)
+                ) {
+                    ContactListItem(
+                        salesRep
+                    )
                 }
             }
         }
+
     }
 }
 
 @Composable
 fun ContactListItem(
-    rep: RepsModel,
-    onClick: (RepsModel) -> Unit
+    details: RepsModel
 ) {
-
     val actionTaken = 1
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
 
@@ -96,52 +103,53 @@ fun ContactListItem(
                 .size(50.dp) // Circle size
                 .clip(CircleShape) // Make the container circular
                 .border(
-                    width = 2.dp, // Border thickness
-                    color = if (actionTaken == 1) appColorBlack else Color.Transparent, // Green border if there’s a new post
+                    width = 3.dp, // Border thickness
+                    color = if (actionTaken == 1) Color.Gray else Color.Transparent, // Green border if there’s a new post
                     shape = CircleShape // Make the border circular
                 ),
             contentAlignment = Alignment.Center
         ) {
 
             Text(
-                text = "M", // First letter of the name or any text
-                color = appColor, // Text color inside the circle
+                text = "${details.fullName.firstOrNull()}",
+                color = appColor,
                 fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                fontSize = 25.sp,
+                fontFamily = dartFontFamily
             )
-
         }
 
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(3.dp))
 
-        Column(modifier = Modifier.weight(1f)) {
+        Column(modifier = Modifier.weight(1f). padding(start = 10.dp)) {
             Text(
-                text = rep.fullName,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodyLarge,
+                text = details.fullName,
+                fontWeight = FontWeight(500),
                 overflow = TextOverflow.Ellipsis,
-                maxLines = 1
+                maxLines = 1,
+                fontSize = 17.sp,
+                color = appColor,
+                fontFamily = robotoFamily
             )
             Text(
-                text = "jnjcdnsacjds",
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.Gray
+                text = "${details.routeName} ${details.staffCode}",
+                maxLines = 1,
+                fontSize = 12.sp,
+                color = Color.Gray,
+                fontFamily = robotoFamily
             )
         }
 
         // Time (e.g., last message time)
         Text(
-            text = "time",
-            style = MaterialTheme.typography.bodySmall,
-            color = Color.Gray
+            text = "12:01",
+            color = Color.Gray,
+            fontFamily = robotoFamily,
+            fontWeight = FontWeight(600),
+            fontSize = 12.sp,
+
         )
     }
 }
 
-fun getRandomColor(minColorValue: Float = 0.3f, maxColorValue: Float = 0.8f): Color {
-    return Color(
-        Random.nextFloat() * (maxColorValue - minColorValue) + minColorValue, // Random Red value
-        Random.nextFloat() * (maxColorValue - minColorValue) + minColorValue, // Random Green value
-        Random.nextFloat() * (maxColorValue - minColorValue) + minColorValue  // Random Blue value
-    )
-}
