@@ -1,6 +1,6 @@
 package its.dart.com.presentation.viewmodel
 
-import android.util.Log
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -9,7 +9,6 @@ import its.dart.com.domain.usecases.LoginUseCases
 import its.dart.com.mapper.toSalesRepsList
 import its.dart.com.presentation.viewmodel.event.LoginUIEvent
 import its.dart.com.presentation.viewmodel.event.LoginUIState
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -81,22 +80,16 @@ class LoginViewModel @Inject constructor(
         }
 
         _uiState.value = _uiState.value.copy(isLoading = true, buttonState = false)
-
         val result = loginUseCase.invokeLogin(uiState.value.username, uiState.value.password)
 
-
         result.onSuccess {
-
             if (it.status == 200) {
-                    localCache.insertLogins(it.data.rep.toSalesRepsList())
-                Log.d("epoka", it.data.rep.toString())
-//                navigateToHomeScreen()
-
+                localCache.insertLogins(it.data.rep.toSalesRepsList())
+                navigateToHomeScreen()
             } else {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     buttonState = true
-//                    isErrorMessage = it.error.description ?: "Login failed. Please try again."
                 )
             }
         }.onFailure { error ->
