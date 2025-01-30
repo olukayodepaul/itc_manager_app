@@ -2,7 +2,11 @@ package its.dart.com.mapper
 
 
 import its.dart.com.data.repository.local.entity.SalesRepsEntity
+import its.dart.com.data.repository.remote.dto.AllCustomersDto
+import its.dart.com.data.repository.remote.dto.CustomersDto
 import its.dart.com.data.repository.remote.dto.LoginDto
+import its.dart.com.domain.repository.remote.model.AllCustomersModel
+import its.dart.com.domain.repository.remote.model.CustomersModel
 import its.dart.com.domain.repository.remote.model.LoginModel
 import its.dart.com.domain.repository.remote.model.RepsModel
 import its.dart.com.domain.repository.remote.model.UserDataModel
@@ -50,12 +54,14 @@ fun LoginDto.mapToLoginModel(): LoginModel {
 fun List<SalesRepsEntity>.toRepsModelList(): List<RepsModel> {
     return this.map { salesRep ->
         RepsModel(
-            id = salesRep.id, // No transformation needed
-            routeId = salesRep.route_id, // No transformation needed
-            fullName = salesRep.full_name, // No transformation needed
-            staffCode = salesRep.staff_code, // No transformation needed
-            phoneNo = salesRep.phone_no ?: "", // Handle nullable phone_no
-            routeName = salesRep.route_name // No transformation needed
+            id = salesRep.id,
+            routeId = salesRep.route_id,
+            fullName = salesRep.full_name,
+            staffCode = salesRep.staff_code,
+            phoneNo = salesRep.phone_no ?: "",
+            routeName = salesRep.route_name,
+            state = salesRep.state,
+            time = salesRep.time
         )
     }
 }
@@ -68,7 +74,34 @@ fun List<RepsModel>.toSalesRepsList(): List<SalesRepsEntity> {
             full_name = repsModel.fullName,
             staff_code = repsModel.staffCode,
             phone_no = repsModel.phoneNo ?: "",
-            route_name = repsModel.routeName ?: ""
+            route_name = repsModel.routeName ?: "",
+            state = repsModel.state,
+            time = repsModel.time?:""
         )
     }
 }
+
+fun CustomersDto.toCustomersModel(): CustomersModel {
+    return CustomersModel(
+        status = this.status,
+        message = this.message,
+        transDate = this.transDate,
+        data = this.data.toAllCustomersModelList()
+    )
+}
+
+fun List<AllCustomersDto>.toAllCustomersModelList(): List<AllCustomersModel> {
+    return this.map { customer ->
+        AllCustomersModel(
+            id = customer.id,
+            urno = customer.urno,
+            latitude = customer.latitude ?: "0.0",
+            longitude = customer.longitude ?: "0.0",
+            posid = customer.posid ?: "0.0",
+            outletName = customer.outletName,
+            outletAddress = customer.outletAddress,
+            contactPhone = customer.contactPhone
+        )
+    }
+}
+

@@ -86,6 +86,7 @@ data class UserModel(
     }
 }
 
+
 data class RepsModel(
     val id: Int,
     val routeId: Int,
@@ -93,6 +94,8 @@ data class RepsModel(
     val staffCode: String,
     val phoneNo: String? = null,
     val routeName: String? = null,
+    val state: Int,
+    val time: String? = null
 ) {
     // Builder class for RepsModel
     class Builder {
@@ -102,6 +105,8 @@ data class RepsModel(
         private var staffCode: String = ""
         private var phoneNo: String? = null
         private var routeName: String? = null
+        private var state: Int = 0
+        private var time: String? = null
 
         // Setters for each property
         fun id(id: Int) = apply { this.id = id }
@@ -110,10 +115,12 @@ data class RepsModel(
         fun staffCode(staffCode: String) = apply { this.staffCode = staffCode }
         fun phoneNo(phoneNo: String?) = apply { this.phoneNo = phoneNo }
         fun routeName(routeName: String?) = apply { this.routeName = routeName }
+        fun state(state: Int) = apply { this.state = state }  // Fixed duplicate function name
+        fun time(time: String?) = apply { this.time = time }  // Added setter for time
 
         // Build method to create RepsModel object
         fun build(): RepsModel {
-            return RepsModel(id, routeId, fullName, staffCode, phoneNo, routeName)
+            return RepsModel(id, routeId, fullName, staffCode, phoneNo, routeName, state, time)
         }
     }
 }

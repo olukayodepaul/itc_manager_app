@@ -11,5 +11,7 @@ data class SalesRepsEntity(
     val full_name: String,
     val staff_code: String,
     val phone_no: String,
-    val route_name: String
+    val route_name: String,
+    var state: Int,
+    var time: String
 )

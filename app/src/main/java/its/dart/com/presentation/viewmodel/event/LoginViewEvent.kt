@@ -11,14 +11,6 @@ import its.dart.com.domain.repository.remote.model.LoginModel
 //}
 
 
-data class LoginUIState(
-    val username: String = "",
-    val password: String = "",
-    val buttonState: Boolean = true,
-    val isLoading: Boolean = false,
-    val isErrorMessage: String = "",
-)
-
 sealed class LoginUIEvent {
     class OnUsername(val username: String) : LoginUIEvent()
     class OnPassword(val password: String) : LoginUIEvent()

@@ -35,4 +35,6 @@ data class RepsDto(
     @SerialName("staff_code") val staffCode: String,
     @SerialName("phone_no") val phoneNo: String? = null,
     @SerialName("route_name") val routeName: String? = null,
+    val state: Int,
+    val time: String? = null
 )

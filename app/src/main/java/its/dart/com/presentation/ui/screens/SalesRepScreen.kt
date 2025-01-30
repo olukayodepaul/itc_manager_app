@@ -1,6 +1,5 @@
 package its.dart.com.presentation.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -73,7 +72,7 @@ fun  SalesRepScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            navController.navigate("CustomersScreen")
+                            navController.navigate("CustomersScreen/${salesRep.id}/${salesRep.fullName}")
                         } // Handle item click
                         .padding(16.dp)
                 ) {

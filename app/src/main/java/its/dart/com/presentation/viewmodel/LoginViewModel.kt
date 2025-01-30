@@ -1,6 +1,7 @@
 package its.dart.com.presentation.viewmodel
 
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -8,7 +9,7 @@ import its.dart.com.data.repository.local.configuration.RoomDatabaseTable
 import its.dart.com.domain.usecases.LoginUseCases
 import its.dart.com.mapper.toSalesRepsList
 import its.dart.com.presentation.viewmodel.event.LoginUIEvent
-import its.dart.com.presentation.viewmodel.event.LoginUIState
+import its.dart.com.presentation.viewmodel.state.LoginUIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -72,6 +73,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private suspend fun onLoginClick() {
+
         if (uiState.value.username.isBlank() || uiState.value.password.isBlank()) {
             _uiState.value = _uiState.value.copy(
                 isErrorMessage = "Username and password cannot be empty"
@@ -82,7 +84,9 @@ class LoginViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(isLoading = true, buttonState = false)
         val result = loginUseCase.invokeLogin(uiState.value.username, uiState.value.password)
 
+
         result.onSuccess {
+            Log.d("epokhai", "1 ${it.data.rep.toSalesRepsList()}")
             if (it.status == 200) {
                 localCache.insertLogins(it.data.rep.toSalesRepsList())
                 navigateToHomeScreen()
@@ -93,6 +97,7 @@ class LoginViewModel @Inject constructor(
                 )
             }
         }.onFailure { error ->
+            Log.d("epokhai", "2 ${error.message}")
             _uiState.value = _uiState.value.copy(
                 isLoading = false,
                 buttonState = true,
