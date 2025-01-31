@@ -20,7 +20,7 @@ class CustomerByRepViewModel @Inject constructor(private val cloud :  CustomerBy
     val customersState: StateFlow<GenericState<List<AllCustomersModel>>> = _customersState.asStateFlow()
 
     suspend fun getCustomers(userId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch() {
             _customersState.value = GenericState.Loading
             try {
                 val result = cloud.invokeCustomer(userId)

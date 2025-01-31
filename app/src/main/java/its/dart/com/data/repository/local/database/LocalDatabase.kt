@@ -21,8 +21,8 @@ interface LocalDatabase {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun persistProduct(product: List<ProductEntity>)
 
-    @Query("SELECT * FROM logins")
-    suspend fun getAllProducts(): Flow<List<ProductEntity>>
+    @Query("SELECT * FROM product")
+    fun getAllProducts(): Flow<List<ProductEntity>>
 
 }
 

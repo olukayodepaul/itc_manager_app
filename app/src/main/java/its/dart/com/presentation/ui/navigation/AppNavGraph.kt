@@ -9,6 +9,7 @@ import androidx.navigation.navArgument
 import its.dart.com.presentation.ui.screens.CustomerByRep
 import its.dart.com.presentation.ui.screens.MainScreen
 import its.dart.com.presentation.ui.screens.LoginScreen
+import its.dart.com.presentation.ui.screens.OrderScreen
 import its.dart.com.presentation.ui.screens.SurveyScreen
 import its.dart.com.presentation.ui.screens.Screen
 
@@ -50,5 +51,10 @@ fun AppNavGraph(navController: NavHostController) {
             SurveyScreen(navController, userId, userName)
         }
 
+        composable(
+            route = Screen.OrderScreen.route
+        ) {
+            OrderScreen(navController = navController )
+        }
     }
 }
