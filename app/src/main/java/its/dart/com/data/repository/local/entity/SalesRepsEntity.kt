@@ -15,3 +15,11 @@ data class SalesRepsEntity(
     var state: Int,
     var time: String
 )
+
+@Entity(tableName = "product")
+data class ProductEntity(
+    @PrimaryKey(autoGenerate = true) val id: Int,
+    val item: String,
+    val code: String,
+    val qty: String? = null
+)

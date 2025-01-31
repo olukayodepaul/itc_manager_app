@@ -23,15 +23,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import its.dart.com.domain.repository.remote.model.RepsModel
+import its.dart.com.presentation.ui.components.ToolBar
 import its.dart.com.presentation.ui.theme.appColor
-import its.dart.com.presentation.ui.theme.appColorBlack
-import its.dart.com.presentation.ui.theme.appColorWhite
 import its.dart.com.presentation.ui.theme.dartFontFamily
 import its.dart.com.presentation.ui.theme.robotoFamily
 import its.dart.com.presentation.viewmodel.SalesRepViewModel
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun  SalesRepScreen(
     navController: NavHostController,
@@ -39,52 +37,43 @@ fun  SalesRepScreen(
 ) {
     val salesReps = viewModel.salesReps.collectAsState().value
 
-    Column(modifier = Modifier.fillMaxSize()) {
-
-        TopAppBar(
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = appColorBlack,
-                titleContentColor = Color.White,
-                navigationIconContentColor = Color.White,
-                actionIconContentColor = Color.White,
-            ),
-            title = {
-                Text(text = "Sales Person", fontWeight = FontWeight.Medium)
-            },
-            actions = {
-                IconButton(onClick = { /* TODO: Implement Search */ }) {
-                    Icon(Icons.Filled.Search, contentDescription = "Search", tint = appColorWhite)
-                }
-                IconButton(onClick = { /* TODO: Handle click */ }) {
-                    Icon(Icons.Default.MoreVert, contentDescription = "More Options")
-                }
-            }
-        )
-
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            items(items = salesReps)
-            {   // Use `items()` instead of `forEach`
-                    salesRep ->
-                // Wrap each item in a clickable component
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            navController.navigate("CustomersScreen/${salesRep.id}/${salesRep.fullName}")
-                        } // Handle item click
-                        .padding(16.dp)
-                ) {
-                    ContactListItem(
-                        salesRep
-                    )
+    Scaffold(
+        topBar = {
+            ToolBar(
+                title = "SapApp",
+                click = {navController.popBackStack() },
+                clickSearch = {},
+                clickMenu = {},
+                fontSize = 22,
+                fontWeight = 900,
+            )
+        }
+    ) { innerPadding ->
+        Column(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                items(items = salesReps)
+                { salesRep ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                navController.navigate("CustomersScreen/${salesRep.id}/${salesRep.fullName}")
+                            } // Handle item click
+                            .padding(16.dp)
+                    ) {
+                        ContactListItem(
+                            salesRep
+                        )
+                    }
                 }
             }
         }
-
     }
 }
+
+
 
 @Composable
 fun ContactListItem(

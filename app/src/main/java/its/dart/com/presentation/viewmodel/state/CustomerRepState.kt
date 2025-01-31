@@ -1,12 +1,11 @@
 package its.dart.com.presentation.viewmodel.state
 
-import its.dart.com.domain.repository.remote.model.AllCustomersModel
 
-sealed class CustomerRepState {
-    data object Loading : CustomerRepState()
-    data object Empty : CustomerRepState()  // No customers found
-    data class Success(val data: List<AllCustomersModel>) : CustomerRepState()
-    data class Failure(val exception: Throwable) : CustomerRepState()
+sealed class GenericState<out T> {
+    data object Loading : GenericState<Nothing>()
+    data object Empty : GenericState<Nothing>()
+    data class Success<out T>(val data: T) : GenericState<T>()
+    data class Failure(val exception: Throwable) : GenericState<Nothing>()
 }
 
 data class LoginUIState(

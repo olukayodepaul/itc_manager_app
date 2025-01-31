@@ -1,6 +1,6 @@
 package its.dart.com.domain.usecases
 
-import its.dart.com.data.repository.local.configuration.RoomDatabaseTable
+import its.dart.com.data.repository.local.database.LocalDatabase
 import its.dart.com.domain.repository.remote.model.RepsModel
 import its.dart.com.mapper.toRepsModelList
 import kotlinx.coroutines.Dispatchers
@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 
-class RepUseCases @Inject constructor(private val localCache: RoomDatabaseTable) {
+class RepUseCases @Inject constructor(private val localCache: LocalDatabase) {
 
     fun fetchSalesReps(): Flow<List<RepsModel>> {
         return localCache.getAllSalesReps()

@@ -8,7 +8,8 @@ data class LoginDto(
     val status: Int,
     val message: String,
     @SerialName("trans_date") val transDate: String,
-    val data: UserDataDto
+    val data: UserDataDto,
+    val products: List<ProductDto>
 )
 
 @Serializable
@@ -38,3 +39,12 @@ data class RepsDto(
     val state: Int,
     val time: String? = null
 )
+
+@Serializable
+data class ProductDto(
+    val id: Int,
+    val item: String,
+    val code: String,
+    val qty: String? = null,
+)
+

@@ -16,10 +16,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.AutoStories
 import androidx.compose.material.icons.outlined.BookOnline
 import androidx.compose.material.icons.outlined.LocationSearching
@@ -28,13 +26,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -53,13 +48,11 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import its.dart.com.domain.repository.remote.model.AllCustomersModel
+import its.dart.com.presentation.ui.components.ToolBar
 import its.dart.com.presentation.ui.theme.appColor
-import its.dart.com.presentation.ui.theme.appColorBlack
-import its.dart.com.presentation.ui.theme.appColorWhite
 import its.dart.com.presentation.ui.theme.robotoFamily
 import its.dart.com.presentation.viewmodel.CustomerByRepViewModel
-import its.dart.com.presentation.viewmodel.state.CustomerRepState
-
+import its.dart.com.presentation.viewmodel.state.GenericState
 
 
 @Composable
@@ -77,7 +70,14 @@ fun CustomerByRep(
 
     Scaffold(
         topBar = {
-            ToolBar(onBackClick = { navController.popBackStack() })
+            ToolBar(
+                title = "userName",
+                click = {navController.popBackStack() },
+                clickSearch = {},
+                clickMenu = {},
+                navigation = true,
+                fontSize = 46
+            )
         }
     ) { innerPadding ->
         Column(
@@ -86,36 +86,15 @@ fun CustomerByRep(
                 .padding(innerPadding)
         ) {
             when (val state = customersState) {
-                is CustomerRepState.Loading -> LoadingIndicator()
-                is CustomerRepState.Empty -> Text("No customers available.")
-                is CustomerRepState.Success -> CustomerList(state.data)
-                is CustomerRepState.Failure -> {
+                is GenericState.Loading -> LoadingIndicator()
+                is GenericState.Empty -> Text("No customers available.")
+                is GenericState.Success -> CustomerList(state.data, navController)
+                is GenericState.Failure -> {
                     Failure(
                         errorMessage = state.exception.message ?: "Unknown error",
                         onRetry = { }
                     )
                 }
-            }
-        }
-    }
-}
-
-@Composable
-fun CustomerList(customers: List<AllCustomersModel>) {
-    val listState = rememberLazyListState()
-    LazyColumn(
-        state = listState,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        items(customers) { customer ->
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(5.dp)
-            ) {
-                CustomersCard(
-                    details = customer
-                )
             }
         }
     }
@@ -165,10 +144,32 @@ fun Failure(
 }
 
 
+@Composable
+fun CustomerList(customers: List<AllCustomersModel>, navController: NavHostController) {
+    val listState = rememberLazyListState()
+    LazyColumn(
+        state = listState,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        items(customers) { customer ->
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+            ) {
+                CustomersCard(
+                    details = customer,
+                    navController = navController
+                )
+            }
+        }
+    }
+}
 
 @Composable
 fun CustomersCard(
     details: AllCustomersModel,
+    navController: NavHostController
 ) {
     Row(
         modifier = Modifier
@@ -193,14 +194,15 @@ fun CustomersCard(
                 fontFamily = robotoFamily
             )
         }
-        DropdownMenuWithDetails()
+        DropdownMenuWithDetails(navController, details)
     }
 }
 
-
 @Composable
-fun DropdownMenuWithDetails() {
-
+fun DropdownMenuWithDetails(
+    navController: NavHostController,
+    details: AllCustomersModel
+) {
     var expanded by rememberSaveable { mutableStateOf(false) }
 
     Box(
@@ -224,7 +226,11 @@ fun DropdownMenuWithDetails() {
             DropdownMenuItem(
                 text = { Text("Survey") },
                 leadingIcon = { Icon(Icons.Outlined.AutoStories, contentDescription = null) },
-                onClick = { expanded = false }
+                onClick = {
+                    expanded = false
+                    // Navigate to SurveyScreen with parameters
+                    navController.navigate("survey/${"ts"}/${"dd"}")
+                }
             )
             DropdownMenuItem(
                 text = { Text("Order") },
@@ -238,39 +244,4 @@ fun DropdownMenuWithDetails() {
             )
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ToolBar(
-    onBackClick: () -> Unit)
-{
-    TopAppBar(
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = appColorBlack,
-            titleContentColor = Color.White,
-            navigationIconContentColor = Color.White,
-            actionIconContentColor = Color.White,
-        ),
-        title = {
-            Text(text = "Sales Person", fontWeight = FontWeight.Medium)
-        },
-        navigationIcon = {
-            IconButton(onClick = onBackClick) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Color.White
-                )
-            }
-        },
-        actions = {
-            IconButton(onClick = { /* TODO: Implement Search */ }) {
-                Icon(Icons.Filled.Search, contentDescription = "Search", tint = appColorWhite)
-            }
-            IconButton(onClick = { /* TODO: Handle click */ }) {
-                Icon(Icons.Default.MoreVert, contentDescription = "More Options")
-            }
-        }
-    )
 }

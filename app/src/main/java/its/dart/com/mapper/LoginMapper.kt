@@ -1,11 +1,13 @@
 package its.dart.com.mapper
 
 
+import its.dart.com.data.repository.local.entity.ProductEntity
 import its.dart.com.data.repository.local.entity.SalesRepsEntity
 import its.dart.com.data.repository.remote.dto.AllCustomersDto
 import its.dart.com.data.repository.remote.dto.CustomersDto
 import its.dart.com.data.repository.remote.dto.LoginDto
 import its.dart.com.domain.repository.remote.model.AllCustomersModel
+import its.dart.com.domain.repository.remote.model.ProductModel
 import its.dart.com.domain.repository.remote.model.CustomersModel
 import its.dart.com.domain.repository.remote.model.LoginModel
 import its.dart.com.domain.repository.remote.model.RepsModel
@@ -13,7 +15,6 @@ import its.dart.com.domain.repository.remote.model.UserDataModel
 import its.dart.com.domain.repository.remote.model.UserModel
 
 fun LoginDto.mapToLoginModel(): LoginModel {
-    // Map UserDto to UserModel
     val userDto = this.data.users
     val userModel = UserModel.Builder()
         .fullName(userDto.fullName)
@@ -24,7 +25,6 @@ fun LoginDto.mapToLoginModel(): LoginModel {
         .depotLng(userDto.depotLng)
         .build()
 
-    // Map List of RepsDto to List of RepsModel
     val repsModelList = this.data.rep.map { repDto ->
         RepsModel.Builder()
             .id(repDto.id)
@@ -36,20 +36,29 @@ fun LoginDto.mapToLoginModel(): LoginModel {
             .build()
     }
 
-    // Map UserDataDto to UserDataModel
+    val customerModelList = this.products.map { customerDto ->
+        ProductModel.Builder()
+            .id(customerDto.id)
+            .item(customerDto.item)
+            .code(customerDto.code)
+            .qty(customerDto.qty)
+            .build()
+    }
+
     val userDataModel = UserDataModel.Builder()
         .users(userModel)
-        .rep(repsModelList) // Add the list of RepsModel
+        .rep(repsModelList)
         .build()
 
-    // Map LoginDto to LoginModelx
     return LoginModel.Builder()
         .status(this.status)
         .message(this.message)
         .transDate(this.transDate)
         .data(userDataModel)
+        .customer(customerModelList)
         .build()
 }
+
 
 fun List<SalesRepsEntity>.toRepsModelList(): List<RepsModel> {
     return this.map { salesRep ->
@@ -105,3 +114,24 @@ fun List<AllCustomersDto>.toAllCustomersModelList(): List<AllCustomersModel> {
     }
 }
 
+fun List<ProductModel>.toEntityList(): List<ProductEntity> {
+    return this.map { productModel ->
+        ProductEntity(
+            id = productModel.id,
+            item = productModel.item,
+            code = productModel.code,
+            qty = productModel.qty
+        )
+    }
+}
+
+fun List<ProductEntity>.toModelList(): List<ProductModel> {
+    return this.map { productEntity ->
+        ProductModel.Builder()
+            .id(productEntity.id)
+            .item(productEntity.item)
+            .code(productEntity.code)
+            .qty(productEntity.qty)
+            .build()
+    }
+}

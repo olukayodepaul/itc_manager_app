@@ -6,7 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import its.dart.com.Application
-import its.dart.com.data.repository.local.configuration.RoomDatabaseTable
+import its.dart.com.data.repository.local.database.LocalDatabase
 import its.dart.com.data.repository.local.configuration.RoomDatabase
 import javax.inject.Singleton
 
@@ -28,7 +28,7 @@ object Dao{
 
     @Singleton
     @Provides
-    fun provideDao(db: RoomDatabase): RoomDatabaseTable {
+    fun provideDao(db: RoomDatabase): LocalDatabase {
         return db.doa
     }
 

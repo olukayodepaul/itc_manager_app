@@ -5,8 +5,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import its.dart.com.data.repository.local.configuration.RoomDatabaseTable
+import its.dart.com.data.repository.local.database.LocalDatabase
 import its.dart.com.domain.usecases.LoginUseCases
+import its.dart.com.mapper.toEntityList
 import its.dart.com.mapper.toSalesRepsList
 import its.dart.com.presentation.viewmodel.event.LoginUIEvent
 import its.dart.com.presentation.viewmodel.state.LoginUIState
@@ -18,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCases,
-    private val localCache: RoomDatabaseTable
+    private val localCache: LocalDatabase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginUIState())
@@ -84,11 +85,15 @@ class LoginViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(isLoading = true, buttonState = false)
         val result = loginUseCase.invokeLogin(uiState.value.username, uiState.value.password)
 
-
         result.onSuccess {
-            Log.d("epokhai", "1 ${it.data.rep.toSalesRepsList()}")
             if (it.status == 200) {
-                localCache.insertLogins(it.data.rep.toSalesRepsList())
+
+                //save sales representative in a local repository
+                localCache.persistLogin(it.data.rep.toSalesRepsList())
+
+                //save product in a local repository
+                localCache.persistProduct(it.products.toEntityList())
+
                 navigateToHomeScreen()
             } else {
                 _uiState.value = _uiState.value.copy(
@@ -97,7 +102,7 @@ class LoginViewModel @Inject constructor(
                 )
             }
         }.onFailure { error ->
-            Log.d("epokhai", "2 ${error.message}")
+            Log.d("its.dart.com", error.message.toString())
             _uiState.value = _uiState.value.copy(
                 isLoading = false,
                 buttonState = true,

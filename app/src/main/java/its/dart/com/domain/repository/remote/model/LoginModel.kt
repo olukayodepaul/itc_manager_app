@@ -6,7 +6,8 @@ data class LoginModel(
     val status: Int,
     val message: String,
     val transDate: String,
-    val data: UserDataModel
+    val data: UserDataModel,
+    val products: List<ProductModel>
 ) {
     // Builder class for LoginModel
     class Builder {
@@ -14,19 +15,22 @@ data class LoginModel(
         private var message: String = ""
         private var transDate: String = ""
         private var data: UserDataModel? = null
+        private var customer: MutableList<ProductModel> = mutableListOf()
 
         // Setters for each property
         fun status(status: Int) = apply { this.status = status }
         fun message(message: String) = apply { this.message = message }
         fun transDate(transDate: String) = apply { this.transDate = transDate }
         fun data(data: UserDataModel) = apply { this.data = data }
+        fun customer(customer: List<ProductModel>) = apply { this.customer = customer.toMutableList() }
+        fun addCustomer(customerModel: ProductModel) = apply { this.customer.add(customerModel) }
 
         // Build method to create LoginModel object
         fun build(): LoginModel {
             if (data == null) {
                 throw IllegalStateException("UserDataModel must be provided.")
             }
-            return LoginModel(status, message, transDate, data!!)
+            return LoginModel(status, message, transDate, data!!, customer)
         }
     }
 }
@@ -86,7 +90,6 @@ data class UserModel(
     }
 }
 
-
 data class RepsModel(
     val id: Int,
     val routeId: Int,
@@ -121,6 +124,29 @@ data class RepsModel(
         // Build method to create RepsModel object
         fun build(): RepsModel {
             return RepsModel(id, routeId, fullName, staffCode, phoneNo, routeName, state, time)
+        }
+    }
+}
+
+data class ProductModel(
+    val id: Int,
+    val item: String,
+    val code: String,
+    val qty: String? = null
+) {
+    class Builder {
+        private var id: Int = 0
+        private var item: String = ""
+        private var code: String = ""
+        private var qty: String? = null
+
+        fun id(id: Int) = apply { this.id = id }
+        fun item(item: String) = apply { this.item = item }
+        fun code(code: String) = apply { this.code = code }
+        fun qty(qty: String?) = apply { this.qty = qty }
+
+        fun build(): ProductModel {
+            return ProductModel(id, item, code, qty)
         }
     }
 }
