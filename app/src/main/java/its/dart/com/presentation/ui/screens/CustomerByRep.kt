@@ -1,9 +1,11 @@
 package its.dart.com.presentation.ui.screens
 
-
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -41,13 +43,17 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import its.dart.com.domain.repository.remote.model.AllCustomersModel
+import its.dart.com.domain.repository.remote.model.RepsModel
+import its.dart.com.presentation.ui.components.CircleAvatar
+import its.dart.com.presentation.ui.components.DropdownMenuWithDetails
 import its.dart.com.presentation.ui.components.Failure
 import its.dart.com.presentation.ui.components.ToolBar
 import its.dart.com.presentation.ui.theme.appColor
+import its.dart.com.presentation.ui.theme.appColorBlack
+import its.dart.com.presentation.ui.theme.dartSansFontFamily
 import its.dart.com.presentation.ui.theme.robotoFamily
 import its.dart.com.presentation.viewmodel.CustomerByRepViewModel
 import its.dart.com.presentation.viewmodel.state.GenericState
-
 
 @Composable
 fun CustomerByRep(
@@ -65,19 +71,23 @@ fun CustomerByRep(
     Scaffold(
         topBar = {
             ToolBar(
-                title = "userName",
-                click = {navController.popBackStack() },
+                title = "Kenneth",
+                click = {},
                 clickSearch = {},
                 clickMenu = {},
                 navigation = true,
-                fontSize = 46
+                fontSize = 20,
+                searchIcon =  true,
+                fontFamily = robotoFamily,
+                letterSpacing = 0.5
             )
         }
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .fillMaxWidth()
                 .padding(innerPadding)
+                .fillMaxSize()
+                .background(Color(0xFFFFFFFF))
         ) {
             when (val state = customersState) {
                 is GenericState.Loading -> LoadingIndicator()
@@ -94,113 +104,70 @@ fun CustomerByRep(
 }
 
 @Composable
+fun CustomerList(
+    customers: List<AllCustomersModel>,
+    navController: NavHostController
+) {
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth(),
+        state = rememberLazyListState()
+    ) {
+        items(
+            items = customers,
+            key = { it.id }
+        ) { customer ->
+            ContentList(customer, navController)
+        }
+    }
+}
+
+@Composable
 fun LoadingIndicator() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         CircularProgressIndicator()
     }
 }
 
-
 @Composable
-fun CustomerList(customers: List<AllCustomersModel>, navController: NavHostController) {
-    val listState = rememberLazyListState()
-    LazyColumn(
-        state = listState,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        items(customers) { customer ->
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(5.dp)
-            ) {
-                CustomersCard(
-                    details = customer,
-                    navController = navController
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun CustomersCard(
-    details: AllCustomersModel,
+fun ContentList(
+    salesRep: AllCustomersModel,
     navController: NavHostController
 ) {
-    Row(
+    Column(
         modifier = Modifier
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+            .fillMaxWidth()
+            .padding(vertical = 10.dp)
     ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = details.outletName,
-                fontWeight = FontWeight(500),
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1,
-                fontSize = 17.sp,
-                color = appColor,
-                fontFamily = robotoFamily
-            )
-            Text(
-                text = "${details.outletAddress} ${details.urno}",
-                maxLines = 1,
-                fontSize = 12.sp,
-                color = Color.Gray,
-                fontFamily = robotoFamily
-            )
-        }
-        DropdownMenuWithDetails(navController, details)
-    }
-}
-
-@Composable
-fun DropdownMenuWithDetails(
-    navController: NavHostController,
-    details: AllCustomersModel
-) {
-    var expanded by rememberSaveable { mutableStateOf(false) }
-
-    Box(
-        modifier = Modifier
-            .wrapContentSize(Alignment.TopEnd)
-    ) {
-        IconButton(onClick = { expanded = !expanded }) {
-            Icon(Icons.Default.MoreVert, contentDescription = "More options")
-        }
-
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = Modifier.wrapContentSize()
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 10.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            DropdownMenuItem(
-                text = { Text("Location Finder") },
-                leadingIcon = { Icon(Icons.Outlined.LocationSearching, contentDescription = null) },
-                onClick = { expanded = false }
+            CircleAvatar(
+                initialName = salesRep.outletName,
+                id = salesRep.id // Pass the unique ID
             )
-            DropdownMenuItem(
-                text = { Text("Survey") },
-                leadingIcon = { Icon(Icons.Outlined.AutoStories, contentDescription = null) },
-                onClick = {
-                    expanded = false
-                    navController.navigate("survey/${"ts"}/${"dd"}")
-                }
-            )
-            DropdownMenuItem(
-                text = { Text("Order") },
-                leadingIcon = { Icon(Icons.Outlined.ShoppingCart, contentDescription = null) },
-                onClick = {
-                    expanded = false
-                    navController.navigate("orderPage")
-                }
-            )
-            DropdownMenuItem(
-                text = { Text("Competition") },
-                leadingIcon = { Icon(Icons.Outlined.BookOnline, contentDescription = null) },
-                onClick = { expanded = false }
-            )
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 10.dp)
+            ) {
+                Text(
+                    text = salesRep.outletName,
+                    fontWeight = FontWeight(400),
+                    maxLines = 1,
+                    fontSize = 18.sp,
+                    color = appColor,
+                )
+                Text(
+                    text = "${salesRep.outletAddress} ${salesRep.contactPhone}",
+                    maxLines = 1,
+                    fontSize = 14.sp,
+                    color = Color.Gray,
+                )
+            }
+            DropdownMenuWithDetails(navController, salesRep)
         }
     }
 }

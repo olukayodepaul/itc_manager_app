@@ -12,6 +12,21 @@ val robotoFamily = FontFamily(
     Font(R.font.roboto)
 )
 
+val KanitBold = FontFamily(
+    Font(R.font.kanit_bold)
+)
+
+val notosanskrboldFamily = FontFamily(
+    Font(R.font.notosanskr_bold)
+)
+
+val KanitMedium = FontFamily(
+    Font(R.font.kanit_medium)
+)
+
+val KanitSemiBold = FontFamily(
+    Font(R.font.kanit_seminbold)
+)
 
 val dartFontFamily = FontFamily(
     Font(R.font.ubuntu_bold, FontWeight.Bold),

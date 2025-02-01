@@ -27,7 +27,7 @@ fun OrderScreen(
         is GenericState.Success->{
             Failure(
                 errorMessage = "${state.data[1]}"?: "Unknown error",
-                onRetry = { }
+                onRetry = {}
             )
         }
     }

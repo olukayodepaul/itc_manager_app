@@ -11,9 +11,11 @@ import javax.inject.Inject
 
 
 class OrderUseCases @Inject constructor(private val localDatabase: LocalDatabase) {
-    suspend fun fetchProduct(): Flow<List<ProductModel>> {
+    fun fetchProduct(): Flow<List<ProductModel>> {
         return localDatabase.getAllProducts()
-            .map { it.toModelList() }
+            .map {
+                it.toModelList()
+            }
             .flowOn(Dispatchers.IO)
     }
 }
