@@ -41,7 +41,7 @@ fun DropdownMenuWithDetails(
             Icon(
                 Icons.Default.MoreVert,
                 contentDescription = "More options",
-                modifier = Modifier.size(18.dp)
+                modifier = Modifier.size(20.dp)
             )
         }
 
