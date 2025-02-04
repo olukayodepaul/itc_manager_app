@@ -57,22 +57,24 @@ fun ToolBar(
                 lineHeight = 24.sp,
             )
         },
+
         navigationIcon = {
-            if(navigation){
+            if(navigation) {
                 IconButton(onClick = click) {
-                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
+                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
                 }
             }
         },
+
         actions = {
             if(searchIcon) {
                 IconButton(onClick = clickSearch) {
-                    Icon(Icons.Filled.Search, contentDescription = "Search")
+                    Icon(Icons.Filled.Search, contentDescription = null)
                 }
             }
             if(menuIcon){
                 IconButton(onClick = clickMenu) {
-                    Icon(Icons.Default.MoreVert, contentDescription = "More Options")
+                    Icon(Icons.Default.MoreVert, contentDescription = null)
                 }
             }
         }

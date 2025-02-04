@@ -1,6 +1,7 @@
 package its.dart.com.mapper
 
 
+import its.dart.com.data.repository.local.entity.AllCustomersEntity
 import its.dart.com.data.repository.local.entity.ProductEntity
 import its.dart.com.data.repository.local.entity.SalesRepsEntity
 import its.dart.com.data.repository.remote.dto.AllCustomersDto
@@ -133,5 +134,35 @@ fun List<ProductEntity>.toModelList(): List<ProductModel> {
             .code(productEntity.code)
             .qty(productEntity.qty)
             .build()
+    }
+}
+
+fun List<AllCustomersEntity>.toAllCustomersModel(): List<AllCustomersModel> {
+    return this.map { entity ->
+        AllCustomersModel.Builder()
+            .setId(entity.id)
+            .setUrno(entity.urno)
+            .setLatitude(entity.latitude ?: "0.0")
+            .setLongitude(entity.longitude ?: "0.0")
+            .setPosid(entity.posid ?: "0.0")
+            .setOutletName(entity.outlet_name)
+            .setOutletAddress(entity.outlet_address)
+            .setContactPhone(entity.contact_phone)
+            .build()
+    }
+}
+
+fun List<AllCustomersModel>.toAllCustomersEntity(): List<AllCustomersEntity> {
+    return this.map { model ->
+        AllCustomersEntity(
+            id = model.id,
+            urno = model.urno,
+            latitude = model.latitude,
+            longitude = model.longitude,
+            posid = model.posid,
+            outlet_name = model.outletName,
+            outlet_address = model.outletAddress,
+            contact_phone = model.contactPhone
+        )
     }
 }

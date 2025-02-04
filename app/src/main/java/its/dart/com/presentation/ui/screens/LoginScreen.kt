@@ -3,7 +3,6 @@ package its.dart.com.presentation.ui.screens
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,22 +10,35 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LockOpen
+import androidx.compose.material.icons.filled.PieChartOutline
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import its.dart.com.presentation.ui.components.CButton
-import its.dart.com.presentation.ui.components.NavigationText
 import its.dart.com.presentation.ui.components.TextFieldInput
+import its.dart.com.presentation.ui.components.ToolBar
+import its.dart.com.presentation.ui.theme.KanitBold
+import its.dart.com.presentation.ui.theme.KanitMedium
+import its.dart.com.presentation.ui.theme.appColor
 import its.dart.com.presentation.ui.theme.appColorBlack
-import its.dart.com.presentation.ui.theme.appColorWhite
+import its.dart.com.presentation.ui.theme.robotoFamily
 import its.dart.com.presentation.viewmodel.LoginViewModel
 import its.dart.com.presentation.viewmodel.event.LoginUIEvent
 
@@ -39,6 +51,7 @@ fun LoginScreen(
     val uiState by viewModel.uiState.collectAsState()
     val navigateToHome by viewModel.navigateToHome.collectAsState()
 
+
     LaunchedEffect(navigateToHome) {
         if (navigateToHome) {
             navController.navigate("MainPage") {
@@ -48,75 +61,94 @@ fun LoginScreen(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .graphicsLayer()
-            .background(color = appColorBlack)
-
-    ) {
-
+    Scaffold(
+        topBar = {
+            ToolBar(
+                title = "SapApp",
+                fontSize =  32,
+                click = {},
+                clickSearch = {},
+                clickMenu = {},
+                navigation = false
+            )
+        }
+    ) { innerPadding ->
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(100.dp)
-                .padding(start = 12.dp, end = 12.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.Start,
-        ) {
-
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Box(
-            modifier = Modifier
-                .clip(RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp))
-                .fillMaxWidth()
-                .weight(1f)
-                .background(appColorWhite)
+                .padding(innerPadding)
+                .fillMaxSize()
+                .background(Color(0xFFFFFFFFF))
         ) {
             Column(
                 modifier = Modifier.padding(
-                    start = 16.dp,
-                    end = 16.dp
+                    start = 20.dp,
+                    end = 20.dp
                 )
             ) {
+                Spacer(modifier = Modifier.height(40.dp))
+
+               Row (
+                   verticalAlignment = Alignment.CenterVertically
+               ){
+                   Icon(
+                       imageVector = Icons.Filled.LockOpen,
+                       contentDescription = null,
+                       tint = appColorBlack,
+                       modifier = Modifier.size(18.dp)
+                   )
+                   Spacer(modifier = Modifier.width(8.dp))
+                   Text(
+                       text= "Login",
+                       color = appColor,
+                       fontSize = 25.sp,
+                       fontFamily = robotoFamily,
+                       letterSpacing = (-0.5).sp,
+                   )
+               }
+//                Text(
+//                    text= "provide all credential to access all the feature of the app",
+//                    fontFamily = robotoFamily,
+//                    letterSpacing = (-0.5).sp,
+//                    fontSize = 15.sp,
+//                    color = appColor,
+//
+//                )
+
+                Spacer(modifier = Modifier.height(30.dp))
 
                 TextFieldInput(
                     value = uiState.username,
-                    onValueChange = {username -> viewModel.onEvent(LoginUIEvent.OnUsername(username))},
+                    onValueChange = { username -> viewModel.onEvent(LoginUIEvent.OnUsername(username)) },
                     hint = "Username"
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-
                 TextFieldInput(
                     value = uiState.password,
-                    onValueChange = {password -> viewModel.onEvent(LoginUIEvent.OnPassword(password))},
+                    onValueChange = { password -> viewModel.onEvent(LoginUIEvent.OnPassword(password)) },
                     hint = "Password",
                     type = true
                 )
 
                 Spacer(modifier = Modifier.height(23.dp))
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    NavigationText(
-                        onClick = {},
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(23.dp))
-
                 CButton(
                     onClick = { viewModel.onEvent(LoginUIEvent.OnLoginClick) },
                     buttonState = uiState.buttonState,
-                    text= "Login",
+                    text = "Login",
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Text(
+                    text = "Design and build by dartSpatial Nig Ltd",
+                    fontSize = 13.sp,
+                    color = Color.Gray,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .padding(bottom = 5.dp)
+                        .fillMaxWidth()
                 )
             }
         }

@@ -17,5 +17,6 @@ val appColorGray = Color(0xFFBEC2C2)
 val appColor = Color(0xFF000000)
 val iconColor = Color(0xFF616161)
 val backgrondColor = Color(0xFFFFAFAFA)
-val otherIconColor = Color(0xFFF263238)
-
+val otherIconColor = Color(0xFFFc7006e)
+val IconBgColor = Color(0xFFF5c00d2)
+val IconBgColors = Color(0xFFFf47100)

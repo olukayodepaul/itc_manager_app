@@ -42,6 +42,7 @@ fun TextFieldInput(
 
     TextField(
         value = value,
+        maxLines = 1,
         onValueChange = onValueChange,
         placeholder = {
             Text(

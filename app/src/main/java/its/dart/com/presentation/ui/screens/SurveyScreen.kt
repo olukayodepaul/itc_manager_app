@@ -10,10 +10,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -35,7 +35,7 @@ fun SurveyScreen(
         topBar = {
             ToolBar(
                 title = "Kenneth",
-                click = {},
+                click = {navController.popBackStack()},
                 clickSearch = {},
                 clickMenu = {},
                 navigation = true,
@@ -110,6 +110,60 @@ fun CustomerSurveyScreen() {
             modifier = Modifier.padding(bottom = 8.dp)
         )
         AdditionalFeedbackQuestions()
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Group 5: Customer Satisfaction
+        Text(
+            text = "Product Availability on Sheff",
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+
+        var selectedOne by remember { mutableStateOf<String?>(null) }
+        var selectedTwo by remember { mutableStateOf<String?>(null) }
+        var selectedThree by remember { mutableStateOf<String?>(null) }
+        var selectedFour by remember { mutableStateOf<String?>(null) }
+        val proOne = "040-007"
+        val proTwo = "040-008"
+        val proThree = "040-009"
+        val proFour = "040-010"
+
+        ProductCheckbox(
+            productName = "TARGET SUPER RV",
+            isChecked = selectedOne === proOne,
+            onCheckedChange = {
+                newValues->
+                selectedOne = if(newValues)  proOne  else ""
+            }
+        )
+
+        ProductCheckbox(
+            productName = "TARGET MENTHOL RV",
+            isChecked = selectedTwo === proTwo,
+            onCheckedChange = {
+                    newValues->
+                selectedTwo = if(newValues)  proTwo  else ""
+            }
+        )
+
+        ProductCheckbox(
+            productName = "EXECUTIVE",
+            isChecked = selectedThree === proThree,
+            onCheckedChange = {
+                    newValues->
+                selectedThree = if(newValues)  proThree  else ""
+            }
+        )
+
+        ProductCheckbox(
+            productName = "EXECUTIVE CLICK",
+            isChecked = selectedFour === proFour,
+            onCheckedChange = {
+                    newValues->
+                selectedFour = if(newValues)  proFour  else ""
+            }
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -341,7 +395,7 @@ fun AdditionalFeedbackQuestions() {
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.padding(bottom = 4.dp)
         )
-        OutlinedTextField(
+        TextField(
             value = improvementSuggestions,
             onValueChange = { improvementSuggestions = it },
             label = { Text("Enter your suggestions") },
@@ -370,7 +424,7 @@ fun AdditionalFeedbackQuestions() {
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.padding(bottom = 4.dp)
         )
-        OutlinedTextField(
+        TextField(
             value = comments,
             onValueChange = { comments = it },
             label = { Text("Enter your comments") },
@@ -378,6 +432,7 @@ fun AdditionalFeedbackQuestions() {
         )
     }
 }
+
 @Composable
 fun DropdownQuestion(
     options: List<String>,
@@ -391,33 +446,31 @@ fun DropdownQuestion(
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        // DropdownMenu tied to the OutlinedTextField
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }, // Close dropdown when dismissed
+            onDismissRequest = {expanded = false},
             modifier = Modifier
                 .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
-                .zIndex(1f) // Ensure it appears on top
+                .zIndex(1f)
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
                     text = { Text(option) },
                     onClick = {
                         onOptionSelected(option)
-                        expanded = false // Close dropdown after selection
+                        expanded = false
                     }
                 )
             }
         }
 
-        // OutlinedTextField with clickable modifier
-        OutlinedTextField(
+        TextField(
             value = selectedOption,
-            onValueChange = { }, // No-op since the field is read-only
+            onValueChange = {},
             readOnly = true,
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { expanded = true } // Open dropdown on click
+                .clickable { expanded = true }
                 .onGloballyPositioned { coordinates ->
                     textFieldSize = coordinates.size.toSize()
                 },
@@ -425,9 +478,32 @@ fun DropdownQuestion(
                 Icon(
                     imageVector = Icons.Default.ArrowDropDown,
                     contentDescription = null,
-                    modifier = Modifier.clickable { expanded = true } // Open dropdown on icon click
+                    modifier = Modifier.clickable { expanded = true }
                 )
             }
         )
     }
 }
+
+@Composable
+fun ProductCheckbox(
+    productName:String,
+    isChecked: Boolean,
+    onCheckedChange: (Boolean)-> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Checkbox(
+            checked = isChecked,
+            onCheckedChange = onCheckedChange
+        )
+        Text(
+            text = productName,
+            modifier = Modifier
+                .padding(start = 8.dp)
+        )
+    }
+}
+
