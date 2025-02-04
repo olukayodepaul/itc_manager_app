@@ -1,20 +1,16 @@
 package its.dart.com.presentation.ui.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -24,11 +20,9 @@ import androidx.navigation.NavHostController
 import its.dart.com.domain.repository.remote.model.RepsModel
 import its.dart.com.presentation.ui.components.CircleAvatar
 import its.dart.com.presentation.ui.components.ToolBar
-import its.dart.com.presentation.ui.components.generateRandomColor
 import its.dart.com.presentation.ui.theme.appColor
 import its.dart.com.presentation.ui.theme.appColorBlack
-import its.dart.com.presentation.ui.theme.appColorWhite
-import its.dart.com.presentation.ui.theme.backgrondColor
+import its.dart.com.presentation.ui.theme.robotoFamily
 import its.dart.com.presentation.viewmodel.SalesRepViewModel
 
 @Composable
@@ -41,11 +35,13 @@ fun SalesRepScreen(
     Scaffold(
         topBar = {
             ToolBar(
-                title = "SapApp",
+                title = "Sales Representative",
                 click = {},
                 clickSearch = {},
                 clickMenu = {},
-                navigation = false
+                fontSize = 20,
+                fontFamily = robotoFamily,
+                letterSpacing = 0.5
             )
         }
     ) { innerPadding ->
@@ -86,7 +82,7 @@ fun Content(
 ) {
     Spacer(modifier = Modifier
         .fillMaxWidth()
-        .padding(7.dp))
+        .padding(5.dp))
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -95,7 +91,7 @@ fun Content(
     ) {
         CircleAvatar(
             initialName = salesRep.fullName,
-            id = salesRep.id // Pass the unique ID
+            id = salesRep.id
         )
         Column(
             modifier = Modifier
@@ -125,7 +121,7 @@ fun Content(
     }
     Spacer(modifier = Modifier
         .fillMaxWidth()
-        .padding(7.dp))
+        .padding(5.dp))
 }
 
 

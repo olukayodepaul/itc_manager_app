@@ -105,14 +105,6 @@ fun LoginScreen(
                        letterSpacing = (-0.5).sp,
                    )
                }
-//                Text(
-//                    text= "provide all credential to access all the feature of the app",
-//                    fontFamily = robotoFamily,
-//                    letterSpacing = (-0.5).sp,
-//                    fontSize = 15.sp,
-//                    color = appColor,
-//
-//                )
 
                 Spacer(modifier = Modifier.height(30.dp))
 

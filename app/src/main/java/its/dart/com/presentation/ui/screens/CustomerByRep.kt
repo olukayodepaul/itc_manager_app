@@ -51,7 +51,7 @@ fun CustomerByRep(
     Scaffold(
         topBar = {
             ToolBar(
-                title = "Kenneth",
+                title = "${userName}",
                 click = {
                     navController.popBackStack()
                 },
@@ -59,7 +59,6 @@ fun CustomerByRep(
                 clickMenu = {},
                 navigation = true,
                 fontSize = 20,
-                searchIcon =  true,
                 fontFamily = robotoFamily,
                 letterSpacing = 0.5
             )

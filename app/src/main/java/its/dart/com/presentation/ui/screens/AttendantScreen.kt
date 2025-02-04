@@ -2,6 +2,7 @@ package its.dart.com.presentation.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
@@ -15,13 +16,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Analytics
 import androidx.compose.material.icons.filled.AssignmentReturned
 import androidx.compose.material.icons.filled.AvTimer
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.PieChartOutline
 import androidx.compose.material.icons.filled.Search
@@ -74,9 +78,9 @@ fun AttendantScreen(
                 click = {},
                 clickSearch = {},
                 clickMenu = {},
-                fontSize = 21,
+                fontSize = 18,
                 fontFamily = robotoFamily,
-                letterSpacing = -0.5
+                letterSpacing = -0.2
             )
         }
     ) { innerPadding ->
@@ -85,15 +89,16 @@ fun AttendantScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
                 .background(Color(0xFFFFFFFF))
+                .verticalScroll(rememberScrollState()),
         ) {
             RowOfCards()
             Spacer(modifier = Modifier.height(30.dp))
             RowHeader(title = "DailyTask", fontSize = 20)
             Spacer(modifier = Modifier.height(10.dp))
-            RowTask(icon = Icons.Filled.Timelapse , title = "Resume", subTitle = "Welcome to today activity")
-            RowTask(icon = Icons.Filled.TimeToLeave , title = "Out for Survey", subTitle = "Take a tour with a sales representative")
-            RowTask(icon = Icons.Filled.AssignmentReturned , title = "Return from Survey", subTitle = "Back from a  tour with a sales representative")
-            RowTask(icon = Icons.Filled.Close , title = "Close", subTitle = "Good night and hope to see the next day")
+            RowTask(icon = Icons.Filled.Timelapse , title = "Resume", subTitle = "Welcome to today activity", click = {})
+            RowTask(icon = Icons.Filled.TimeToLeave , title = "Out for Survey", subTitle = "Take a tour with a sales representative", click = {})
+            RowTask(icon = Icons.Filled.AssignmentReturned , title = "Return from Survey", subTitle = "Back from a  tour with a sales representative", click = {})
+            RowTask(icon = Icons.Filled.Home , title = "Close", subTitle = "Good night and hope to see you the next day", click = {})
         }
     }
 }
@@ -193,52 +198,58 @@ fun RowOfCards() {
 
 @Composable
 fun RowTask(
+    click:()->Unit,
     icon: ImageVector,
     title:String,
     subTitle:String
 ){
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 10.dp, vertical = 5.dp)
-            .background(Color.LightGray.copy(alpha = 0.05f), shape = RoundedCornerShape(12.dp)) // Even lighter background
-            .border(0.5.dp, Color.Gray.copy(alpha = 0.2f), shape = RoundedCornerShape(12.dp)) // Even lighter border
-            .padding(12.dp), // Inner padding for spacing
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = appColorBlack,
-            modifier = Modifier.size(20.dp) // Properly sized icon
-        )
+  Box(modifier = Modifier
+      .fillMaxWidth()
+      .padding(12.dp)
+  ) {
+      Row(
+          modifier = Modifier
+              .clickable {click()}
+              .fillMaxWidth()
+              .background(Color.LightGray.copy(alpha = 0.05f), shape = RoundedCornerShape(12.dp)) // Even lighter background
+              .border(0.5.dp, Color.Gray.copy(alpha = 0.2f), shape = RoundedCornerShape(12.dp))
+              .padding(horizontal = 10.dp, vertical = 10.dp),
+          verticalAlignment = Alignment.CenterVertically
+      ) {
+          Icon(
+              imageVector = icon,
+              contentDescription = null,
+              tint = appColorBlack,
+              modifier = Modifier.size(20.dp) // Properly sized icon
+          )
 
-        Spacer(modifier = Modifier.width(12.dp)) // Space between Icon and Column
+          Spacer(modifier = Modifier.width(12.dp)) // Space between Icon and Column
 
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = title,
-                color = Color.Black,
-                fontWeight = FontWeight.W600,
-                fontSize = 18.sp
-            )
-            Text(
-                text = subTitle,
-                color = Color.Gray.copy(alpha = 1f),
-                fontSize = 11.sp,
-                modifier = Modifier.padding(top = 1.dp)
-            )
-        }
+          Column(modifier = Modifier.weight(1f)) {
+              Spacer(modifier = Modifier.height(5.dp))
+              Text(
+                  text = title,
+                  color = Color.Black,
+                  fontWeight = FontWeight.W600,
+                  fontSize = 18.sp
+              )
+              Text(
+                  text = subTitle,
+                  color = Color.Gray.copy(alpha = 1f),
+                  fontSize = 11.sp,
+                  modifier = Modifier.padding(top = 1.dp)
+              )
+              Spacer(modifier = Modifier.height(5.dp))
+          }
 
-        Text(
-            text = "00:00:00",
-            color = Color.Gray.copy(alpha = 1f),
-            fontSize = 11.sp
-        )
-    }
-
-
+          Text(
+              text = "00:00:00",
+              color = Color.Gray.copy(alpha = 1f),
+              fontSize = 11.sp
+          )
+      }
+  }
 }
 
 

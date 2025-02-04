@@ -1,5 +1,6 @@
 package its.dart.com.presentation.ui.components
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
@@ -35,6 +36,7 @@ fun ToolBar(
     navigation: Boolean = false,
     searchIcon: Boolean = false,
     menuIcon: Boolean = false,
+    subTitle: Boolean = false,
     fontSize: Int = 24,
     letterSpacing: Double = -2.1,
     fontFamily: FontFamily = KanitMedium
@@ -48,20 +50,35 @@ fun ToolBar(
             actionIconContentColor = otherIconColor,
         ),
         title = {
-            Text(
-                text = title,
-                fontSize = fontSize.sp,
-                color = Color(0xFF37474F),
-                fontFamily = fontFamily,
-                letterSpacing = (letterSpacing).sp,
-                lineHeight = 24.sp,
-            )
+            Column {
+                Text(
+                    text = title,
+                    fontSize = fontSize.sp,
+                    color = Color(0xFF37474F),
+                    fontFamily = fontFamily,
+                    letterSpacing = (letterSpacing).sp,
+                    lineHeight = 24.sp,
+                )
+                if(subTitle){
+                    Text(
+                        text = "Customer Survey",
+                        fontSize = (fontSize-5).sp,
+                        color = Color(0xFF37474F),
+                        fontFamily = fontFamily,
+                        letterSpacing = (letterSpacing).sp,
+                        lineHeight = 24.sp,
+                    )
+                }
+            }
         },
 
         navigationIcon = {
             if(navigation) {
                 IconButton(onClick = click) {
-                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        tint = Color.Gray.copy(alpha = 1f),
+                        contentDescription = null)
                 }
             }
         },
@@ -69,12 +86,16 @@ fun ToolBar(
         actions = {
             if(searchIcon) {
                 IconButton(onClick = clickSearch) {
-                    Icon(Icons.Filled.Search, contentDescription = null)
+                    Icon(Icons.Filled.Search,
+                        tint = Color.Gray.copy(alpha = 1f),
+                        contentDescription = null)
                 }
             }
             if(menuIcon){
                 IconButton(onClick = clickMenu) {
-                    Icon(Icons.Default.MoreVert, contentDescription = null)
+                    Icon(Icons.Default.MoreVert,
+                        tint = Color.Gray.copy(alpha = 1f),
+                        contentDescription = null)
                 }
             }
         }
