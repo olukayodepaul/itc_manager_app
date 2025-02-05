@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.AutoStories
+import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material.icons.outlined.BookOnline
 import androidx.compose.material.icons.outlined.LocationSearching
 import androidx.compose.material.icons.outlined.ShoppingCart
@@ -75,13 +76,23 @@ fun DropdownMenuWithDetails(
                 leadingIcon = { Icon(Icons.Outlined.ShoppingCart, contentDescription = null) },
                 onClick = {
                     expanded = false
-                    navController.navigate("orderPage")
+                    val identifier  = "0"
+                    navController.navigate("OrderProduct/${details.id}/${details.outletName}/$identifier")
                 }
             )
+//            DropdownMenuItem(
+//                text = { Text("Competition") },
+//                leadingIcon = { Icon(Icons.Outlined.BookOnline, contentDescription = null) },
+//                onClick = { expanded = false }
+//            )
+
             DropdownMenuItem(
-                text = { Text("Competition") },
-                leadingIcon = { Icon(Icons.Outlined.BookOnline, contentDescription = null) },
-                onClick = { expanded = false }
+                text = { Text("Add Customer") },
+                leadingIcon = { Icon(Icons.Outlined.Book, contentDescription = null) },
+                onClick = {
+                    expanded = false
+                    navController.navigate("add_customer/${details.outletName}")
+                }
             )
         }
     }

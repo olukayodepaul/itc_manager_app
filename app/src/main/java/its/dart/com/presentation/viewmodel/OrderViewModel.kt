@@ -13,9 +13,9 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
-class OrderViewModel  @Inject constructor(private val orderUserCase: OrderUseCases) : ViewModel(){
+class OrderViewModel  @Inject constructor(private val orderUserCase: OrderUseCases) : ViewModel()
+{
 
     private val _productState = MutableStateFlow<GenericState<List<ProductModel>>>(GenericState.Loading)
     val productState: StateFlow<GenericState<List<ProductModel>>> = _productState.asStateFlow()

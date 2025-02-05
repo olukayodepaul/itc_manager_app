@@ -51,6 +51,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -64,8 +65,6 @@ import its.dart.com.presentation.ui.theme.appColorWhite
 import its.dart.com.presentation.ui.theme.robotoFamily
 import its.dart.com.presentation.viewmodel.AttendantViewModel
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AttendantScreen(
 
@@ -93,7 +92,7 @@ fun AttendantScreen(
         ) {
             RowOfCards()
             Spacer(modifier = Modifier.height(30.dp))
-            RowHeader(title = "DailyTask", fontSize = 20)
+            RowHeader(title = "DailyTask", fontSize = 18)
             Spacer(modifier = Modifier.height(10.dp))
             RowTask(icon = Icons.Filled.Timelapse , title = "Resume", subTitle = "Welcome to today activity", click = {})
             RowTask(icon = Icons.Filled.TimeToLeave , title = "Out for Survey", subTitle = "Take a tour with a sales representative", click = {})
@@ -115,7 +114,9 @@ fun RowHeader(
         maxLines = 1,
         fontSize = fontSize.sp,
         color = appColor,
-        text = title
+        text = title,
+        fontFamily = robotoFamily,
+        letterSpacing = (-1.2).sp
     )
 }
 @Composable
@@ -206,14 +207,14 @@ fun RowTask(
 
   Box(modifier = Modifier
       .fillMaxWidth()
-      .padding(12.dp)
+      .padding(start = 10.dp, end = 10.dp, bottom = 5.dp)
   ) {
       Row(
           modifier = Modifier
               .clickable {click()}
               .fillMaxWidth()
-              .background(Color.LightGray.copy(alpha = 0.05f), shape = RoundedCornerShape(12.dp)) // Even lighter background
-              .border(0.5.dp, Color.Gray.copy(alpha = 0.2f), shape = RoundedCornerShape(12.dp))
+              .background(Color.LightGray.copy(alpha = 0.05f), shape = RoundedCornerShape(1.dp)) // Even lighter background
+              .border(0.5.dp, Color.Gray.copy(alpha = 0.2f), shape = RoundedCornerShape(1.dp))
               .padding(horizontal = 10.dp, vertical = 10.dp),
           verticalAlignment = Alignment.CenterVertically
       ) {
@@ -221,26 +222,28 @@ fun RowTask(
               imageVector = icon,
               contentDescription = null,
               tint = appColorBlack,
-              modifier = Modifier.size(20.dp) // Properly sized icon
+              modifier = Modifier.size(30.dp) // Properly sized icon
           )
 
           Spacer(modifier = Modifier.width(12.dp)) // Space between Icon and Column
 
           Column(modifier = Modifier.weight(1f)) {
-              Spacer(modifier = Modifier.height(5.dp))
+              Spacer(modifier = Modifier.height(3.dp))
               Text(
                   text = title,
                   color = Color.Black,
                   fontWeight = FontWeight.W600,
-                  fontSize = 18.sp
+                  fontSize = 15.sp
               )
               Text(
                   text = subTitle,
                   color = Color.Gray.copy(alpha = 1f),
-                  fontSize = 11.sp,
-                  modifier = Modifier.padding(top = 1.dp)
+                  fontSize = 13.sp,
+                  maxLines = 1,
+                  overflow = TextOverflow.Ellipsis,
+                  modifier = Modifier.padding(top = 0.dp)
               )
-              Spacer(modifier = Modifier.height(5.dp))
+              Spacer(modifier = Modifier.height(3.dp))
           }
 
           Text(
@@ -253,8 +256,8 @@ fun RowTask(
 }
 
 
-@Preview
-@Composable
-fun PreviewApp(){
-    AttendantScreen()
-}
+//@Preview
+//@Composable
+//fun PreviewApp(){
+//    AttendantScreen()
+//}

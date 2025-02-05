@@ -29,6 +29,7 @@ import its.dart.com.domain.repository.remote.model.AllCustomersModel
 import its.dart.com.presentation.ui.components.CircleAvatar
 import its.dart.com.presentation.ui.components.DropdownMenuWithDetails
 import its.dart.com.presentation.ui.components.Failure
+import its.dart.com.presentation.ui.components.LoadingIndicator
 import its.dart.com.presentation.ui.components.ToolBar
 import its.dart.com.presentation.ui.theme.appColor
 import its.dart.com.presentation.ui.theme.robotoFamily
@@ -60,7 +61,9 @@ fun CustomerByRep(
                 navigation = true,
                 fontSize = 20,
                 fontFamily = robotoFamily,
-                letterSpacing = 0.5
+                letterSpacing = 0.5,
+                subTitleItem = "Customers List",
+                subTitle = true,
             )
         }
     ) { innerPadding ->
@@ -99,13 +102,6 @@ fun CustomerList(
         ) { customer ->
             ContentList(customer, navController)
         }
-    }
-}
-
-@Composable
-fun LoadingIndicator() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        CircularProgressIndicator()
     }
 }
 

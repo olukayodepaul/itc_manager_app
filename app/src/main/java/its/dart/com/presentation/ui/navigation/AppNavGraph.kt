@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import its.dart.com.presentation.ui.screens.AddCustomer
 import its.dart.com.presentation.ui.screens.CustomerByRep
 import its.dart.com.presentation.ui.screens.MainScreen
 import its.dart.com.presentation.ui.screens.LoginScreen
@@ -52,9 +53,28 @@ fun AppNavGraph(navController: NavHostController) {
         }
 
         composable(
-            route = Screen.OrderScreen.route
-        ) {
-            OrderScreen(navController = navController )
+            route = Screen.OrderScreen.route,
+            arguments = listOf(
+                navArgument("userId") { type = NavType.StringType },
+                navArgument("userName") { type = NavType.StringType },
+                navArgument("identifier") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getString("userId") ?: ""
+            val userName = backStackEntry.arguments?.getString("userName") ?: ""
+            val identifier = backStackEntry.arguments?.getString("identifier") ?: ""
+            OrderScreen(navController, userId, userName, identifier)
         }
+
+        composable(
+            route = Screen.AddCustomer.route,
+            arguments = listOf(
+                navArgument("userName") { type = NavType.StringType },
+            )
+        ){backStackEntry->
+            val userName = backStackEntry.arguments?.getString("userName") ?: ""
+            AddCustomer(navController = navController, userName)
+        }
+
     }
 }

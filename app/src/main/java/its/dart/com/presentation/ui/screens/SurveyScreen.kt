@@ -28,7 +28,7 @@ import androidx.compose.ui.zIndex
 import its.dart.com.presentation.ui.components.CButton
 import its.dart.com.presentation.ui.components.ToolBar
 import its.dart.com.presentation.ui.theme.robotoFamily
-import its.dart.com.presentation.viewmodel.event.LoginUIEvent
+
 
 
 @Composable
@@ -40,185 +40,203 @@ fun SurveyScreen(
     Scaffold(
         topBar = {
             ToolBar(
-                title =  userName,
-                click = {navController.popBackStack()},
+                title = userName,
+                click = { navController.popBackStack() },
                 clickSearch = {},
                 clickMenu = {},
                 navigation = true,
                 subTitle = true,
                 fontSize = 20,
                 fontFamily = robotoFamily,
-                letterSpacing = 0.5
+                letterSpacing = 0.5,
+                subTitleItem = "Customer Survey"
             )
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-                .background(Color(0xFFFFFFFF))
-        ) {
-            CustomerSurveyScreen()
-        }
+        // Pass navController to CustomerSurveyScreen for handling submit navigation
+        CustomerSurveyScreen(navController = navController, modifier = Modifier.padding(innerPadding))
     }
 }
 
 @Composable
-fun CustomerSurveyScreen() {
+fun CustomerSurveyScreen(
+    navController: NavHostController,
+    modifier: Modifier = Modifier
+) {
     val scrollState = rememberScrollState()
+    var showDialog by remember { mutableStateOf(false) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(16.dp)
-            .verticalScroll(scrollState)
-    ) {
-
-
-        Row(
-            modifier = Modifier.padding(bottom = 8.dp, start = 10.dp),
-            verticalAlignment = Alignment.CenterVertically
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(16.dp)
+                .verticalScroll(scrollState)
         ) {
-            NumberedCircle(number = 1) // Add the numbered circle
-            Spacer(modifier = Modifier.width(8.dp)) // Add some spacing
-            Text(
-                text = "Sales Representative Visit Frequency",
-                style = MaterialTheme.typography.headlineSmall,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.W500
+            // Group 1: Rep Visit Frequency
+            Row(
+                modifier = Modifier.padding(bottom = 8.dp, start = 10.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                NumberedCircle(number = 1)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Rep Visit Frequency",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.W500
+                )
+            }
+            VisitFrequencyQuestions()
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Group 2: Customer Satisfaction
+            Row(
+                modifier = Modifier.padding(bottom = 8.dp, start = 10.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                NumberedCircle(number = 2)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Customer Satisfaction",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.W500
+                )
+            }
+            CustomerSatisfactionQuestions()
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Group 3: Sales Performance
+            Row(
+                modifier = Modifier.padding(bottom = 8.dp, start = 10.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                NumberedCircle(number = 3)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Sales Performance",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.W500
+                )
+            }
+            SalesPerformanceQuestions()
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Group 4: Additional Feedback
+            Row(
+                modifier = Modifier.padding(bottom = 8.dp, start = 10.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                NumberedCircle(number = 4)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Additional Feedback",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.W500
+                )
+            }
+            AdditionalFeedbackQuestions()
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            // Group 5: Product Availability on Sheff
+            Row(
+                modifier = Modifier.padding(bottom = 8.dp, start = 10.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                NumberedCircle(number = 5)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Product Availability on Sheff",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.W500
+                )
+            }
+
+            var selectedOne by remember { mutableStateOf<String?>(null) }
+            var selectedTwo by remember { mutableStateOf<String?>(null) }
+            var selectedThree by remember { mutableStateOf<String?>(null) }
+            var selectedFour by remember { mutableStateOf<String?>(null) }
+            val proOne = "040-007"
+            val proTwo = "040-008"
+            val proThree = "040-009"
+            val proFour = "040-010"
+
+            ProductCheckbox(
+                productName = "TARGET SUPER RV",
+                isChecked = selectedOne === proOne,
+                onCheckedChange = { newValue ->
+                    selectedOne = if (newValue) proOne else ""
+                }
+            )
+            ProductCheckbox(
+                productName = "TARGET MENTHOL RV",
+                isChecked = selectedTwo === proTwo,
+                onCheckedChange = { newValue ->
+                    selectedTwo = if (newValue) proTwo else ""
+                }
+            )
+            ProductCheckbox(
+                productName = "EXECUTIVE",
+                isChecked = selectedThree === proThree,
+                onCheckedChange = { newValue ->
+                    selectedThree = if (newValue) proThree else ""
+                }
+            )
+            ProductCheckbox(
+                productName = "EXECUTIVE CLICK",
+                isChecked = selectedFour === proFour,
+                onCheckedChange = { newValue ->
+                    selectedFour = if (newValue) proFour else ""
+                }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Submit Button: clicking will show the success dialog
+            CButton(
+                onClick = { showDialog = true },
+                buttonState = true,
+                text = "Submit Survey",
             )
         }
 
-
-        VisitFrequencyQuestions()
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Group 2: Customer Satisfaction
-        Row(
-            modifier = Modifier.padding(bottom = 8.dp, start = 10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            NumberedCircle(number = 2) // Add the numbered circle
-            Spacer(modifier = Modifier.width(8.dp)) // Add some spacing
-            Text(
-                text = "Customer Satisfaction",
-                style = MaterialTheme.typography.headlineSmall,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.W500
-            )
-        }
-
-        CustomerSatisfactionQuestions()
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Group 3: Sales Performance
-        Row(
-            modifier = Modifier.padding(bottom = 8.dp, start = 10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            NumberedCircle(number = 3) // Add the numbered circle
-            Spacer(modifier = Modifier.width(8.dp)) // Add some spacing
-            Text(
-                text = "Sales Performance",
-                style = MaterialTheme.typography.headlineSmall,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.W500
-            )
-        }
-
-        SalesPerformanceQuestions()
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Group 4: Additional Feedback
-        Row(
-            modifier = Modifier.padding(bottom = 8.dp, start = 10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            NumberedCircle(number = 4) // Add the numbered circle
-            Spacer(modifier = Modifier.width(8.dp)) // Add some spacing
-            Text(
-                text = "Additional Feedback",
-                style = MaterialTheme.typography.headlineSmall,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.W500
-            )
-        }
-
-        AdditionalFeedbackQuestions()
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        // Group 5: Customer Satisfaction
-        Row(
-            modifier = Modifier.padding(bottom = 8.dp, start = 10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            NumberedCircle(number = 5) // Add the numbered circle
-            Spacer(modifier = Modifier.width(8.dp)) // Add some spacing
-            Text(
-                text = "Product Availability on Sheff",
-                style = MaterialTheme.typography.headlineSmall,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.W500
-            )
-        }
-
-        var selectedOne by remember { mutableStateOf<String?>(null) }
-        var selectedTwo by remember { mutableStateOf<String?>(null) }
-        var selectedThree by remember { mutableStateOf<String?>(null) }
-        var selectedFour by remember { mutableStateOf<String?>(null) }
-        val proOne = "040-007"
-        val proTwo = "040-008"
-        val proThree = "040-009"
-        val proFour = "040-010"
-
-        ProductCheckbox(
-            productName = "TARGET SUPER RV",
-            isChecked = selectedOne === proOne,
-            onCheckedChange = {
-                newValues->
-                selectedOne = if(newValues)  proOne  else ""
+        // Success dialog: when OK is clicked, navigate back
+        SuccessDialog(
+            showDialog = showDialog,
+            onDismiss = { showDialog = false },
+            onNavigateBack = {
+                showDialog = false
+                navController.popBackStack()
             }
         )
+    }
+}
 
-        ProductCheckbox(
-            productName = "TARGET MENTHOL RV",
-            isChecked = selectedTwo === proTwo,
-            onCheckedChange = {
-                    newValues->
-                selectedTwo = if(newValues)  proTwo  else ""
+@Composable
+fun SuccessDialog(
+    showDialog: Boolean,
+    onDismiss: () -> Unit,
+    onNavigateBack: () -> Unit
+) {
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = onDismiss,
+            title = { Text("Success") },
+            text = { Text("Your submission was successful!") },
+            confirmButton = {
+                Button(onClick = onNavigateBack) {
+                    Text("OK")
+                }
             }
-        )
-
-        ProductCheckbox(
-            productName = "EXECUTIVE",
-            isChecked = selectedThree === proThree,
-            onCheckedChange = {
-                    newValues->
-                selectedThree = if(newValues)  proThree  else ""
-            }
-        )
-
-        ProductCheckbox(
-            productName = "EXECUTIVE CLICK",
-            isChecked = selectedFour === proFour,
-            onCheckedChange = {
-                    newValues->
-                selectedFour = if(newValues)  proFour  else ""
-            }
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Submit Button
-        CButton(
-            onClick = {},
-            buttonState = true,
-            text = "Submit Survey",
         )
     }
 }
@@ -231,10 +249,7 @@ fun VisitFrequencyQuestions() {
     var isFrequencySufficient by remember { mutableStateOf("") }
     var isProactive by remember { mutableStateOf("") }
 
-    Column(
-        modifier = Modifier.padding(8.dp)
-    ) {
-        // Question 1: How often does the sales representative visit your outlet?
+    Column(modifier = Modifier.padding(8.dp)) {
         Text(
             text = "How often does the sales representative visit your outlet?",
             style = MaterialTheme.typography.bodyMedium,
@@ -248,7 +263,6 @@ fun VisitFrequencyQuestions() {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Question 2: When was the last time the sales representative visited?
         Text(
             text = "When was the last time the sales representative visited?",
             style = MaterialTheme.typography.bodyMedium,
@@ -259,8 +273,8 @@ fun VisitFrequencyQuestions() {
             onValueChange = { lastVisitDate = it },
             label = { Text("Enter date") },
             modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp)
+                .fillMaxWidth()
+                .padding(bottom = 8.dp)
                 .background(Color(0xFFEEEEEE), shape = RoundedCornerShape(8.dp)),
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color(0xFFEEEEEE),
@@ -270,7 +284,6 @@ fun VisitFrequencyQuestions() {
             shape = RoundedCornerShape(12.dp)
         )
 
-        // Question 3: Is the frequency of visits sufficient for your needs?
         Text(
             text = "Is the frequency of visits sufficient for your needs?",
             style = MaterialTheme.typography.bodyMedium,
@@ -284,7 +297,6 @@ fun VisitFrequencyQuestions() {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Question 4: Do you feel the sales representative is proactive?
         Text(
             text = "Do you feel the sales representative is proactive?",
             style = MaterialTheme.typography.bodyMedium,
@@ -305,10 +317,7 @@ fun CustomerSatisfactionQuestions() {
     var productKnowledge by remember { mutableStateOf("") }
     var responsiveness by remember { mutableStateOf("") }
 
-    Column(
-        modifier = Modifier.padding(8.dp)
-    ) {
-        // Question 1: How satisfied are you with the service?
+    Column(modifier = Modifier.padding(8.dp)) {
         Text(
             text = "How satisfied are you with the service?",
             style = MaterialTheme.typography.bodyMedium,
@@ -322,7 +331,6 @@ fun CustomerSatisfactionQuestions() {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Question 2: Are there any unresolved issues or complaints?
         Text(
             text = "Are there any unresolved issues or complaints?",
             style = MaterialTheme.typography.bodyMedium,
@@ -336,7 +344,6 @@ fun CustomerSatisfactionQuestions() {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Question 3: How would you rate the sales representative's product knowledge?
         Text(
             text = "How would you rate the sales representative's product knowledge?",
             style = MaterialTheme.typography.bodyMedium,
@@ -350,7 +357,6 @@ fun CustomerSatisfactionQuestions() {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Question 4: How responsive is the sales representative?
         Text(
             text = "How responsive is the sales representative?",
             style = MaterialTheme.typography.bodyMedium,
@@ -372,10 +378,7 @@ fun SalesPerformanceQuestions() {
     var unmetProductNeeds by remember { mutableStateOf("") }
     var monthlySpend by remember { mutableStateOf("") }
 
-    Column(
-        modifier = Modifier.padding(8.dp)
-    ) {
-        // Question 1: Which products do you purchase most frequently?
+    Column(modifier = Modifier.padding(8.dp)) {
         Text(
             text = "Which products do you purchase most frequently?",
             style = MaterialTheme.typography.bodyMedium,
@@ -388,7 +391,6 @@ fun SalesPerformanceQuestions() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
-                .padding(bottom = 8.dp)
                 .background(Color(0xFFEEEEEE), shape = RoundedCornerShape(8.dp)),
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color(0xFFEEEEEE),
@@ -398,7 +400,6 @@ fun SalesPerformanceQuestions() {
             shape = RoundedCornerShape(12.dp)
         )
 
-        // Question 2: How much of each product do you typically order?
         Text(
             text = "How much of each product do you typically order?",
             style = MaterialTheme.typography.bodyMedium,
@@ -420,7 +421,6 @@ fun SalesPerformanceQuestions() {
             shape = RoundedCornerShape(12.dp)
         )
 
-        // Question 3: Are there any products you would like to order but are not currently purchasing?
         Text(
             text = "Are there any products you would like to order but are not currently purchasing?",
             style = MaterialTheme.typography.bodyMedium,
@@ -434,7 +434,6 @@ fun SalesPerformanceQuestions() {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Question 4: What is your average monthly spend on our products?
         Text(
             text = "What is your average monthly spend on our products?",
             style = MaterialTheme.typography.bodyMedium,
@@ -445,7 +444,8 @@ fun SalesPerformanceQuestions() {
             onValueChange = { monthlySpend = it },
             label = { Text("Enter amount") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .background(Color(0xFFEEEEEE), shape = RoundedCornerShape(8.dp)),
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color(0xFFEEEEEE),
@@ -464,10 +464,7 @@ fun AdditionalFeedbackQuestions() {
     var recommendation by remember { mutableStateOf("") }
     var comments by remember { mutableStateOf("") }
 
-    Column(
-        modifier = Modifier.padding(8.dp)
-    ) {
-        // Question 1: What can we do to improve our service or products?
+    Column(modifier = Modifier.padding(8.dp)) {
         Text(
             text = "What can we do to improve our service or products?",
             style = MaterialTheme.typography.bodyMedium,
@@ -489,7 +486,6 @@ fun AdditionalFeedbackQuestions() {
             shape = RoundedCornerShape(12.dp)
         )
 
-        // Question 2: Would you recommend our products/services to others?
         Text(
             text = "Would you recommend our products/services to others?",
             style = MaterialTheme.typography.bodyMedium,
@@ -503,7 +499,6 @@ fun AdditionalFeedbackQuestions() {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Question 3: Any other comments or suggestions?
         Text(
             text = "Any other comments or suggestions?",
             style = MaterialTheme.typography.bodyMedium,
@@ -513,8 +508,9 @@ fun AdditionalFeedbackQuestions() {
             value = comments,
             onValueChange = { comments = it },
             label = { Text("Enter your comments") },
-            modifier = Modifier.fillMaxWidth() .
-            padding(bottom = 8.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp)
                 .background(Color(0xFFEEEEEE), shape = RoundedCornerShape(8.dp)),
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color(0xFFEEEEEE),
@@ -536,13 +532,10 @@ fun DropdownQuestion(
     var expanded by remember { mutableStateOf(false) }
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
 
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
+    Box(modifier = Modifier.fillMaxWidth()) {
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = {expanded = false},
+            onDismissRequest = { expanded = false },
             modifier = Modifier
                 .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
                 .zIndex(1f)
@@ -582,7 +575,6 @@ fun DropdownQuestion(
                 unfocusedIndicatorColor = Color.Transparent
             ),
             shape = RoundedCornerShape(12.dp)
-
         )
     }
 }
@@ -601,9 +593,9 @@ fun ProductCheckbox(
             checked = isChecked,
             onCheckedChange = onCheckedChange,
             colors = CheckboxDefaults.colors(
-                checkedColor = Color(0xFF008b00), // Change to any color
-                uncheckedColor = Color.Gray, // Change to any color
-                checkmarkColor = Color.White // Checkmark color inside checkbox
+                checkedColor = Color(0xFF008b00),
+                uncheckedColor = Color.Gray,
+                checkmarkColor = Color.White
             )
         )
         Text(
@@ -617,13 +609,13 @@ fun ProductCheckbox(
 fun NumberedCircle(number: Int) {
     Box(
         modifier = Modifier
-            .size(24.dp) // Set fixed size for circle
-            .background(Color(0xFF008b00), shape = CircleShape), // Circle color
-        contentAlignment = Alignment.Center // Ensures text is centered
+            .size(24.dp)
+            .background(Color(0xFF008b00), shape = CircleShape),
+        contentAlignment = Alignment.Center
     ) {
         Text(
             text = number.toString(),
-            color = Color.White, // Text color
+            color = Color.White,
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold
         )

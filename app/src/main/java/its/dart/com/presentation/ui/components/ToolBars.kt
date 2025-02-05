@@ -39,7 +39,8 @@ fun ToolBar(
     subTitle: Boolean = false,
     fontSize: Int = 24,
     letterSpacing: Double = -2.1,
-    fontFamily: FontFamily = KanitMedium
+    fontFamily: FontFamily = KanitMedium,
+    subTitleItem: String = ""
 
 ) {
     TopAppBar(
@@ -61,7 +62,7 @@ fun ToolBar(
                 )
                 if(subTitle){
                     Text(
-                        text = "Customer Survey",
+                        text = subTitleItem,
                         fontSize = (fontSize-5).sp,
                         color = Color(0xFF37474F),
                         fontFamily = fontFamily,
