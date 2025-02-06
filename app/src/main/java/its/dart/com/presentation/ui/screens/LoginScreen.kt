@@ -65,7 +65,7 @@ fun LoginScreen(
         topBar = {
             ToolBar(
                 title = "SapApp",
-                fontSize =  32,
+                fontSize =  23,
                 click = {},
                 clickSearch = {},
                 clickMenu = {},
@@ -85,28 +85,8 @@ fun LoginScreen(
                     end = 20.dp
                 )
             ) {
-                Spacer(modifier = Modifier.height(40.dp))
 
-               Row (
-                   verticalAlignment = Alignment.CenterVertically
-               ){
-                   Icon(
-                       imageVector = Icons.Filled.LockOpen,
-                       contentDescription = null,
-                       tint = appColorBlack,
-                       modifier = Modifier.size(18.dp)
-                   )
-                   Spacer(modifier = Modifier.width(8.dp))
-                   Text(
-                       text= "Login",
-                       color = appColor,
-                       fontSize = 25.sp,
-                       fontFamily = robotoFamily,
-                       letterSpacing = (-0.5).sp,
-                   )
-               }
-
-                Spacer(modifier = Modifier.height(30.dp))
+                Spacer(modifier = Modifier.height(130.dp))
 
                 TextFieldInput(
                     value = uiState.username,

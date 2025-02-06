@@ -35,7 +35,7 @@ fun SalesRepScreen(
     Scaffold(
         topBar = {
             ToolBar(
-                title = "Sales Representative",
+                title = "Sales Rep",
                 click = {},
                 clickSearch = {},
                 clickMenu = {},

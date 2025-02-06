@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
@@ -21,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import its.dart.com.presentation.ui.components.ToolBar
+import its.dart.com.presentation.ui.theme.appColorBlack
 import its.dart.com.presentation.ui.theme.robotoFamily
 
 @Composable
@@ -34,7 +37,6 @@ fun WholeSellerScreen(
                 click = { navController.popBackStack() },
                 clickSearch = {},
                 clickMenu = {},
-                navigation = true,
                 fontSize = 20,
                 fontFamily = robotoFamily,
                 letterSpacing = 0.5,
@@ -63,28 +65,29 @@ fun AllWholeSeller(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(bottom = 80.dp)
         ) {
-            items(20) { index ->
-                Text(
-                    text = "Item $index",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                )
-            }
+
         }
 
         FloatingActionButton(
             onClick = {
                 val id = "123"
-                val outletName = "SuperMart"
+                val outletName = "Whole Seller"
                 val quantity = 3
                 navController.navigate("OrderProduct/$id/$outletName/$quantity")
             },
+            shape = CircleShape,
+            containerColor = appColorBlack,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp)
+                .size(70.dp)
         ) {
-            Icon(Icons.Default.Add, contentDescription = "Add")
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = "Add",
+                tint = Color.White,
+                modifier = Modifier.size(36.dp)
+            )
         }
     }
 }
