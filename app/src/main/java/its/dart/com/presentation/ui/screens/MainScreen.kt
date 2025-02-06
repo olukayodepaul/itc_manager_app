@@ -24,8 +24,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import its.dart.com.presentation.ui.theme.appColorBlack
-import its.dart.com.presentation.ui.theme.appColorWhite
-import its.dart.com.presentation.ui.theme.lightGray
 
 
 @Composable
@@ -48,7 +46,7 @@ fun MainScreen(navController: NavHostController) {
                 title = "Order",
                 unselectedIcon = Icons.Outlined.ShoppingCart,
                 selectedIcon = Icons.Filled.ShoppingCart,
-                content = { CustomersScreen(navController) }
+                content = { WholeSellerScreen(navController) }
             ),
         )
     }

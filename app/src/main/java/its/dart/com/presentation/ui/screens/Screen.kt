@@ -15,4 +15,5 @@ sealed class Screen(val route: String) {
     data object AddCustomer : Screen("add_customer/{userName}") {
         fun createRoute(userName: String) = "add_customer/$userName"
     }
+    data object WholeSellerPage : Screen("wholeSellerPage")
 }

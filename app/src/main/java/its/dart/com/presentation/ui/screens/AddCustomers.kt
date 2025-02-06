@@ -10,7 +10,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Contacts
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.LocationSearching
+import androidx.compose.material.icons.filled.MobileFriendly
+import androidx.compose.material.icons.filled.Outlet
+import androidx.compose.material.icons.filled.TypeSpecimen
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
@@ -89,9 +96,9 @@ fun AddCustomerContent(
             Language()
             Spacer(modifier = Modifier.height(10.dp))
             OutletType()
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             OutletClass()
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             Address()
             Spacer(modifier = Modifier.height(10.dp))
             CButton(
@@ -137,7 +144,7 @@ fun OutletName() {
         label = "Outlet Name",
         value = outletName,
         onValueChange = { outletName = it },
-        leadingIcon = Icons.Default.Info
+        leadingIcon = Icons.Default.Home
     )
 }
 
@@ -148,7 +155,7 @@ fun ContactPerson() {
         label = "Contact Person",
         value = contactPerson,
         onValueChange = { contactPerson = it },
-        leadingIcon = Icons.Default.Info
+        leadingIcon = Icons.Default.Contacts
     )
 }
 
@@ -156,50 +163,50 @@ fun ContactPerson() {
 fun MobileNumber() {
     var mobileNumber by remember { mutableStateOf("") }
     CustomTextField(
-        label = "Contact Person",
+        label = "Mobile Number",
         value = mobileNumber,
         onValueChange = { mobileNumber = it },
-        leadingIcon = Icons.Default.Info
+        leadingIcon = Icons.Default.MobileFriendly
     )
 }
 
 
 @Composable
 fun Language() {
-    val options = listOf("Option 1", "Option 2", "Option 3", "Option 4")
+    val options = listOf("Select", "Option 2", "Option 3", "Option 4")
     var selectedOption by remember { mutableStateOf(options.first()) }
     DropdownLists(
         options = options,
         selectedOption = selectedOption,
         onOptionSelected = { selectedOption = it },
         label = "Language",
-        leadingIcon = Icons.Default.Info
+        leadingIcon = Icons.Default.Language
     )
 }
 
 @Composable
 fun OutletType() {
-    val options = listOf("Igbo", "Option 2", "Option 3", "Option 4")
+    val options = listOf("Select", "Option 2", "Option 3", "Option 4")
     var selectedOption by remember { mutableStateOf(options.first()) }
     DropdownLists(
         options = options,
         selectedOption = selectedOption,
         onOptionSelected = { selectedOption = it },
         label = "Outlet Type",
-        leadingIcon = Icons.Default.Info
+        leadingIcon = Icons.Default.TypeSpecimen
     )
 }
 
 @Composable
 fun OutletClass() {
-    val options = listOf("Kios", "Option 2", "Option 3", "Option 4")
+    val options = listOf("Select", "Option 2", "Option 3", "Option 4")
     var selectedOption by remember { mutableStateOf(options.first()) }
     DropdownLists(
         options = options,
         selectedOption = selectedOption,
         onOptionSelected = { selectedOption = it },
         label = "Outlet Class",
-        leadingIcon = Icons.Default.Info
+        leadingIcon = Icons.Default.TypeSpecimen
     )
 }
 
@@ -210,7 +217,7 @@ fun Address() {
         label = "Address",
         value = outletAddress,
         onValueChange = { outletAddress = it },
-        leadingIcon = Icons.Default.Info
+        leadingIcon = Icons.Default.LocationSearching
     )
 }
 

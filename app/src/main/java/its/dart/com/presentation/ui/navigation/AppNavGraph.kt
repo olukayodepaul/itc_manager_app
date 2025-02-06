@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import its.dart.com.domain.repository.remote.model.WholeSellerModel
 import its.dart.com.presentation.ui.screens.AddCustomer
 import its.dart.com.presentation.ui.screens.CustomerByRep
 import its.dart.com.presentation.ui.screens.MainScreen
@@ -13,6 +14,7 @@ import its.dart.com.presentation.ui.screens.LoginScreen
 import its.dart.com.presentation.ui.screens.OrderScreen
 import its.dart.com.presentation.ui.screens.SurveyScreen
 import its.dart.com.presentation.ui.screens.Screen
+import its.dart.com.presentation.ui.screens.WholeSellerScreen
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {
@@ -74,6 +76,10 @@ fun AppNavGraph(navController: NavHostController) {
         ){backStackEntry->
             val userName = backStackEntry.arguments?.getString("userName") ?: ""
             AddCustomer(navController = navController, userName)
+        }
+
+        composable(route = Screen.WholeSellerPage.route){
+            WholeSellerScreen(navController = navController)
         }
 
     }
