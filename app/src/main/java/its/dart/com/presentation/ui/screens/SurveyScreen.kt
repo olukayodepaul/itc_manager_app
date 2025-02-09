@@ -26,6 +26,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.zIndex
 import its.dart.com.presentation.ui.components.CButton
+import its.dart.com.presentation.ui.components.ProductCheckbox
+import its.dart.com.presentation.ui.components.SuccessDialog
 import its.dart.com.presentation.ui.components.ToolBar
 import its.dart.com.presentation.ui.theme.robotoFamily
 
@@ -209,37 +211,19 @@ fun CustomerSurveyScreen(
             )
         }
 
-        // Success dialog: when OK is clicked, navigate back
         SuccessDialog(
             showDialog = showDialog,
-            onDismiss = { showDialog = false },
-            onNavigateBack = {
+            onOkClick = {
                 showDialog = false
                 navController.popBackStack()
             }
         )
+        // Success dialog: when OK is clicked, navigate back
+
     }
 }
 
-@Composable
-fun SuccessDialog(
-    showDialog: Boolean,
-    onDismiss: () -> Unit,
-    onNavigateBack: () -> Unit
-) {
-    if (showDialog) {
-        AlertDialog(
-            onDismissRequest = onDismiss,
-            title = { Text("Success") },
-            text = { Text("Your submission was successful!") },
-            confirmButton = {
-                Button(onClick = onNavigateBack) {
-                    Text("OK")
-                }
-            }
-        )
-    }
-}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -579,31 +563,6 @@ fun DropdownQuestion(
     }
 }
 
-@Composable
-fun ProductCheckbox(
-    productName: String,
-    isChecked: Boolean,
-    onCheckedChange: (Boolean) -> Unit
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Checkbox(
-            checked = isChecked,
-            onCheckedChange = onCheckedChange,
-            colors = CheckboxDefaults.colors(
-                checkedColor = Color(0xFF008b00),
-                uncheckedColor = Color.Gray,
-                checkmarkColor = Color.White
-            )
-        )
-        Text(
-            text = productName,
-            modifier = Modifier.padding(start = 8.dp)
-        )
-    }
-}
 
 @Composable
 fun NumberedCircle(number: Int) {

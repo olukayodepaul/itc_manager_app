@@ -80,11 +80,6 @@ fun DropdownMenuWithDetails(
                     navController.navigate("OrderProduct/${details.id}/${details.outletName}/$identifier")
                 }
             )
-//            DropdownMenuItem(
-//                text = { Text("Competition") },
-//                leadingIcon = { Icon(Icons.Outlined.BookOnline, contentDescription = null) },
-//                onClick = { expanded = false }
-//            )
 
             DropdownMenuItem(
                 text = { Text("Add Customer") },

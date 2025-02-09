@@ -1,5 +1,6 @@
 package its.dart.com.presentation.ui.screens
 
+import android.view.Window
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,22 +15,30 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import its.dart.com.domain.repository.remote.model.ProductModel
 import its.dart.com.presentation.ui.components.CButton
 import its.dart.com.presentation.ui.components.CircleAvatar
 import its.dart.com.presentation.ui.components.LoadingIndicator
+import its.dart.com.presentation.ui.components.SuccessDialog
 import its.dart.com.presentation.ui.components.TextFieldInput
 import its.dart.com.presentation.ui.components.ToolBar
 import its.dart.com.presentation.ui.theme.appColor
@@ -44,8 +53,10 @@ fun OrderScreen(
     userId: String,
     userName: String,
     identifier: String = "0",
-    viewModel: OrderViewModel = hiltViewModel(),
+    window: Window,
+    viewModel: OrderViewModel = hiltViewModel()
 ) {
+
     val order by viewModel.productState.collectAsState()
 
     LaunchedEffect(key1 = null) {
@@ -103,6 +114,9 @@ fun OrderScreenContent(
     order: List<ProductModel>,
     navController: NavHostController
 ) {
+
+    var showDialog by remember { mutableStateOf(false) }
+
     Column(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
             modifier = Modifier
@@ -118,10 +132,20 @@ fun OrderScreenContent(
             }
         }
         CButton(
-            onClick = {},
+            onClick = {
+                showDialog = true
+            },
             buttonState = true,
             text = "Post Order",
             roundState = true
+        )
+
+        SuccessDialog(
+            showDialog = showDialog,
+            onOkClick = {
+                showDialog = false
+                navController.popBackStack()
+            }
         )
     }
 }

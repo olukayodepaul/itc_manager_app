@@ -45,17 +45,20 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import its.dart.com.presentation.ui.components.RowTask
+import its.dart.com.presentation.ui.components.SuccessDialog
 import its.dart.com.presentation.ui.components.ToolBar
 import its.dart.com.presentation.ui.theme.IconBgColor
 import its.dart.com.presentation.ui.theme.IconBgColors
@@ -63,17 +66,15 @@ import its.dart.com.presentation.ui.theme.appColor
 import its.dart.com.presentation.ui.theme.appColorBlack
 import its.dart.com.presentation.ui.theme.appColorWhite
 import its.dart.com.presentation.ui.theme.robotoFamily
-import its.dart.com.presentation.viewmodel.AttendantViewModel
 
 @Composable
 fun AttendantScreen(
-
+    navController: NavHostController
 ) {
-
     Scaffold(
         topBar = {
             ToolBar(
-                title = "Analytics",
+                title = "Analytic",
                 click = {},
                 clickSearch = {},
                 clickMenu = {},
@@ -90,17 +91,39 @@ fun AttendantScreen(
                 .background(Color(0xFFFFFFFF))
                 .verticalScroll(rememberScrollState()),
         ) {
+
+            var showDialog by remember { mutableStateOf(false) }
+
             RowOfCards()
             Spacer(modifier = Modifier.height(30.dp))
             RowHeader(title = "DailyTask", fontSize = 18)
             Spacer(modifier = Modifier.height(10.dp))
-            RowTask(icon = Icons.Filled.Timelapse , title = "Resume", subTitle = "Welcome to today activity", click = {})
-            RowTask(icon = Icons.Filled.TimeToLeave , title = "Out for Survey", subTitle = "Take a tour with a sales representative", click = {})
-            RowTask(icon = Icons.Filled.AssignmentReturned , title = "Return from Survey", subTitle = "Back from a  tour with a sales representative", click = {})
-            RowTask(icon = Icons.Filled.Home , title = "Close", subTitle = "Good night and hope to see you the next day", click = {})
+            RowTask(icon = Icons.Filled.Timelapse , title = "Resume", subTitle = "When starting the day, the supervisor and other users are expected to mark their resumption",
+                click = {showDialog = true}
+            )
+            RowTask(icon = Icons.Filled.TimeToLeave , title = "Clock Out", subTitle = "Users must clock out when leaving for their daily tasks.",
+                click = {showDialog = true}
+            )
+            RowTask(icon = Icons.Filled.AssignmentReturned , title = "Clock In", subTitle = "Upon returning from their tasks, users should clock in to update their status",
+                click = {showDialog = true}
+            )
+            RowTask(icon = Icons.Filled.Home , title = "Close", subTitle = "At the end of the business day, users should finalize activities by clicking Close",
+                click = {showDialog = true}
+            )
+
+            SuccessDialog(
+                showDialog = showDialog,
+                onOkClick = {
+                    showDialog = false
+                },
+                title =  "Success",
+                texts = "push to server is successful",
+                confirmButtonText = "Ok"
+            )
         }
     }
 }
+
 
 @Composable
 fun RowHeader(
@@ -119,6 +142,7 @@ fun RowHeader(
         letterSpacing = (-1.2).sp
     )
 }
+
 @Composable
 fun ElevatedCardM3(
     icon: ImageVector = Icons.Filled.PieChartOutline,
@@ -195,64 +219,6 @@ fun RowOfCards() {
             count = "0"
         )
     }
-}
-
-@Composable
-fun RowTask(
-    click:()->Unit,
-    icon: ImageVector,
-    title:String,
-    subTitle:String
-){
-
-  Box(modifier = Modifier
-      .fillMaxWidth()
-      .padding(start = 10.dp, end = 10.dp, bottom = 5.dp)
-  ) {
-      Row(
-          modifier = Modifier
-              .clickable {click()}
-              .fillMaxWidth()
-              .background(Color.LightGray.copy(alpha = 0.05f), shape = RoundedCornerShape(1.dp)) // Even lighter background
-              .border(0.5.dp, Color.Gray.copy(alpha = 0.2f), shape = RoundedCornerShape(1.dp))
-              .padding(horizontal = 10.dp, vertical = 10.dp),
-          verticalAlignment = Alignment.CenterVertically
-      ) {
-          Icon(
-              imageVector = icon,
-              contentDescription = null,
-              tint = appColorBlack,
-              modifier = Modifier.size(30.dp) // Properly sized icon
-          )
-
-          Spacer(modifier = Modifier.width(12.dp)) // Space between Icon and Column
-
-          Column(modifier = Modifier.weight(1f)) {
-              Spacer(modifier = Modifier.height(3.dp))
-              Text(
-                  text = title,
-                  color = Color.Black,
-                  fontWeight = FontWeight.W600,
-                  fontSize = 15.sp
-              )
-              Text(
-                  text = subTitle,
-                  color = Color.Gray.copy(alpha = 1f),
-                  fontSize = 13.sp,
-                  maxLines = 1,
-                  overflow = TextOverflow.Ellipsis,
-                  modifier = Modifier.padding(top = 0.dp)
-              )
-              Spacer(modifier = Modifier.height(3.dp))
-          }
-
-          Text(
-              text = "00:00:00",
-              color = Color.Gray.copy(alpha = 1f),
-              fontSize = 11.sp
-          )
-      }
-  }
 }
 
 

@@ -1,5 +1,6 @@
 package its.dart.com.presentation.ui.screens
 
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,16 +11,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Contacts
+import androidx.compose.material.icons.filled.AdfScanner
+import androidx.compose.material.icons.filled.Backpack
+import androidx.compose.material.icons.filled.Book
+import androidx.compose.material.icons.filled.BusAlert
+import androidx.compose.material.icons.filled.EmojiPeople
+import androidx.compose.material.icons.filled.Feedback
+import androidx.compose.material.icons.filled.GifBox
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Language
-import androidx.compose.material.icons.filled.LocationSearching
 import androidx.compose.material.icons.filled.MobileFriendly
-import androidx.compose.material.icons.filled.TypeSpecimen
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.filled.Money
+import androidx.compose.material.icons.filled.PeopleOutline
+import androidx.compose.material.icons.filled.PestControlRodent
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,42 +32,37 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import its.dart.com.presentation.ui.components.CButton
 import its.dart.com.presentation.ui.components.CustomTextField
 import its.dart.com.presentation.ui.components.DropdownLists
+import its.dart.com.presentation.ui.components.ProductCheckbox
 import its.dart.com.presentation.ui.components.SuccessDialog
 import its.dart.com.presentation.ui.components.ToolBar
 import its.dart.com.presentation.ui.theme.robotoFamily
-import its.dart.com.presentation.viewmodel.AddCustomerViewModel
+
 
 @Composable
-fun AddCustomer(
+fun DailyConsumer(
     navController: NavHostController,
-    userName: String,
-    viewModel: AddCustomerViewModel = hiltViewModel()
 ) {
     Scaffold(
         topBar = {
             ToolBar(
-                title = userName,
-                click = { navController.popBackStack() },
+                title = "Daily Consumer Data Form",
+                click = {navController.popBackStack()},
                 clickSearch = {},
                 clickMenu = {},
                 navigation = true,
-                subTitle = true,
                 fontSize = 20,
                 fontFamily = robotoFamily,
                 letterSpacing = 0.5,
-                subTitleItem = "Add Customer"
             )
         }
     ) { innerPadding ->
-        AddCustomerContent(
+        DailyConsumerContent(
             navController = navController,
             modifier = Modifier.padding(innerPadding)
         )
@@ -70,7 +70,7 @@ fun AddCustomer(
 }
 
 @Composable
-fun AddCustomerContent(
+fun DailyConsumerContent(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
@@ -86,24 +86,30 @@ fun AddCustomerContent(
                 .verticalScroll(scrollState)
         ) {
 
-            OutletName()
+            ConsumerName()
             Spacer(modifier = Modifier.height(10.dp))
-            ContactPerson()
+            PhoneNumber()
             Spacer(modifier = Modifier.height(10.dp))
-            MobileNumber()
+            Gender()
             Spacer(modifier = Modifier.height(10.dp))
-            Language()
-            Spacer(modifier = Modifier.height(10.dp))
-            OutletType()
+            Age()
             Spacer(modifier = Modifier.height(20.dp))
-            OutletClass()
+            PersonBrand()
             Spacer(modifier = Modifier.height(20.dp))
-            Address()
-            Spacer(modifier = Modifier.height(10.dp))
+            SampleSKU()
+            Spacer(modifier = Modifier.height(20.dp))
+            AnySales()
+            Spacer(modifier = Modifier.height(20.dp))
+            QtySold()
+            Spacer(modifier = Modifier.height(20.dp))
+            ConsumerFeedback()
+            Spacer(modifier = Modifier.height(20.dp))
+            CheckBoxFeed()
+            Spacer(modifier = Modifier.height(20.dp))
             CButton(
                 onClick = { showDialog = true },
                 buttonState = true,
-                text = "Register"
+                text = "Post"
             )
         }
 
@@ -117,30 +123,11 @@ fun AddCustomerContent(
     }
 }
 
-//@Composable
-//fun SuccessDialog(
-//    showDialog: Boolean,
-//    onOkClick: () -> Unit
-//) {
-//    if (showDialog) {
-//        AlertDialog(
-//            onDismissRequest = {},
-//            title = { Text("Success") },
-//            text = { Text("Your submission was successful!") },
-//            confirmButton = {
-//                Button(onClick = onOkClick) {
-//                    Text("OK")
-//                }
-//            }
-//        )
-//    }
-//}
-
 @Composable
-fun OutletName() {
+fun ConsumerName() {
     var outletName by remember { mutableStateOf("") }
     CustomTextField(
-        label = "Outlet Name",
+        label = "Consumer Name",
         value = outletName,
         onValueChange = { outletName = it },
         leadingIcon = Icons.Default.Home
@@ -148,18 +135,7 @@ fun OutletName() {
 }
 
 @Composable
-fun ContactPerson() {
-    var contactPerson by remember { mutableStateOf("") }
-    CustomTextField(
-        label = "Contact Person",
-        value = contactPerson,
-        onValueChange = { contactPerson = it },
-        leadingIcon = Icons.Default.Contacts
-    )
-}
-
-@Composable
-fun MobileNumber() {
+fun PhoneNumber() {
     var mobileNumber by remember { mutableStateOf("") }
     CustomTextField(
         label = "Mobile Number",
@@ -171,63 +147,115 @@ fun MobileNumber() {
 
 
 @Composable
-fun Language() {
-    val options = listOf("Select", "Option 2", "Option 3", "Option 4")
+fun Gender() {
+    val options = listOf("Select", "Male", "Female",)
     var selectedOption by remember { mutableStateOf(options.first()) }
     DropdownLists(
         options = options,
         selectedOption = selectedOption,
         onOptionSelected = { selectedOption = it },
-        label = "Language",
-        leadingIcon = Icons.Default.Language
+        label = "Gender",
+        leadingIcon = Icons.Default.PeopleOutline
     )
 }
 
 @Composable
-fun OutletType() {
-    val options = listOf("Select", "Option 2", "Option 3", "Option 4")
-    var selectedOption by remember { mutableStateOf(options.first()) }
-    DropdownLists(
-        options = options,
-        selectedOption = selectedOption,
-        onOptionSelected = { selectedOption = it },
-        label = "Outlet Type",
-        leadingIcon = Icons.Default.TypeSpecimen
-    )
-}
-
-@Composable
-fun OutletClass() {
-    val options = listOf("Select", "Option 2", "Option 3", "Option 4")
-    var selectedOption by remember { mutableStateOf(options.first()) }
-    DropdownLists(
-        options = options,
-        selectedOption = selectedOption,
-        onOptionSelected = { selectedOption = it },
-        label = "Outlet Class",
-        leadingIcon = Icons.Default.TypeSpecimen
-    )
-}
-
-@Composable
-fun Address() {
-    var outletAddress by remember { mutableStateOf("") }
+fun Age() {
+    var outletName by remember { mutableStateOf("") }
     CustomTextField(
-        label = "Address",
-        value = outletAddress,
-        onValueChange = { outletAddress = it },
-        leadingIcon = Icons.Default.LocationSearching
+        label = "Age",
+        value = outletName,
+        onValueChange = { outletName = it },
+        leadingIcon = Icons.Default.EmojiPeople
     )
 }
 
 @Composable
-@Preview(showBackground = true)
-fun AddCustomerPreview() {
-    val navController = rememberNavController()
-    AddCustomer(
-        navController = navController,
-        userName = "userName"
+fun PersonBrand() {
+    val options = listOf("Select", "B & H boost", "sterling blue", "B & H flavour",
+        "B & H switch","pall mall excel", "bohem", "aspen" ,"B & H demi", "oris flavour", "pall mall filter","yes","oris slim"
+        ,"time menthol","Royal standard","pall mall menthol","chesterfield","dorchester", "rothmans"
+    )
+    var selectedOption by remember { mutableStateOf(options.first()) }
+    DropdownLists(
+        options = options,
+        selectedOption = selectedOption,
+        onOptionSelected = { selectedOption = it },
+        label = "Personal Brand",
+        leadingIcon = Icons.Default.GifBox
     )
 }
 
+@Composable
+fun SampleSKU() {
+    var outletName by remember { mutableStateOf("") }
+    CustomTextField(
+        label = "Sample SKU",
+        value = outletName,
+        onValueChange = { outletName = it },
+        leadingIcon = Icons.Default.Backpack
+    )
+}
 
+@Composable
+fun AnySales() {
+    val options = listOf("Select", "Yes", "No",)
+    var selectedOption by remember { mutableStateOf(options.first()) }
+    DropdownLists(
+        options = options,
+        selectedOption = selectedOption,
+        onOptionSelected = { selectedOption = it },
+        label = "Any Sales",
+        leadingIcon = Icons.Default.BusAlert
+    )
+}
+
+@Composable
+fun QtySold() {
+    var outletName by remember { mutableStateOf("") }
+    CustomTextField(
+        label = "Qty Sold",
+        value = outletName,
+        onValueChange = { outletName = it },
+        leadingIcon = Icons.Default.Money
+    )
+}
+
+@Composable
+fun Pen() {
+    val options = listOf("Select", "TH", "PEN","WB")
+    var selectedOption by remember { mutableStateOf(options.first()) }
+    DropdownLists(
+        options = options,
+        selectedOption = selectedOption,
+        onOptionSelected = { selectedOption = it },
+        label = "PMS",
+        leadingIcon = Icons.Default.AdfScanner
+    )
+}
+
+@Composable
+fun ConsumerFeedback() {
+    var outletName by remember { mutableStateOf("") }
+    CustomTextField(
+        label = "Consumer Feedback",
+        value = outletName,
+        onValueChange = { outletName = it },
+        leadingIcon = Icons.Default.Feedback
+    )
+}
+
+@Composable
+fun CheckBoxFeed(){
+
+    var selected by remember { mutableStateOf<String?>(null) }
+    val proOne = "agreed"
+
+    ProductCheckbox(
+        productName = "The checking is an acknowledgment that the person has entered the information correctly and agrees to be the one who entered it.",
+        isChecked = selected === proOne,
+        onCheckedChange = { newValue ->
+            selected = if (newValue) proOne else ""
+        }
+    )
+}

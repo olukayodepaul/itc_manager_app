@@ -7,9 +7,11 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTimeFilled
+import androidx.compose.material.icons.filled.CardGiftcard
 import androidx.compose.material.icons.filled.Shop
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.AccessTime
+import androidx.compose.material.icons.outlined.CardGiftcard
 import androidx.compose.material.icons.outlined.Shop
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.*
@@ -31,19 +33,25 @@ fun MainScreen(navController: NavHostController) {
     val tabItems = remember {
         listOf(
             TabItem(
-                title = "Attendant",
+                title = "Attendance",
                 unselectedIcon = Icons.Outlined.AccessTime,
                 selectedIcon = Icons.Filled.AccessTimeFilled,
-                content = { AttendantScreen() }
+                content = { AttendantScreen(navController = navController )}
             ),
             TabItem(
-                title = "Sales",
+                title = "Supervisor",
                 unselectedIcon = Icons.Outlined.Shop,
                 selectedIcon = Icons.Filled.Shop,
                 content = { SalesRepScreen(navController) }
             ),
             TabItem(
-                title = "Order",
+                title = "Promoter",
+                unselectedIcon = Icons.Outlined.CardGiftcard,
+                selectedIcon = Icons.Filled.CardGiftcard,
+                content = { Promo(navController) }
+            ),
+            TabItem(
+                title = "Merchant",
                 unselectedIcon = Icons.Outlined.ShoppingCart,
                 selectedIcon = Icons.Filled.ShoppingCart,
                 content = { WholeSellerScreen(navController) }
@@ -51,7 +59,6 @@ fun MainScreen(navController: NavHostController) {
         )
     }
 
-    // Persist selected tab even after navigating away
     var selectedTabIndex by rememberSaveable { mutableStateOf(0) }
 
     Scaffold(
@@ -61,7 +68,7 @@ fun MainScreen(navController: NavHostController) {
                 tabItems.forEachIndexed { index, item ->
                     NavigationBarItem(
                         selected = index == selectedTabIndex,
-                        onClick = { selectedTabIndex = index }, // Keeps selection
+                        onClick = { selectedTabIndex = index },
                         icon = {
                             Icon(
                                 imageVector = if (index == selectedTabIndex) item.selectedIcon else item.unselectedIcon,

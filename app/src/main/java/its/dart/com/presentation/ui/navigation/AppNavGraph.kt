@@ -1,5 +1,6 @@
 package its.dart.com.presentation.ui.navigation
 
+import android.view.Window
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -9,15 +10,21 @@ import androidx.navigation.navArgument
 import its.dart.com.domain.repository.remote.model.WholeSellerModel
 import its.dart.com.presentation.ui.screens.AddCustomer
 import its.dart.com.presentation.ui.screens.CustomerByRep
+import its.dart.com.presentation.ui.screens.DailyActivityForm
+import its.dart.com.presentation.ui.screens.DailyConsumer
 import its.dart.com.presentation.ui.screens.MainScreen
 import its.dart.com.presentation.ui.screens.LoginScreen
 import its.dart.com.presentation.ui.screens.OrderScreen
+import its.dart.com.presentation.ui.screens.Promo
 import its.dart.com.presentation.ui.screens.SurveyScreen
 import its.dart.com.presentation.ui.screens.Screen
 import its.dart.com.presentation.ui.screens.WholeSellerScreen
 
 @Composable
-fun AppNavGraph(navController: NavHostController) {
+fun AppNavGraph(
+    navController: NavHostController,
+    window: Window
+) {
     NavHost(
         navController = navController,
         startDestination = Screen.HomePage.route
@@ -65,7 +72,7 @@ fun AppNavGraph(navController: NavHostController) {
             val userId = backStackEntry.arguments?.getString("userId") ?: ""
             val userName = backStackEntry.arguments?.getString("userName") ?: ""
             val identifier = backStackEntry.arguments?.getString("identifier") ?: ""
-            OrderScreen(navController, userId, userName, identifier)
+            OrderScreen(navController, userId, userName, identifier, window)
         }
 
         composable(
@@ -80,6 +87,14 @@ fun AppNavGraph(navController: NavHostController) {
 
         composable(route = Screen.WholeSellerPage.route){
             WholeSellerScreen(navController = navController)
+        }
+
+        composable(route = Screen.DailyConsumerPage.route){
+            DailyConsumer(navController = navController)
+        }
+
+        composable(route = Screen.DailyRetailPage.route){
+            DailyActivityForm(navController = navController)
         }
 
     }

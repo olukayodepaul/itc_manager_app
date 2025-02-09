@@ -2,6 +2,7 @@ package its.dart.com.presentation.ui.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTimeFilled
+import androidx.compose.material.icons.filled.CardGiftcard
 import androidx.compose.material.icons.filled.Diversity3
 import androidx.compose.material.icons.filled.Reorder
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -21,6 +22,12 @@ sealed class BottomBar (
         route = "Attendant",
         title = "Attendant",
         icon = Icons.Default.AccessTimeFilled
+    )
+
+    data object Promo : BottomBar(
+        route = "Promo",
+        title = "Promo",
+        icon = Icons.Default.CardGiftcard
     )
 
     data object Customers : BottomBar(

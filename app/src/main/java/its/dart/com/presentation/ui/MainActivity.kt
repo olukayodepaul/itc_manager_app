@@ -47,7 +47,8 @@ class MainActivity : ComponentActivity() {
                 }
 
                 AppNavGraph(
-                    navController = rememberNavController()
+                    navController = rememberNavController(),
+                    window = window
                 )
             }
         }

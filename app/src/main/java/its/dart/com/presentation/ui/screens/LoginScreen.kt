@@ -3,6 +3,7 @@ package its.dart.com.presentation.ui.screens
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material.icons.filled.PieChartOutline
@@ -23,9 +25,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,7 +46,6 @@ import its.dart.com.presentation.ui.theme.robotoFamily
 import its.dart.com.presentation.viewmodel.LoginViewModel
 import its.dart.com.presentation.viewmodel.event.LoginUIEvent
 
-
 @Composable
 fun LoginScreen(
     navController: NavHostController,
@@ -50,7 +53,6 @@ fun LoginScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val navigateToHome by viewModel.navigateToHome.collectAsState()
-
 
     LaunchedEffect(navigateToHome) {
         if (navigateToHome) {
@@ -61,32 +63,22 @@ fun LoginScreen(
         }
     }
 
-    Scaffold(
-        topBar = {
-            ToolBar(
-                title = "SapApp",
-                fontSize =  23,
-                click = {},
-                clickSearch = {},
-                clickMenu = {},
-                navigation = false
-            )
-        }
-    ) { innerPadding ->
-        Column(
+    Scaffold { innerPadding ->
+        Box( // Wrap everything in a Box for centering
             modifier = Modifier
-                .padding(innerPadding)
                 .fillMaxSize()
-                .background(Color(0xFFFFFFFFF))
+                .padding(innerPadding)
+                .background(Color(0xFFFFFFFFF)),
+            contentAlignment = Alignment.Center // Centers CircularLogo
         ) {
             Column(
-                modifier = Modifier.padding(
-                    start = 20.dp,
-                    end = 20.dp
-                )
+                modifier = Modifier.padding(horizontal = 20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                Spacer(modifier = Modifier.height(130.dp))
+                Spacer(modifier = Modifier.height(100.dp))
+                CircularLogo()
+                Spacer(modifier = Modifier.height(50.dp))
 
                 TextFieldInput(
                     value = uiState.username,
@@ -127,3 +119,30 @@ fun LoginScreen(
     }
 }
 
+
+@Composable
+fun CircularLogo() {
+    Box(
+        modifier = Modifier
+            .size(70.dp)
+            .clip(CircleShape)
+            .background(Color(0xFF008b00)),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = "SapApp",
+            fontSize = 20.sp,
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+            fontFamily = KanitMedium,
+            letterSpacing = (-2.1).sp,
+            lineHeight = 24.sp,
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewCircularLogo() {
+    CircularLogo()
+}

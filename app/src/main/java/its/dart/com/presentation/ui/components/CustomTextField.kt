@@ -68,3 +68,44 @@ fun CustomTextField(
         )
     }
 }
+
+
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CustomTextFields(
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    fontSize: TextUnit = 14.sp,
+    fontFamily: FontFamily = robotoFamily,
+    fontWeight: FontWeight = FontWeight.W600,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
+        Text(
+            text = label,
+            modifier = Modifier.padding(bottom = 4.dp),
+            style = TextStyle(
+                fontSize = fontSize,
+                fontFamily = fontFamily,
+                fontWeight = fontWeight
+            )
+        )
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp)
+                .background(Color(0xFFEEEEEE), shape = RoundedCornerShape(8.dp)),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                containerColor = Color(0xFFEEEEEE),
+                focusedBorderColor = Color.LightGray,
+                unfocusedBorderColor = Color.LightGray
+            ),
+            shape = RoundedCornerShape(12.dp)
+        )
+    }
+}
