@@ -20,6 +20,7 @@ import androidx.navigation.NavHostController
 import its.dart.com.presentation.ui.components.CButton
 import its.dart.com.presentation.ui.components.CustomTextFields
 import its.dart.com.presentation.ui.components.DropdownLists
+import its.dart.com.presentation.ui.components.DropdownListsNoneIcon
 import its.dart.com.presentation.ui.components.ProductCheckbox
 import its.dart.com.presentation.ui.components.SuccessDialog
 import its.dart.com.presentation.ui.components.ToolBar
@@ -167,7 +168,6 @@ fun StockSalesForm(
             ITCSalesMen()
             Spacer(modifier = Modifier.height(20.dp))
 
-
             CButton(
                 onClick = { showDialog = true },
                 buttonState = true,
@@ -223,12 +223,11 @@ fun TargetEXCCK() {
 fun SamplingEXCKS() {
     val options = listOf("Select", "STICKS", "LIKE","DISLIKE")
     var selectedOption by remember { mutableStateOf(options.first()) }
-    DropdownLists(
+    DropdownListsNoneIcon(
         options = options,
         selectedOption = selectedOption,
         onOptionSelected = { selectedOption = it },
-        label = "SAMPLING EXC KS",
-        leadingIcon = Icons.Default.AdfScanner
+        label = "SAMPLING EXC KS"
     )
 }
 
@@ -236,12 +235,11 @@ fun SamplingEXCKS() {
 fun SamplingXCCK() {
     val options = listOf("Select", "STICKS", "LIKE","DISLIKE")
     var selectedOption by remember { mutableStateOf(options.first()) }
-    DropdownLists(
+    DropdownListsNoneIcon(
         options = options,
         selectedOption = selectedOption,
         onOptionSelected = { selectedOption = it },
-        label = "SAMPLING XC CK ",
-        leadingIcon = Icons.Default.AdfScanner
+        label = "SAMPLING XC CK "
     )
 }
 
@@ -249,12 +247,11 @@ fun SamplingXCCK() {
 fun ITCSalesMen() {
     val options = listOf("Select", "YES", "No")
     var selectedOption by remember { mutableStateOf(options.first()) }
-    DropdownLists(
+    DropdownListsNoneIcon(
         options = options,
         selectedOption = selectedOption,
         onOptionSelected = { selectedOption = it },
-        label = "ITC SALESMAN??",
-        leadingIcon = Icons.Default.AdfScanner
+        label = "ITC SALESMAN??"
     )
 }
 

@@ -58,7 +58,7 @@ fun AddCustomer(
                 fontSize = 20,
                 fontFamily = robotoFamily,
                 letterSpacing = 0.5,
-                subTitleItem = "Add Customer"
+                subTitleItem = "Add Wholesaler"
             )
         }
     ) { innerPadding ->
@@ -103,7 +103,7 @@ fun AddCustomerContent(
             CButton(
                 onClick = { showDialog = true },
                 buttonState = true,
-                text = "Register"
+                text = "Add Customer"
             )
         }
 

@@ -114,4 +114,8 @@ dependencies {
     testImplementation("org.mockito:mockito-core:4.5.1")
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
+
+
+    //state flow collect as state with life cycle
+    implementation ("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
 }

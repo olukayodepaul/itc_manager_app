@@ -101,11 +101,11 @@ fun DailyConsumerContent(
             AnySales()
             Spacer(modifier = Modifier.height(20.dp))
             QtySold()
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(40.dp))
             ConsumerFeedback()
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(40.dp))
             CheckBoxFeed()
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(30.dp))
             CButton(
                 onClick = { showDialog = true },
                 buttonState = true,

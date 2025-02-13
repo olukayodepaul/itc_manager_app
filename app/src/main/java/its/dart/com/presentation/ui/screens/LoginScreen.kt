@@ -2,26 +2,18 @@ package its.dart.com.presentation.ui.screens
 
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LockOpen
-import androidx.compose.material.icons.filled.PieChartOutline
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,20 +21,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import its.dart.com.presentation.ui.components.CButton
 import its.dart.com.presentation.ui.components.TextFieldInput
-import its.dart.com.presentation.ui.components.ToolBar
-import its.dart.com.presentation.ui.theme.KanitBold
 import its.dart.com.presentation.ui.theme.KanitMedium
-import its.dart.com.presentation.ui.theme.appColor
-import its.dart.com.presentation.ui.theme.appColorBlack
-import its.dart.com.presentation.ui.theme.robotoFamily
 import its.dart.com.presentation.viewmodel.LoginViewModel
 import its.dart.com.presentation.viewmodel.event.LoginUIEvent
 
@@ -51,8 +38,8 @@ fun LoginScreen(
     navController: NavHostController,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-    val navigateToHome by viewModel.navigateToHome.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val navigateToHome by viewModel.navigateToHome.collectAsStateWithLifecycle()
 
     LaunchedEffect(navigateToHome) {
         if (navigateToHome) {
@@ -80,8 +67,17 @@ fun LoginScreen(
                 CircularLogo()
                 Spacer(modifier = Modifier.height(50.dp))
 
+                //error message in the compose ui
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    text = uiState.isErrorMessageState.ifEmpty { "" },
+                )
+
+                //Dialog with a loader
+
                 TextFieldInput(
-                    value = uiState.username,
+                    value = uiState.usernameState,
                     onValueChange = { username -> viewModel.onEvent(LoginUIEvent.OnUsername(username)) },
                     hint = "Username"
                 )
@@ -89,7 +85,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 TextFieldInput(
-                    value = uiState.password,
+                    value = uiState.passwordState,
                     onValueChange = { password -> viewModel.onEvent(LoginUIEvent.OnPassword(password)) },
                     hint = "Password",
                     type = true
@@ -98,8 +94,8 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(23.dp))
 
                 CButton(
-                    onClick = { viewModel.onEvent(LoginUIEvent.OnLoginClick) },
                     buttonState = uiState.buttonState,
+                    onClick = { viewModel.onEvent(LoginUIEvent.OnLoginClick) },
                     text = "Login",
                 )
 
@@ -118,7 +114,6 @@ fun LoginScreen(
         }
     }
 }
-
 
 @Composable
 fun CircularLogo() {
@@ -141,8 +136,4 @@ fun CircularLogo() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewCircularLogo() {
-    CircularLogo()
-}
+

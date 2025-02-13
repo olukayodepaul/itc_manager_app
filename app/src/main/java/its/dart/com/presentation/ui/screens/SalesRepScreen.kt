@@ -9,6 +9,11 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,12 +23,14 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import its.dart.com.domain.repository.remote.model.RepsModel
+import its.dart.com.presentation.ui.components.ChatFilterOptions
 import its.dart.com.presentation.ui.components.CircleAvatar
 import its.dart.com.presentation.ui.components.ToolBar
 import its.dart.com.presentation.ui.theme.appColor
 import its.dart.com.presentation.ui.theme.appColorBlack
 import its.dart.com.presentation.ui.theme.robotoFamily
 import its.dart.com.presentation.viewmodel.SalesRepViewModel
+import its.dart.com.presentation.viewmodel.event.ChatFilter
 
 @Composable
 fun SalesRepScreen(
@@ -51,6 +58,13 @@ fun SalesRepScreen(
                 .fillMaxSize()
                 .background(Color(0xFFFFFFFFF))
         ) {
+
+            var selectedFilter by rememberSaveable { mutableStateOf<ChatFilter>(ChatFilter.Monday) }
+
+            ChatFilterOptions(selectedFilter = selectedFilter){ filter->
+                selectedFilter = filter
+            }
+
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
                 state = rememberLazyListState()

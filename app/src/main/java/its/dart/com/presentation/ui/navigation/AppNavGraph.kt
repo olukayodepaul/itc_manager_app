@@ -15,6 +15,7 @@ import its.dart.com.presentation.ui.screens.DailyConsumer
 import its.dart.com.presentation.ui.screens.MainScreen
 import its.dart.com.presentation.ui.screens.LoginScreen
 import its.dart.com.presentation.ui.screens.OrderScreen
+import its.dart.com.presentation.ui.screens.PackPlacement
 import its.dart.com.presentation.ui.screens.Promo
 import its.dart.com.presentation.ui.screens.SurveyScreen
 import its.dart.com.presentation.ui.screens.Screen
@@ -95,6 +96,10 @@ fun AppNavGraph(
 
         composable(route = Screen.DailyRetailPage.route){
             DailyActivityForm(navController = navController)
+        }
+
+        composable(route = Screen.PackPlacementPage.route){
+            PackPlacement(navController = navController)
         }
 
     }

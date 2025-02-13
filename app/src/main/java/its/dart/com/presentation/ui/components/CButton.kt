@@ -9,7 +9,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
@@ -34,7 +34,7 @@ fun CButton(
 ) {
 
     val configuration = LocalConfiguration.current
-    val screenWidthDp = remember { mutableStateOf(configuration.screenWidthDp) }
+    val screenWidthDp = rememberSaveable { mutableStateOf(configuration.screenWidthDp) }
     val buttonHeight: Dp = if (screenWidthDp.value > 600) 56.dp else 48.dp
 
     Button(
@@ -47,7 +47,6 @@ fun CButton(
             .height(buttonHeight),
         enabled = buttonState
     ) {
-
         if(buttonState) {
             Text(
                 text = text,

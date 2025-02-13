@@ -1,7 +1,6 @@
 package its.dart.com.presentation.viewmodel
 
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +21,8 @@ class LoginViewModel @Inject constructor(
     private val localCache: LocalDatabase
 ) : ViewModel() {
 
+
+    //component and widget state.
     private val _uiState = MutableStateFlow(LoginUIState())
     val uiState: StateFlow<LoginUIState> = _uiState
 
@@ -54,11 +55,11 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun isErrorMessage(message: String) {
-        _uiState.value = _uiState.value.copy(isErrorMessage = message)
+        _uiState.value = _uiState.value.copy(isErrorMessageState = message)
     }
 
     private fun onLoading(isLoading: Boolean) {
-        _uiState.value = _uiState.value.copy(isLoading = isLoading)
+        _uiState.value = _uiState.value.copy(isLoadingState = isLoading)
     }
 
     private fun onButtonState(buttonState: Boolean) {
@@ -66,47 +67,43 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun onPassword(password: String) {
-        _uiState.value = _uiState.value.copy(password = password)
+        _uiState.value = _uiState.value.copy(passwordState = password)
     }
 
     private fun onUsername(username: String) {
-        _uiState.value = _uiState.value.copy(username = username)
+        _uiState.value = _uiState.value.copy(usernameState = username)
     }
 
     private suspend fun onLoginClick() {
 
-        if (uiState.value.username.isBlank() || uiState.value.password.isBlank()) {
+        if (uiState.value.usernameState.isBlank() || uiState.value.passwordState.isBlank()) {
             _uiState.value = _uiState.value.copy(
-                isErrorMessage = "Username and password cannot be empty"
+                isErrorMessageState = "Username and password cannot be empty"
             )
             return
         }
 
-        _uiState.value = _uiState.value.copy(isLoading = true, buttonState = false)
-        val result = loginUseCase.invokeLogin(uiState.value.username, uiState.value.password)
+        _uiState.value = _uiState.value.copy(isLoadingState = true, buttonState = false)
+        val result = loginUseCase.invokeLogin(uiState.value.usernameState, uiState.value.passwordState)
 
         result.onSuccess {
             if (it.status == 200) {
-
-                //save sales representative in a local repository
+                _uiState.value = _uiState.value.copy(isErrorMessageState = "")
                 localCache.persistLogin(it.data.rep.toSalesRepsList())
-
-                //save product in a local repository
                 localCache.persistProduct(it.products.toEntityList())
-
                 navigateToHomeScreen()
             } else {
                 _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    buttonState = true
+                    isLoadingState = false,
+                    buttonState = true,
+                    isErrorMessageState = it.message
                 )
             }
         }.onFailure { error ->
-            Log.d("its.dart.com", error.message.toString())
             _uiState.value = _uiState.value.copy(
-                isLoading = false,
+                isLoadingState = false,
                 buttonState = true,
-                isErrorMessage = error.message ?: "An error occurred. Please try again."
+                isErrorMessageState = error.message ?: "An error occurred. Please try again."
             )
         }
     }

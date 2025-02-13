@@ -23,8 +23,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import its.dart.com.presentation.ui.components.CButton
-import its.dart.com.presentation.ui.components.CustomTextField
+import its.dart.com.presentation.ui.components.CustomTextFields
 import its.dart.com.presentation.ui.components.DropdownLists
+import its.dart.com.presentation.ui.components.DropdownListsNoneIcon
 import its.dart.com.presentation.ui.components.SuccessDialog
 import its.dart.com.presentation.ui.components.ToolBar
 import its.dart.com.presentation.ui.theme.robotoFamily
@@ -43,11 +44,9 @@ fun PackPlacement(
                 clickSearch = {},
                 clickMenu = {},
                 navigation = true,
-                subTitle = true,
                 fontSize = 20,
                 fontFamily = robotoFamily,
                 letterSpacing = 0.5,
-                subTitleItem = "Add Customer"
             )
         }
     ) { innerPadding ->
@@ -113,11 +112,10 @@ fun PackPlacementContent(
 @Composable
     fun     PosId() {
     var outletName by remember { mutableStateOf("") }
-    CustomTextField(
+    CustomTextFields(
         label = "Outlet PosId",
         value = outletName,
-        onValueChange = { outletName = it },
-        leadingIcon = Icons.Default.Home
+        onValueChange = { outletName = it }
     )
 }
 
@@ -125,56 +123,51 @@ fun PackPlacementContent(
 fun Handler() {
     val options = listOf("Select", "Yes", "No",)
     var selectedOption by remember { mutableStateOf(options.first()) }
-    DropdownLists(
+    DropdownListsNoneIcon(
         options = options,
         selectedOption = selectedOption,
         onOptionSelected = { selectedOption = it },
-        label = "Personal Brand",
-        leadingIcon = Icons.Default.Language
+        label = "Personal Brand"
     )
 }
 
 @Composable
 fun     Tgtsup() {
     var outletName by remember { mutableStateOf("") }
-    CustomTextField(
+    CustomTextFields(
         label = "TGT SUP",
         value = outletName,
-        onValueChange = { outletName = it },
-        leadingIcon = Icons.Default.Home
+        onValueChange = { outletName = it }
     )
 }
 
 @Composable
 fun     Tgtmtl() {
     var outletName by remember { mutableStateOf("") }
-    CustomTextField(
+    CustomTextFields(
         label = "TGT MTL",
         value = outletName,
-        onValueChange = { outletName = it },
-        leadingIcon = Icons.Default.Home
+        onValueChange = { outletName = it }
     )
 }
 
 @Composable
 fun     exec() {
     var outletName by remember { mutableStateOf("") }
-    CustomTextField(
+    CustomTextFields(
         label = "EXC",
         value = outletName,
-        onValueChange = { outletName = it },
-        leadingIcon = Icons.Default.Home
+        onValueChange = { outletName = it }
     )
 }
 
 @Composable
 fun     QtyBought() {
     var outletName by remember { mutableStateOf("") }
-    CustomTextField(
+    CustomTextFields(
         label = "Qty Bought",
         value = outletName,
-        onValueChange = { outletName = it },
-        leadingIcon = Icons.Default.Home
+        onValueChange = { outletName = it }
     )
 }
 
@@ -182,23 +175,21 @@ fun     QtyBought() {
 fun BikeSales() {
     val options = listOf("Select", "Yes", "No",)
     var selectedOption by remember { mutableStateOf(options.first()) }
-    DropdownLists(
+    DropdownListsNoneIcon(
         options = options,
         selectedOption = selectedOption,
         onOptionSelected = { selectedOption = it },
-        label = "Bike Sales",
-        leadingIcon = Icons.Default.Language
+        label = "Bike Sales"
     )
 }
 
 @Composable
 fun     SalesManName() {
     var outletName by remember { mutableStateOf("") }
-    CustomTextField(
+    CustomTextFields(
         label = "SalesManName",
         value = outletName,
-        onValueChange = { outletName = it },
-        leadingIcon = Icons.Default.Home
+        onValueChange = { outletName = it }
     )
 }
 

@@ -62,9 +62,9 @@ fun Promo(
                 timeIcon = false
             )
 
-            RowTask(icon = Icons.Filled.DataSaverOn , title = "Pack Placement", subTitle = "Records the placement of SKUs at each customer outlet, ensuring accurate tracking of SKU distribution", click = {
-
-            },timeIcon = false)
+            RowTask(icon = Icons.Filled.DataSaverOn , title = "Pack Placement", subTitle = "Records the placement of SKUs at each customer outlet, ensuring accurate tracking of SKU distribution",
+                click = {navController.navigate("PackPlacementPage")},timeIcon = false
+            )
         }
     }
 }

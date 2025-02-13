@@ -9,11 +9,12 @@ sealed class GenericState<out T> {
 }
 
 data class LoginUIState(
-    val username: String = "",
-    val password: String = "",
+    val usernameState: String = "",
+    val passwordState: String = "",
     val buttonState: Boolean = true,
-    val isLoading: Boolean = false,
-    val isErrorMessage: String = "",
+    val isLoadingState: Boolean = false,
+    val isErrorMessageState: String = "",
+    val dialogLoaderState: Boolean  = false
 )
 
 
