@@ -7,7 +7,6 @@ import its.dart.com.domain.repository.TaskRemote
 import its.dart.com.domain.repository.local.TasksRepository
 import its.dart.com.domain.repository.remote.model.TaskRequestModel
 import its.dart.com.domain.repository.remote.model.TasksModel
-import its.dart.com.mapper.mapToTaskDto
 import its.dart.com.mapper.toTasksEntity
 import its.dart.com.presentation.viewmodel.event.TaskViewEvent
 import its.dart.com.presentation.viewmodel.state.TaskViewState
@@ -16,12 +15,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
 class TaskViewModel @Inject constructor(
     private val localRep: TasksRepository,
     private val remoteRepo: TaskRemote
-    ): ViewModel() {
+) : ViewModel() {
 
     private val _taskUpdate = MutableStateFlow(TaskViewState())
     val taskUpdate: StateFlow<TaskViewState> = _taskUpdate
@@ -38,46 +36,61 @@ class TaskViewModel @Inject constructor(
 
     private suspend fun eventListener(event: TaskViewEvent) {
         when (event) {
-            is TaskViewEvent.OnClickResume -> {
-                try {
-                    if (_taskUpdate.value.resume.isBlank() || _taskUpdate.value.resume == "00:00:00") {
-                        _taskUpdate.value = _taskUpdate.value.copy(dialogLoader = true)
-
-                        val request = TaskRequestModel(
-                            userId = 2,
-                            taskId = 1,
-                            lat = "0.2",
-                            lng = "0.5",
-                            taskName = "resume",
-                            userType = 3
-                        )
-
-                        val result = remoteRepo.taskRequest(request)
-
-                        val cache = TasksModel
-                            .builder()
-                            .setTaskId(result.taskId.toInt())
-                            .setLatitude("0.0")
-                            .setLongitude("0.0")
-                            .setUserId(1)
-                            .setTimeAgo(result.time)
-                            .build()
-
-                        localRep.persistTask(cache.toTasksEntity())
-                        _taskUpdate.value = _taskUpdate.value.copy(resume = result.time)
-                    }
-
-                    _taskUpdate.value = _taskUpdate.value.copy(dialogLoader = false)
-                } catch (e: Exception) {
-                    _taskUpdate.value = _taskUpdate.value.copy(dialogLoader = false)
-                }
-            }
-            is TaskViewEvent.OnClickClockOut -> { /* TODO */ }
-            is TaskViewEvent.OnClickClockIn -> { /* TODO */ }
-            is TaskViewEvent.OnClickClose -> { /* TODO */ }
+            is TaskViewEvent.OnClickResume -> handleTaskEvent(taskId = 1, taskName = "resume")
+            is TaskViewEvent.OnClickClockOut -> handleTaskEvent(taskId = 2, taskName = "ClockOut")
+            is TaskViewEvent.OnClickClockIn -> handleTaskEvent(taskId = 3, taskName = "ClockIn")
+            is TaskViewEvent.OnClickClose -> handleTaskEvent(taskId = 4, taskName = "Close")
         }
     }
 
+    private suspend fun handleTaskEvent(taskId: Int, taskName: String) {
+        try {
+            val currentTime = when (taskId) {
+                1 -> _taskUpdate.value.resume
+                2 -> _taskUpdate.value.clockOut
+                3 -> _taskUpdate.value.clockIn
+                4 -> _taskUpdate.value.close
+                else -> "00:00:00"
+            }
+
+            if (currentTime.isBlank() || currentTime == "00:00:00") {
+                _taskUpdate.value = _taskUpdate.value.copy(dialogLoader = true)
+
+                val request = TaskRequestModel(
+                    userId = 2,
+                    taskId = taskId,
+                    lat = "0.2",
+                    lng = "0.5",
+                    taskName = taskName,
+                    userType = 3
+                )
+
+                val result = remoteRepo.taskRequest(request)
+
+                val cache = TasksModel.builder()
+                    .setTaskId(result.taskId.toInt())
+                    .setLatitude("0.0")
+                    .setLongitude("0.0")
+                    .setUserId(1)
+                    .setTimeAgo(result.time)
+                    .build()
+
+                localRep.persistTask(cache.toTasksEntity())
+
+                _taskUpdate.value = when (taskId) {
+                    1 -> _taskUpdate.value.copy(resume = result.time)
+                    2 -> _taskUpdate.value.copy(clockOut = result.time)
+                    3 -> _taskUpdate.value.copy(clockIn = result.time)
+                    4 -> _taskUpdate.value.copy(close = result.time)
+                    else -> _taskUpdate.value
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            _taskUpdate.value = _taskUpdate.value.copy(dialogLoader = false)
+        }
+    }
 
     private fun getTask() {
         viewModelScope.launch {
@@ -92,5 +105,4 @@ class TaskViewModel @Inject constructor(
             }
         }
     }
-
 }
