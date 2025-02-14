@@ -37,6 +37,8 @@ interface LocalDatabase {
 
     @Query("DELETE FROM customers")
     suspend fun delCustomer(): Int
+
+
 }
 
 

@@ -12,6 +12,7 @@ import its.dart.com.presentation.viewmodel.event.LoginViewEvent
 import its.dart.com.presentation.viewmodel.state.LoginViewState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,11 +29,18 @@ class LoginViewModel @Inject constructor(
     val navController: StateFlow<Boolean> = _navController
 
 
-    //expose to the view
     fun onEvent(event: LoginViewEvent) {
         viewModelScope.launch {
             eventHandler(event)
         }
+    }
+
+    private fun navigateToHomeScreen() {
+        _navController.update { true }
+    }
+
+    fun resetNavigation() {
+        _navController.update { false }
     }
 
     private suspend fun eventHandler(event: LoginViewEvent) = viewModelScope.launch{
@@ -43,14 +51,6 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun navigateToHomeScreen() {
-        _navController.value = true
-    }
-
-    fun resetNavigation() {
-        _navController.value = false
-    }
-
     private fun usernameTextBox(usernameTextBox: String) {
         _uiState.value = _uiState.value.copy(usernameTextBox = usernameTextBox)
     }
@@ -58,7 +58,6 @@ class LoginViewModel @Inject constructor(
     private fun passwordTextBox(passwordTextBox: String ) {
         _uiState.value = _uiState.value.copy(passwordTextBox = passwordTextBox)
     }
-
 
     private suspend fun onLoginClick() {
 

@@ -2,8 +2,6 @@ package its.dart.com.data.repository.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 
 
 @Entity(tableName = "logins")
@@ -36,4 +34,14 @@ data class AllCustomersEntity (
     val outlet_name: String,
     val outlet_address: String,
     val contact_phone: String,
+)
+
+@Entity(tableName = "task")
+data class Task (
+    @PrimaryKey(autoGenerate = true) val id: Int,
+    val task_id: Int,
+    val latitude: String? = "0.0",
+    val longitude: String? = "0.0",
+    val user_id: String? = "0.0",
+    val time_ago: String? = "0.0",
 )
