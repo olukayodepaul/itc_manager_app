@@ -3,11 +3,13 @@ package its.dart.com.presentation.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -23,8 +25,9 @@ fun LoadingDialog(
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .size(100.dp)
-                    .background(Color.White, shape = RoundedCornerShape(8.dp))
+                    .size(60.dp)
+                    .clip(CircleShape)
+                    .background(Color.White)
             ) {
                 CircularProgressIndicator()
             }

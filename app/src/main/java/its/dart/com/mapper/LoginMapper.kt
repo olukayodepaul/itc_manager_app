@@ -10,23 +10,26 @@ import its.dart.com.data.repository.remote.dto.LoginDto
 import its.dart.com.domain.repository.remote.model.AllCustomersModel
 import its.dart.com.domain.repository.remote.model.ProductModel
 import its.dart.com.domain.repository.remote.model.CustomersModel
+import its.dart.com.domain.repository.remote.model.Errors
 import its.dart.com.domain.repository.remote.model.LoginModel
 import its.dart.com.domain.repository.remote.model.RepsModel
 import its.dart.com.domain.repository.remote.model.UserDataModel
 import its.dart.com.domain.repository.remote.model.UserModel
 
-fun LoginDto.mapToLoginModel(): LoginModel {
-    val userDto = this.data.users
-    val userModel = UserModel.Builder()
-        .fullName(userDto.fullName)
-        .id(userDto.id)
-        .depotId(userDto.depotId)
-        .systemCategoryId(userDto.systemCategoryId)
-        .depotLat(userDto.depotLat)
-        .depotLng(userDto.depotLng)
-        .build()
 
-    val repsModelList = this.data.rep.map { repDto ->
+fun LoginDto.mapToLoginModel(): LoginModel {
+    val userModel = this.data?.users?.let { userDto ->
+        UserModel.Builder()
+            .fullName(userDto.fullName)
+            .id(userDto.id)
+            .depotId(userDto.depotId)
+            .systemCategoryId(userDto.systemCategoryId)
+            .depotLat(userDto.depotLat)
+            .depotLng(userDto.depotLng)
+            .build()
+    }
+
+    val repsModelList = this.data?.rep?.map { repDto ->
         RepsModel.Builder()
             .id(repDto.id)
             .routeId(repDto.routeId)
@@ -37,26 +40,34 @@ fun LoginDto.mapToLoginModel(): LoginModel {
             .build()
     }
 
-    val customerModelList = this.products.map { customerDto ->
+    val customerModelList = this.products?.map { productDto ->
         ProductModel.Builder()
-            .id(customerDto.id)
-            .item(customerDto.item)
-            .code(customerDto.code)
-            .qty(customerDto.qty)
+            .id(productDto.id)
+            .item(productDto.item)
+            .code(productDto.code)
+            .qty(productDto.qty)
             .build()
     }
 
     val userDataModel = UserDataModel.Builder()
-        .users(userModel)
-        .rep(repsModelList)
+        .users(userModel?: UserModel.Builder().build())
+        .rep(repsModelList?: emptyList())
         .build()
+
+    val errorDataModel = this.error?.let { error ->
+        Errors.Builder()
+            .errorCode(error.errorCode)
+            .errorMessage(error.errorMessage)
+            .build()
+    }
 
     return LoginModel.Builder()
         .status(this.status)
         .message(this.message)
         .transDate(this.transDate)
         .data(userDataModel)
-        .customer(customerModelList)
+        .customer(customerModelList?: emptyList())
+        .error(errorDataModel?: Errors.Builder().build())
         .build()
 }
 

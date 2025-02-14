@@ -8,8 +8,9 @@ data class LoginDto(
     val status: Int,
     val message: String,
     @SerialName("trans_date") val transDate: String,
-    val data: UserDataDto,
-    val products: List<ProductDto>
+    val data: UserDataDto? = null,
+    val products: List<ProductDto>? = null,
+    val error: ErrorDto? = null
 )
 
 @Serializable
@@ -48,3 +49,8 @@ data class ProductDto(
     val qty: String? = null,
 )
 
+@Serializable
+data class ErrorDto(
+    @SerialName("error_message") val errorMessage: String,
+    @SerialName("error_code") val errorCode: Int
+)

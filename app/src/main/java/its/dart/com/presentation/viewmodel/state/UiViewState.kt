@@ -8,13 +8,9 @@ sealed class GenericState<out T> {
     data class Failure(val exception: Throwable) : GenericState<Nothing>()
 }
 
-data class LoginUIState(
-    val usernameState: String = "",
-    val passwordState: String = "",
-    val buttonState: Boolean = true,
-    val isLoadingState: Boolean = false,
-    val isErrorMessageState: String = "",
-    val dialogLoaderState: Boolean  = false
+data class LoginViewState(
+    val usernameTextBox: String = "",
+    val passwordTextBox: String = "",
+    val errorMessage: String = "",
+    val dialogLoader: Boolean  = false
 )
-
-

@@ -7,7 +7,8 @@ data class LoginModel(
     val message: String,
     val transDate: String,
     val data: UserDataModel,
-    val products: List<ProductModel>
+    val products: List<ProductModel>,
+    val error: Errors,
 ) {
     // Builder class for LoginModel
     class Builder {
@@ -16,6 +17,7 @@ data class LoginModel(
         private var transDate: String = ""
         private var data: UserDataModel? = null
         private var customer: MutableList<ProductModel> = mutableListOf()
+        private var error: Errors? = null
 
         // Setters for each property
         fun status(status: Int) = apply { this.status = status }
@@ -24,13 +26,14 @@ data class LoginModel(
         fun data(data: UserDataModel) = apply { this.data = data }
         fun customer(customer: List<ProductModel>) = apply { this.customer = customer.toMutableList() }
         fun addCustomer(customerModel: ProductModel) = apply { this.customer.add(customerModel) }
+        fun error(error: Errors) = apply { this.error = error }
 
         // Build method to create LoginModel object
         fun build(): LoginModel {
             if (data == null) {
                 throw IllegalStateException("UserDataModel must be provided.")
             }
-            return LoginModel(status, message, transDate, data!!, customer)
+            return LoginModel(status, message, transDate, data!!, customer, error!!)
         }
     }
 }
@@ -147,6 +150,27 @@ data class ProductModel(
 
         fun build(): ProductModel {
             return ProductModel(id, item, code, qty)
+        }
+    }
+}
+
+data class Errors(
+    val errorMessage: String,
+    val errorCode: Int,
+) {
+    companion object {
+        fun builder() = Builder()
+    }
+
+    class Builder {
+        private var errorMessage: String = ""
+        private var errorCode: Int = 0
+
+        fun errorMessage(errorMessage: String) = apply { this.errorMessage = errorMessage }
+        fun errorCode(errorCode: Int) = apply { this.errorCode = errorCode }
+
+        fun build(): Errors {
+            return Errors(errorMessage, errorCode)
         }
     }
 }
