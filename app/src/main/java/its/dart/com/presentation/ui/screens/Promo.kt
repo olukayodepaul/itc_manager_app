@@ -59,6 +59,7 @@ fun Promo(
 
             RowTask(icon = Icons.Filled.DataObject , title = "Daily Retail Activity Form", subTitle = "Tracks the daily activities of the promoter, updating the system on their performance in relation to customers",
                 click = { navController.navigate("DailyRetailPage")},
+
                 timeIcon = false
             )
 

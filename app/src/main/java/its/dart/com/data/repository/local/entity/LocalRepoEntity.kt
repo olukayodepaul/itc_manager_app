@@ -36,10 +36,10 @@ data class AllCustomersEntity (
     val contact_phone: String,
 )
 
-@Entity(tableName = "task")
-data class Task (
+@Entity(tableName = "tasks")
+data class TasksEntity (
     @PrimaryKey(autoGenerate = true) val id: Int,
-    val task_id: Int,
+    val task_id: Int? = 0,
     val latitude: String? = "0.0",
     val longitude: String? = "0.0",
     val user_id: String? = "0.0",

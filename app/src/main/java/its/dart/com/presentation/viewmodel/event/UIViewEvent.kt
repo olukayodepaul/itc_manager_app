@@ -7,6 +7,13 @@ sealed class LoginViewEvent {
     data object OnClickButton: LoginViewEvent()
 }
 
+sealed class TaskViewEvent {
+    data object OnClickResume: TaskViewEvent()
+    data object OnClickClockOut: TaskViewEvent()
+    data object OnClickClockIn: TaskViewEvent()
+    data object OnClickClose: TaskViewEvent()
+}
+
 sealed class ChatFilter(val id: Int, val label: String) {
 
     data object Monday : ChatFilter(1, "Monday")

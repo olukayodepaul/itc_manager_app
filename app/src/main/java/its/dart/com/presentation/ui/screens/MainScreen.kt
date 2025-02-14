@@ -36,7 +36,7 @@ fun MainScreen(navController: NavHostController) {
                 title = "Attendance",
                 unselectedIcon = Icons.Outlined.AccessTime,
                 selectedIcon = Icons.Filled.AccessTimeFilled,
-                content = { AttendantScreen(navController = navController )}
+                content = { AttendantScreen()}
             ),
             TabItem(
                 title = "Supervisor",

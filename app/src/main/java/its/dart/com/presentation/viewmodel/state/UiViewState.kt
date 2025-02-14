@@ -14,3 +14,11 @@ data class LoginViewState(
     val errorMessage: String = "",
     val dialogLoader: Boolean  = false
 )
+
+data class TaskViewState(
+    val resume: String = "00:00:00",
+    val clockOut: String = "00:00:00",
+    val clockIn: String = "00:00:00",
+    val close : String = "00:00:00",
+    val dialogLoader: Boolean  = false
+)

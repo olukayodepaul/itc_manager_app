@@ -174,3 +174,137 @@ data class Errors(
         }
     }
 }
+
+data class TasksDTO(
+    val id: Int,
+    val taskId: Int? = 0,
+    val latitude: String? = "0.0",
+    val longitude: String? = "0.0",
+    val userId: String? = "0.0",
+    val timeAgo: String? = "0.0"
+) {
+
+    companion object {
+        fun builder() = Builder()
+    }
+
+    class Builder {
+        private var id: Int = 0
+        private var taskId: Int? = 0
+        private var latitude: String? = "0.0"
+        private var longitude: String? = "0.0"
+        private var userId: String? = "0.0"
+        private var timeAgo: String? = "0.0"
+
+        fun id(id: Int) = apply { this.id = id }
+        fun taskId(taskId: Int?) = apply { this.taskId = taskId }
+        fun latitude(latitude: String?) = apply { this.latitude = latitude }
+        fun longitude(longitude: String?) = apply { this.longitude = longitude }
+        fun userId(userId: String?) = apply { this.userId = userId }
+        fun timeAgo(timeAgo: String?) = apply { this.timeAgo = timeAgo }
+
+        fun build(): TasksDTO {
+            return TasksDTO(id, taskId, latitude, longitude, userId, timeAgo)
+        }
+    }
+}
+
+
+data class TaskRequestModel (
+    val userId: Int,
+    val taskId: Int,
+    val lat: String,
+    val lng: String,
+    val taskName: String,
+    val userType: Int
+) {
+
+    companion object {
+        fun builder() = Builder()
+    }
+
+    class Builder {
+        private var userId: Int = 0
+        private var taskId: Int = 0
+        private var lat: String = ""
+        private var lng: String = ""
+        private var taskName: String = ""
+        private var userType: Int = 0
+
+        fun userId(userId: Int) = apply { this.userId = userId }
+        fun taskId(taskId: Int) = apply { this.taskId = taskId }
+        fun lat(lat: String) = apply { this.lat = lat }
+        fun lng(lng: String) = apply { this.lng = lng }
+        fun taskName(taskName: String) = apply { this.taskName = taskName }
+        fun userType(userType: Int) = apply { this.userType = userType }
+
+        fun build() = TaskRequestModel(userId, taskId, lat, lng, taskName, userType)
+    }
+}
+
+class TaskModel(
+    val status: Int,
+    val message: String,
+    val time: String,
+    val taskId: String
+) {
+
+    companion object {
+        fun builder() = Builder()
+    }
+
+    class Builder {
+        private var status: Int = 0
+        private var message: String = ""
+        private var time: String = ""
+        private var taskId: String = ""
+
+        fun status(status: Int) = apply { this.status = status }
+        fun message(message: String) = apply { this.message = message }
+        fun time(time: String) = apply { this.time = time }
+        fun taskId(taskId: String) = apply { this.taskId = taskId }
+
+        fun build() = TaskModel(status, message, time, taskId)
+    }
+}
+
+data class TasksModel(
+    val id: Int = 0,
+    val taskId: Int? = 0,
+    val latitude: String? = "0.0",
+    val longitude: String? = "0.0",
+    val userId: Int? = 0,
+    val timeAgo: String? = "0.0"
+) {
+
+    companion object {
+        fun builder() = Builder()
+    }
+
+    class Builder {
+        var id: Int = 0
+        var taskId: Int? = 0
+        var latitude: String? = "0.0"
+        var longitude: String? = "0.0"
+        var userId: Int? = 0
+        var timeAgo: String? = "0.0"
+
+        fun setId(id: Int) = apply { this.id = id }
+        fun setTaskId(taskId: Int?) = apply { this.taskId = taskId }
+        fun setLatitude(latitude: String?) = apply { this.latitude = latitude }
+        fun setLongitude(longitude: String?) = apply { this.longitude = longitude }
+        fun setUserId(userId: Int?) = apply { this.userId = userId }
+        fun setTimeAgo(timeAgo: String?) = apply { this.timeAgo = timeAgo }
+
+        fun build() = TasksModel(
+                id = id,
+                taskId = taskId,
+                latitude = latitude,
+                longitude = longitude,
+                userId = userId,
+                timeAgo = timeAgo
+            )
+
+    }
+}
+

@@ -7,6 +7,7 @@ import androidx.room.Query
 import its.dart.com.data.repository.local.entity.AllCustomersEntity
 import its.dart.com.data.repository.local.entity.ProductEntity
 import its.dart.com.data.repository.local.entity.SalesRepsEntity
+import its.dart.com.data.repository.local.entity.TasksEntity
 import kotlinx.coroutines.flow.Flow
 
 
@@ -38,6 +39,12 @@ interface LocalDatabase {
     @Query("DELETE FROM customers")
     suspend fun delCustomer(): Int
 
+    //task fetch from repository
+    @Query("SELECT * FROM tasks")
+    fun getTasks(): Flow<List<TasksEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun persistTask(task: TasksEntity)
 
 }
 

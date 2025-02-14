@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -37,7 +35,8 @@ fun RowTask(
     icon: ImageVector,
     title:String,
     subTitle:String,
-    timeIcon: Boolean = true
+    timeIcon: Boolean = true,
+    timeState: String = "00:00:00"
 ){
 
     Box(modifier = Modifier
@@ -86,7 +85,7 @@ fun RowTask(
 
             if(timeIcon){
                 Text(
-                    text = "00:00:00",
+                    text = timeState,
                     color = Color.Gray.copy(alpha = 1f),
                     fontSize = 11.sp
                 )
@@ -102,3 +101,6 @@ fun RowTask(
         }
     }
 }
+
+
+

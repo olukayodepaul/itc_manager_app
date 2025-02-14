@@ -6,16 +6,11 @@ import its.dart.com.data.repository.local.database.LocalDatabase
 import its.dart.com.data.repository.local.entity.AllCustomersEntity
 import its.dart.com.data.repository.local.entity.ProductEntity
 import its.dart.com.data.repository.local.entity.SalesRepsEntity
-import its.dart.com.data.repository.local.entity.Task
+import its.dart.com.data.repository.local.entity.TasksEntity
 
 
 @Database(
-    entities = [
-        SalesRepsEntity::class,
-        ProductEntity::class,
-        AllCustomersEntity::class,
-        Task::class],
-    version = 1, exportSchema = false
+    entities = [SalesRepsEntity::class, ProductEntity::class, AllCustomersEntity::class, TasksEntity::class], version = 1, exportSchema = false
 )
 abstract class RoomDatabase: RoomDatabase() {
     abstract val doa: LocalDatabase

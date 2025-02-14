@@ -8,11 +8,15 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
 import its.dart.com.Application
+import its.dart.com.data.repository.local.TasksRepositoryImpl
 import its.dart.com.data.repository.local.database.LocalDatabase
 import its.dart.com.data.repository.prefence.PreferenceImp
 import its.dart.com.data.repository.remote.CustomerByRepImp
 import its.dart.com.data.repository.remote.LoginRemoteDataImpl
+import its.dart.com.data.repository.remote.TaskRemoteImpl
 import its.dart.com.domain.repository.PreferenceInt
+import its.dart.com.domain.repository.TaskRemote
+import its.dart.com.domain.repository.local.TasksRepository
 import its.dart.com.domain.repository.remote.CustomerByRepInterface
 import its.dart.com.domain.repository.remote.LoginRemoteRepositoryDataInterface
 import its.dart.com.domain.usecases.CustomerByRepUseCases
@@ -37,7 +41,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideCustomerRemoteRepositoryData(
-        httpClient: HttpClient,
+        httpClient: HttpClient
     ): CustomerByRepInterface
     {
         return CustomerByRepImp(httpClient);
@@ -85,6 +89,22 @@ object AppModule {
     @Singleton
     fun providePreferences(sharedPreferences: SharedPreferences): PreferenceInt {
         return PreferenceImp(sharedPreferences)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTasks(
+        localCache: LocalDatabase,
+    ) : TasksRepository {
+        return TasksRepositoryImpl(localCache)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRemote(
+        httpClient: HttpClient,
+    ): TaskRemote {
+        return TaskRemoteImpl(httpClient)
     }
 
 }

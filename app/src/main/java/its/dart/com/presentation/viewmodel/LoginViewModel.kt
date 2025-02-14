@@ -12,7 +12,6 @@ import its.dart.com.presentation.viewmodel.event.LoginViewEvent
 import its.dart.com.presentation.viewmodel.state.LoginViewState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,15 +34,17 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun navigateToHomeScreen() {
-        _navController.update { true }
+    private suspend  fun navigateToHomeScreen() {
+        _navController.emit(true)
+        //_navController.value = true
     }
 
-    fun resetNavigation() {
-        _navController.update { false }
+    suspend fun resetNavigation() {
+        _navController.emit(false)
+        //_navController.value = false
     }
 
-    private suspend fun eventHandler(event: LoginViewEvent) = viewModelScope.launch{
+    private fun eventHandler(event: LoginViewEvent) = viewModelScope.launch{
         when(event){
             is LoginViewEvent.OnUsernameTextBox->{usernameTextBox(event.usernameTextBox)}
             is LoginViewEvent.OnPasswordTextBox->{passwordTextBox(event.passwordTextBox)}
