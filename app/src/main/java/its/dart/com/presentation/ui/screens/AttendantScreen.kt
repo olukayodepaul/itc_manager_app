@@ -82,14 +82,18 @@ fun AttendantScreen(
         ) {
 
             RowOfCards()
+
             Spacer(modifier = Modifier.height(30.dp))
+
             RowHeader(title = "DailyTask", fontSize = 18)
+
             Spacer(modifier = Modifier.height(10.dp))
 
             RowTask(icon = Icons.Filled.Timelapse , title = "Resume", subTitle = "When starting the day, the supervisor and other users are expected to mark their resumption",
                 click = { viewModel.onEvent(TaskViewEvent.OnClickResume) },
                 timeState = widgetUIState.resume
             )
+
             RowTask(icon = Icons.Filled.TimeToLeave , title = "Clock Out", subTitle = "Users must clock out when leaving for their daily tasks.",
                 click = {viewModel.onEvent(TaskViewEvent.OnClickClockOut)},
                 timeState = widgetUIState.clockOut
@@ -110,7 +114,6 @@ fun AttendantScreen(
                 showDialog = widgetUIState.dialogLoader,
                 onDismiss = {}
             )
-
         }
     }
 }
@@ -210,3 +213,62 @@ fun RowOfCards() {
         )
     }
 }
+
+////local state and hoisting state
+//@Composable
+//fun LocalState(){
+//    var localState by remember { mutableStateOf(false) }
+//    Checkbox(
+//        checked = localState,
+//        onCheckedChange = {localState = it}
+//    )
+//}
+//
+//@Composable
+//fun HoistingStateParent(){
+//    var hoisting by remember { mutableStateOf(false) }
+//
+//    Text(
+//        text = "$hoisting"
+//    )
+//
+//    HoistingState(
+//        checked = hoisting,
+//        onCheckedChange = {hoisting = it}
+//    )
+//}
+//
+////state hoisting. passing state as a parameter to the perent
+//@Composable
+//fun HoistingState(
+//    checked: Boolean,
+//    onCheckedChange: (Boolean)->Unit
+//){
+//    Checkbox(
+//        checked = checked,
+//        onCheckedChange = {onCheckedChange(it)}
+//    )
+//}
+//
+////state hoisting for clicking button
+//@Composable
+//fun ClickingStateHoisting() {
+//    ParentButton(
+//        click = {
+//            2 + 6
+//        }
+//    )
+//}
+//
+//@Composable
+//fun ParentButton (
+//    click:()->Unit
+//){
+//    Button(
+//        onClick = { click }
+//    ) {
+//        Text(
+//            text = "Button"
+//        )
+//    }
+//}

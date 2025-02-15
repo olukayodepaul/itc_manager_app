@@ -1,5 +1,6 @@
 package its.dart.com.presentation.viewmodel
 
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -54,6 +55,7 @@ class TaskViewModel @Inject constructor(
             }
 
             if (currentTime.isBlank() || currentTime == "00:00:00") {
+
                 _taskUpdate.value = _taskUpdate.value.copy(dialogLoader = true)
 
                 val request = TaskRequestModel(
@@ -106,3 +108,5 @@ class TaskViewModel @Inject constructor(
         }
     }
 }
+
+

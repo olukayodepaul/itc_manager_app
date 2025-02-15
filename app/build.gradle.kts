@@ -85,7 +85,6 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     debugImplementation("androidx.compose.ui:ui-tooling")
     implementation("androidx.compose.runtime:runtime")
-    implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.compose.foundation:foundation")
 
     // Navigation
@@ -115,7 +114,12 @@ dependencies {
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
 
-
     //state flow collect as state with life cycle
     implementation ("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
+
+    //system Ui controller to control the status bar,  icon color  and the hide status bar in full mode
+    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.31.1-alpha")
+
+    //material icon for the application
+    implementation("androidx.compose.material:material-icons-extended:1.7.7")
 }
