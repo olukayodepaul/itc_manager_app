@@ -27,7 +27,6 @@ class LoginViewModel @Inject constructor(
     private val _navController = MutableStateFlow(false)
     val navController: StateFlow<Boolean> = _navController
 
-
     fun onEvent(event: LoginViewEvent) {
         viewModelScope.launch {
             eventHandler(event)
@@ -36,7 +35,6 @@ class LoginViewModel @Inject constructor(
 
     private suspend  fun navigateToHomeScreen() {
         _navController.emit(true)
-        //_navController.value = true
     }
 
     suspend fun resetNavigation() {
@@ -44,11 +42,11 @@ class LoginViewModel @Inject constructor(
         //_navController.value = false
     }
 
-    private fun eventHandler(event: LoginViewEvent) = viewModelScope.launch{
+    private fun eventHandler(event: LoginViewEvent) {
         when(event){
             is LoginViewEvent.OnUsernameTextBox->{usernameTextBox(event.usernameTextBox)}
             is LoginViewEvent.OnPasswordTextBox->{passwordTextBox(event.passwordTextBox)}
-            is LoginViewEvent.OnClickButton->onLoginClick()
+            is LoginViewEvent.OnClickButton->{viewModelScope.launch{onLoginClick()}}
         }
     }
 
@@ -62,35 +60,37 @@ class LoginViewModel @Inject constructor(
 
     private suspend fun onLoginClick() {
 
-        if (uiState.value.usernameTextBox.isBlank() || uiState.value.passwordTextBox.isBlank()) {
-            _uiState.value = _uiState.value.copy(
+        val state = _uiState.value
+
+        if (state.usernameTextBox.isBlank() || state.passwordTextBox.isBlank()) {
+            _uiState.value = state.copy(
                 errorMessage = "Username and password cannot be empty"
             )
             return
         }
 
-        _uiState.value = _uiState.value.copy(dialogLoader = true)
-        val result = loginUseCase.invokeLogin(uiState.value.usernameTextBox, uiState.value.passwordTextBox)
+        _uiState.value = state.copy(dialogLoader = true)
+        val result = loginUseCase.invokeLogin(state.usernameTextBox, state.passwordTextBox)
 
         result.onSuccess {
             if (it.status == 200) {
                 localCache.persistLogin(it.data.rep.toSalesRepsList())
                 localCache.persistProduct(it.products.toEntityList())
-                _uiState.value = _uiState.value.copy(
+                _uiState.value = state.copy(
                     errorMessage = "",
                     dialogLoader = false
                 )
                 navigateToHomeScreen()
             } else {
                 println(it.error.errorMessage)
-                _uiState.value = _uiState.value.copy(
+                _uiState.value = state.copy(
                     dialogLoader = false,
                     errorMessage = it.error.errorMessage
                 )
             }
         }.onFailure { error ->
             println(error.message ?: "An error occurred. Please try again.")
-            _uiState.value = _uiState.value.copy(
+            _uiState.value = state.copy(
                 dialogLoader = false,
                 errorMessage = error.message ?: "An error occurred. Please try again."
             )

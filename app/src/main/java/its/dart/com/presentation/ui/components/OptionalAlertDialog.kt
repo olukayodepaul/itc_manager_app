@@ -8,12 +8,11 @@ import androidx.compose.runtime.Composable
 @Composable
 fun OptionalDialog(
     btDismissState: Boolean,
+    btDismissEvent: () -> Unit,
+    btConfirmEvent: () -> Unit,
     text: String,
     btConfirmTitle: String,
     btDismissTitle: String,
-
-//    btDismissEvent: (Boolean) -> Unit,
-//    btLeftOnClick: () -> Unit
 ) {
     if (btDismissState) {
         AlertDialog(
@@ -21,14 +20,14 @@ fun OptionalDialog(
             text = { Text(text = text) },
             confirmButton = {
                 Button(onClick = {
-
+                    btConfirmEvent()
                 }) {
                     Text(text = btConfirmTitle)
                 }
             },
             dismissButton = {
                 Button(onClick = {
-
+                    btDismissEvent()
                 }) {
                     Text(text = btDismissTitle)
                 }

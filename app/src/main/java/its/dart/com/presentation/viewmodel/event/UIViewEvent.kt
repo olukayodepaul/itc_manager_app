@@ -22,6 +22,8 @@ sealed class AddCustomerViewEvent{
     class OnOutletType(val outletType: Int): AddCustomerViewEvent()
     class OnAddress(val address: String) : AddCustomerViewEvent()
     data object OnclickButton: AddCustomerViewEvent()
+    data object OnclickDismissButton: AddCustomerViewEvent()
+    data object OnclickConfirmButton: AddCustomerViewEvent()
 }
 
 sealed class ChatFilter(val id: Int, val label: String) {

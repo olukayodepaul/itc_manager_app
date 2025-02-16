@@ -1,6 +1,7 @@
 package its.dart.com.presentation.ui.screens
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -34,7 +36,6 @@ import its.dart.com.presentation.ui.components.CButton
 import its.dart.com.presentation.ui.components.CustomTextField
 import its.dart.com.presentation.ui.components.DropdownLists
 import its.dart.com.presentation.ui.components.OptionalDialog
-import its.dart.com.presentation.ui.components.SuccessDialog
 import its.dart.com.presentation.ui.components.ToolBar
 import its.dart.com.presentation.ui.theme.robotoFamily
 import its.dart.com.presentation.viewmodel.AddCustomerViewModel
@@ -79,7 +80,6 @@ fun AddCustomerContent(
     viewModel: AddCustomerViewModel = hiltViewModel()
 ) {
     val scrollState = rememberScrollState()
-    var showDialog by remember { mutableStateOf(false) }
     val widgetUIState by viewModel.addCustomerState.collectAsStateWithLifecycle()
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -98,57 +98,79 @@ fun AddCustomerContent(
                 onValueChange = { viewModel.onEvent(AddCustomerViewEvent.OnOutletName(it)) }
             )
             Spacer(modifier = Modifier.height(10.dp))
+
             ContactPerson(
                 label = widgetUIState.contactPerson,
                 onValueChange = {viewModel.onEvent(AddCustomerViewEvent.OnContactPerson(it))}
             )
             Spacer(modifier = Modifier.height(10.dp))
+
             MobileNumber(
                 label = widgetUIState.mobileNumber,
                 onValueChange = {viewModel.onEvent(AddCustomerViewEvent.OnMobileNumber(it))}
             )
 
             Spacer(modifier = Modifier.height(10.dp))
+
             Language(
                 selectedOption = widgetUIState.language,
                 onOptionSelected = { viewModel.onEvent(AddCustomerViewEvent.OnLanguage(it)) }
             )
             Spacer(modifier = Modifier.height(15.dp))
+
             OutletType(
                 selectedOption = widgetUIState.outletType,
                 onOptionSelected = { viewModel.onEvent(AddCustomerViewEvent.OnOutletType(it)) }
             )
+
             Spacer(modifier = Modifier.height(15.dp))
-            Address()
+
+            Address(
+                label = widgetUIState.address,
+                onValueChange = {viewModel.onEvent(AddCustomerViewEvent.OnAddress(it))}
+            )
             Spacer(modifier = Modifier.height(10.dp))
+
             CButton(
-                onClick = {},
+                onClick = {viewModel.onEvent(AddCustomerViewEvent.OnclickConfirmButton)},
                 buttonState = true,
                 text = "Post"
             )
+
             Spacer(modifier = Modifier.height(30.dp))
-            HideAndShowOptionalDialog(widgetUIState.dialogLoader)
+
+            HideAndShowOptionalDialog(
+                btDismissState = widgetUIState.dialogLoader,
+                btDismissEvent = {viewModel.onEvent(AddCustomerViewEvent.OnclickDismissButton)},
+                btConfirmEvent = {viewModel.onEvent(AddCustomerViewEvent.OnclickButton)}
+            )
+
+            ShowErrorToast(widgetUIState.errorMessage)
         }
     }
 }
-//viewModel.onEvent(AddCustomerViewEvent.OnclickButton)
-//  text: String,
-//    btConfirmTitle: String,
-//    btDismissTitle: String,
-//    btDismissState: Boolean,
-//    btDismissEvent: (Boolean) -> Unit,
-//    btLeftOnClick: () -> Unit
 
+@Composable
+fun ShowErrorToast(errorMessage: String?) {
+    val context = LocalContext.current
+    errorMessage?.let { message ->
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+}
 
 @Composable
 fun HideAndShowOptionalDialog(
     btDismissState: Boolean,
-    text: String =  "post 1 customer to server",
+    btDismissEvent:()->Unit,
+    btConfirmEvent: () -> Unit,
+    text: String =  "add 1 customer by posting to server?",
     btConfirmTitle:String  = "Post",
     btDismissTitle:String = "Cancel",
 ){
     OptionalDialog(
         text = text,
+        btDismissEvent = {btDismissEvent()},
+        btConfirmEvent = {btConfirmEvent()},
         btConfirmTitle = btConfirmTitle,
         btDismissTitle = btDismissTitle,
         btDismissState = btDismissState
@@ -252,12 +274,14 @@ fun OutletType(
 }
 
 @Composable
-fun Address() {
-    var outletAddress by remember { mutableStateOf("") }
+fun Address(
+    label: String,
+    onValueChange:(String)->Unit
+) {
     CustomTextField(
         label = "Address",
-        value = outletAddress,
-        onValueChange = { outletAddress = it },
+        value = label,
+        onValueChange = onValueChange ,
         leadingIcon = Icons.Default.LocationSearching
     )
 }
