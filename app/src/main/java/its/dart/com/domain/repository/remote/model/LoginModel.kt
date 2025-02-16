@@ -304,10 +304,8 @@ data class TasksModel(
                 userId = userId,
                 timeAgo = timeAgo
             )
-
     }
 }
-
 
 data class AddCustomerReqModel(
     val outletName: String,
@@ -322,6 +320,11 @@ data class AddCustomerReqModel(
     val userId: Int,
     val userType: String
 ) {
+
+    companion object {
+        fun builder() = Builder()
+    }
+
     class Builder {
         private var outletName: String = ""
         private var contactPension: String = ""
@@ -354,22 +357,24 @@ data class AddCustomerReqModel(
     }
 }
 
-
 data class AddCustomerResModel(
-    val status: Boolean,
+    val status: Int,
     val message: String,
-    val time: String
+    val time: String,
+    val id: Int
 ) {
     class Builder {
-        private var status: Boolean = false
+        private var status: Int = 0
         private var message: String = ""
         private var time: String = ""
+        private var id: Int = 0
 
-        fun status(status: Boolean) = apply { this.status = status }
+        fun status(status: Int) = apply { this.status = status }
         fun message(message: String) = apply { this.message = message }
         fun time(time: String) = apply { this.time = time }
+        fun id(id: Int) = apply { this.id = id }
 
-        fun build() = AddCustomerResModel(status, message, time)
+        fun build() = AddCustomerResModel(status, message, time, id)
     }
 }
 

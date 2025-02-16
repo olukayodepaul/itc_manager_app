@@ -7,7 +7,7 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import its.dart.com.data.repository.remote.dto.TaskDto
-import its.dart.com.domain.repository.TaskRemote
+import its.dart.com.domain.repository.remote.TaskRemote
 import its.dart.com.domain.repository.remote.model.TaskModel
 import its.dart.com.domain.repository.remote.model.TaskRequestModel
 import its.dart.com.mapper.mapToTaskModel

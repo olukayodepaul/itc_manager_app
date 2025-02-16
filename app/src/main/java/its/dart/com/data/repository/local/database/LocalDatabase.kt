@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import its.dart.com.data.repository.local.entity.AllCustomersEntity
+import its.dart.com.data.repository.local.entity.OtherAllCustomersEntity
 import its.dart.com.data.repository.local.entity.ProductEntity
 import its.dart.com.data.repository.local.entity.SalesRepsEntity
 import its.dart.com.data.repository.local.entity.TasksEntity
@@ -45,6 +46,13 @@ interface LocalDatabase {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun persistTask(task: TasksEntity)
+
+    //other customers.best is to map. but i am not mapping.
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun persistOtherCustomers(task: OtherAllCustomersEntity)
+
+    @Query("SELECT * FROM promoter")
+    fun getOtherCustomers(): Flow<List<OtherAllCustomersEntity>>
 
 }
 

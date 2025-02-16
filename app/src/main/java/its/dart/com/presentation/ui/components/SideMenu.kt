@@ -9,7 +9,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.AutoStories
 import androidx.compose.material.icons.outlined.Book
-import androidx.compose.material.icons.outlined.BookOnline
 import androidx.compose.material.icons.outlined.LocationSearching
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.DropdownMenu
@@ -27,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import its.dart.com.data.repository.local.entity.OtherAllCustomersEntity
 import its.dart.com.domain.repository.remote.model.AllCustomersModel
 
 
@@ -87,6 +87,70 @@ fun DropdownMenuWithDetails(
                 onClick = {
                     expanded = false
                     navController.navigate("add_customer/${details.outletName}")
+                }
+            )
+        }
+    }
+}
+
+
+@Composable
+fun DropdownMenuWithDetail(
+    navController: NavHostController,
+    details: OtherAllCustomersEntity
+) {
+    var expanded by rememberSaveable { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier
+            .wrapContentSize(Alignment.TopEnd)
+    ) {
+        IconButton(onClick = { expanded = !expanded }) {
+            Icon(
+                Icons.Default.MoreVert,
+                tint = Color.Gray.copy(alpha = 1f),
+                contentDescription = "More options",
+                modifier = Modifier.size(20.dp)
+            )
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.wrapContentSize().
+            background(Color.White) // Ensures white background
+                .border(1.dp, Color.LightGray),
+        ) {
+            DropdownMenuItem(
+                text = { Text(text ="Location Finder") },
+                leadingIcon = { Icon(Icons.Outlined.LocationSearching, contentDescription = null) },
+                onClick = { expanded = false }
+            )
+            DropdownMenuItem(
+                text = { Text(text ="Daily Consumer Data") },
+                leadingIcon = { Icon(Icons.Outlined.AutoStories, contentDescription = null) },
+                onClick = {
+                    expanded = false
+                    navController.navigate("DailyConsumerPage")
+                }
+            )
+            DropdownMenuItem(
+                text = { Text(text ="Daily Retail Activity") },
+                leadingIcon = { Icon(Icons.Outlined.ShoppingCart, contentDescription = null) },
+                onClick = {
+                    expanded = false
+                    val identifier  = "0"
+                    navController.navigate("DailyRetailPage")
+                }
+            )
+
+            DropdownMenuItem(
+                text = { Text(text = "Pack Placement") },
+                leadingIcon = { Icon(Icons.Outlined.ShoppingCart, contentDescription = null) },
+                onClick = {
+                    expanded = false
+                    val identifier  = "0"
+                    navController.navigate("PackPlacementPage")
                 }
             )
         }

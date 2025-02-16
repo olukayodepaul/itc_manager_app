@@ -1,6 +1,6 @@
 package its.dart.com.presentation.ui.screens
 
-import android.util.Log
+
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -21,10 +21,8 @@ import androidx.compose.material.icons.filled.MobileFriendly
 import androidx.compose.material.icons.filled.TypeSpecimen
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -35,6 +33,7 @@ import androidx.navigation.NavHostController
 import its.dart.com.presentation.ui.components.CButton
 import its.dart.com.presentation.ui.components.CustomTextField
 import its.dart.com.presentation.ui.components.DropdownLists
+import its.dart.com.presentation.ui.components.LoadingDialog
 import its.dart.com.presentation.ui.components.OptionalDialog
 import its.dart.com.presentation.ui.components.ToolBar
 import its.dart.com.presentation.ui.theme.robotoFamily
@@ -145,16 +144,28 @@ fun AddCustomerContent(
                 btConfirmEvent = {viewModel.onEvent(AddCustomerViewEvent.OnclickButton)}
             )
 
-            ShowErrorToast(widgetUIState.errorMessage)
+            ShowErrorToast(
+                errorMessage= widgetUIState.errorMessage,
+                onClearErrorMessage = {viewModel.onEvent(AddCustomerViewEvent.OnErrorClear)}
+            )
+
+            LoadingDialog(
+                showDialog = widgetUIState.loader,
+                onDismiss = {}
+            )
+
         }
     }
 }
 
 @Composable
-fun ShowErrorToast(errorMessage: String?) {
+fun ShowErrorToast(errorMessage: String?, onClearErrorMessage: () -> Unit) {
     val context = LocalContext.current
-    errorMessage?.let { message ->
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    LaunchedEffect(errorMessage) {
+        errorMessage?.let { message ->
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            onClearErrorMessage()
+        }
     }
 }
 
@@ -164,7 +175,7 @@ fun HideAndShowOptionalDialog(
     btDismissEvent:()->Unit,
     btConfirmEvent: () -> Unit,
     text: String =  "add 1 customer by posting to server?",
-    btConfirmTitle:String  = "Post",
+    btConfirmTitle:String  = "Confirm",
     btDismissTitle:String = "Cancel",
 ){
     OptionalDialog(
@@ -215,7 +226,6 @@ fun MobileNumber(
         leadingIcon = Icons.Default.MobileFriendly
     )
 }
-
 
 @Composable
 fun Language(

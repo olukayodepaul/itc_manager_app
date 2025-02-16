@@ -31,7 +31,9 @@ data class AddCustomerViewState(
     val outletType: Int = 0,
     val address: String = "",
     val errorMessage: String = "",
-    val dialogLoader: Boolean  = false
+    val dialogLoader: Boolean  = false,
+    val loader: Boolean = false
 )
+
 
 

@@ -72,7 +72,8 @@ data class AddCustomerReqDTO(
 
 @Serializable
 data class AddCustomerResDTO(
-    @SerialName("status") val status: Boolean,
+    @SerialName("status") val status: Int,
     @SerialName("message") val message: String,
-    @SerialName("time") val time: String
+    @SerialName("time") val time: String,
+    val id: Int
 )

@@ -1,4 +1,4 @@
-package its.dart.com.domain.repository
+package its.dart.com.domain.repository.remote
 
 import its.dart.com.domain.repository.remote.model.TaskModel
 import its.dart.com.domain.repository.remote.model.TaskRequestModel

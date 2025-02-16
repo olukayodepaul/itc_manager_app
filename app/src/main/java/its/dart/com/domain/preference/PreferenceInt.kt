@@ -1,4 +1,4 @@
-package its.dart.com.domain.repository
+package its.dart.com.domain.preference
 
 interface PreferenceInt {
     fun saveString(key: String, value: String)

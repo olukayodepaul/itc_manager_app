@@ -166,14 +166,3 @@ fun LoginButton(
         text = "Login",
     )
 }
-
-@Composable
-@Preview(showBackground = true)
-fun PreviewLogin() {
-
-    val fakeNavController = rememberNavController()
-
-    LoginScreen(
-        fakeNavController,
-    )
-}

@@ -24,6 +24,7 @@ data class ProductEntity(
     val qty: String? = null
 )
 
+//list of reps
 @Entity(tableName = "customers")
 data class AllCustomersEntity (
     @PrimaryKey(autoGenerate = true) val id: Int,
@@ -44,4 +45,17 @@ data class TasksEntity (
     val longitude: String? = "0.0",
     val user_id: String? = "0.0",
     val time_ago: String? = "0.0",
+)
+
+
+@Entity(tableName = "promoter")
+data class OtherAllCustomersEntity (
+    @PrimaryKey(autoGenerate = true) val id: Int,
+    val urno: Int,
+    val latitude: String? = "0.0",
+    val longitude: String? = "0.0",
+    val outlet_name: String,
+    val outlet_address: String,
+    val contact_phone: String,
+    val outlet_type: String
 )

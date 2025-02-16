@@ -299,6 +299,7 @@ fun AddCustomerResModel.mapToDTO(): AddCustomerResDTO {
     return AddCustomerResDTO(
         status = this.status,
         message = this.message,
-        time = this.time
+        time = this.time,
+        id = this.id
     )
 }

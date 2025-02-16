@@ -24,6 +24,7 @@ sealed class AddCustomerViewEvent{
     data object OnclickButton: AddCustomerViewEvent()
     data object OnclickDismissButton: AddCustomerViewEvent()
     data object OnclickConfirmButton: AddCustomerViewEvent()
+    data object OnErrorClear: AddCustomerViewEvent()
 }
 
 sealed class ChatFilter(val id: Int, val label: String) {

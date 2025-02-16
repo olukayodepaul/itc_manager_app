@@ -1,10 +1,9 @@
 package its.dart.com.presentation.viewmodel
 
-import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import its.dart.com.domain.repository.TaskRemote
+import its.dart.com.domain.repository.remote.TaskRemote
 import its.dart.com.domain.repository.local.TasksRepository
 import its.dart.com.domain.repository.remote.model.TaskRequestModel
 import its.dart.com.domain.repository.remote.model.TasksModel
