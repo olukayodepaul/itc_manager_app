@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import its.dart.com.presentation.ui.theme.appColorBlack
+import its.dart.com.presentation.ui.theme.mainGray
 import its.dart.com.presentation.ui.theme.robotoFamily
 
 
@@ -27,7 +28,7 @@ fun CButton(
     onClick: () -> Unit = {},
     text: String,
     buttonState: Boolean,
-    containerColor: Color = appColorBlack,
+    containerColor: Color = mainGray,
     fontWeight: FontWeight = FontWeight(600),
     fontSize: Int = 20,
     roundState: Boolean = false

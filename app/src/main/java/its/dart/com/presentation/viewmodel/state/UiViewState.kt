@@ -22,3 +22,16 @@ data class TaskViewState(
     val close : String = "00:00:00",
     val dialogLoader: Boolean  = false
 )
+
+data class AddCustomerViewState(
+    val outletName: String = "",
+    val contactPerson: String = "",
+    val mobileNumber: String = "",
+    val language: Int = 0,
+    val outletType: Int = 0,
+    val address: String = "",
+    val errorMessage: String = "",
+    val dialogLoader: Boolean  = false
+)
+
+

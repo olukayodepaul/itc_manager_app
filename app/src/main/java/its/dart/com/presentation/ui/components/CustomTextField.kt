@@ -47,7 +47,7 @@ fun CustomTextField(
         )
         OutlinedTextField(
             value = value,
-            onValueChange = onValueChange,
+            onValueChange = {onValueChange(it)},
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
@@ -64,7 +64,14 @@ fun CustomTextField(
                     modifier = Modifier.clickable { /* Handle leading icon click if needed */ }
                 )
             },
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(12.dp),
+            maxLines = 1,
+            textStyle = TextStyle(
+                fontFamily = robotoFamily,
+                fontSize = 20.sp,
+                color = Color.Black
+            ),
+
         )
     }
 }

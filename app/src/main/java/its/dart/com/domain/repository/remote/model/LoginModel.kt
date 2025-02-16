@@ -308,3 +308,69 @@ data class TasksModel(
     }
 }
 
+
+data class AddCustomerReqModel(
+    val outletName: String,
+    val contactPension: String,
+    val phoneNumber: String,
+    val languageId: Int,
+    val outletTypeId: Int,
+    val outletClassId: Int,
+    val address: String,
+    val lat: Double,
+    val lng: Double,
+    val userId: Int,
+    val userType: String
+) {
+    class Builder {
+        private var outletName: String = ""
+        private var contactPension: String = ""
+        private var phoneNumber: String = ""
+        private var languageId: Int = 0
+        private var outletTypeId: Int = 0
+        private var outletClassId: Int = 0
+        private var address: String = ""
+        private var lat: Double = 0.0
+        private var lng: Double = 0.0
+        private var userId: Int = 0
+        private var userType: String = ""
+
+        fun outletName(outletName: String) = apply { this.outletName = outletName }
+        fun contactPension(contactPension: String) = apply { this.contactPension = contactPension }
+        fun phoneNumber(phoneNumber: String) = apply { this.phoneNumber = phoneNumber }
+        fun languageId(languageId: Int) = apply { this.languageId = languageId }
+        fun outletTypeId(outletTypeId: Int) = apply { this.outletTypeId = outletTypeId }
+        fun outletClassId(outletClassId: Int) = apply { this.outletClassId = outletClassId }
+        fun address(address: String) = apply { this.address = address }
+        fun lat(lat: Double) = apply { this.lat = lat }
+        fun lng(lng: Double) = apply { this.lng = lng }
+        fun userId(userId: Int) = apply { this.userId = userId }
+        fun userType(userType: String) = apply { this.userType = userType }
+
+        fun build() = AddCustomerReqModel(
+            outletName, contactPension, phoneNumber, languageId,
+            outletTypeId, outletClassId, address, lat, lng, userId, userType
+        )
+    }
+}
+
+
+data class AddCustomerResModel(
+    val status: Boolean,
+    val message: String,
+    val time: String
+) {
+    class Builder {
+        private var status: Boolean = false
+        private var message: String = ""
+        private var time: String = ""
+
+        fun status(status: Boolean) = apply { this.status = status }
+        fun message(message: String) = apply { this.message = message }
+        fun time(time: String) = apply { this.time = time }
+
+        fun build() = AddCustomerResModel(status, message, time)
+    }
+}
+
+

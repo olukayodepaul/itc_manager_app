@@ -5,11 +5,15 @@ import its.dart.com.data.repository.local.entity.AllCustomersEntity
 import its.dart.com.data.repository.local.entity.ProductEntity
 import its.dart.com.data.repository.local.entity.SalesRepsEntity
 import its.dart.com.data.repository.local.entity.TasksEntity
+import its.dart.com.data.repository.remote.dto.AddCustomerReqDTO
+import its.dart.com.data.repository.remote.dto.AddCustomerResDTO
 import its.dart.com.data.repository.remote.dto.AllCustomersDto
 import its.dart.com.data.repository.remote.dto.CustomersDto
 import its.dart.com.data.repository.remote.dto.LoginDto
 import its.dart.com.data.repository.remote.dto.TaskDto
 import its.dart.com.data.repository.remote.dto.TaskRequestDto
+import its.dart.com.domain.repository.remote.model.AddCustomerReqModel
+import its.dart.com.domain.repository.remote.model.AddCustomerResModel
 import its.dart.com.domain.repository.remote.model.AllCustomersModel
 import its.dart.com.domain.repository.remote.model.ProductModel
 import its.dart.com.domain.repository.remote.model.CustomersModel
@@ -240,17 +244,6 @@ fun TaskRequestModel.toTaskRequestDto(): TaskRequestDto {
     )
 }
 
-//fun TasksEntity.toTasksModel (): TasksModel {
-//    return TasksModel(
-//        id = id,
-//        taskId = task_id,
-//        latitude = latitude,
-//        longitude = longitude,
-//        userId = user_id,
-//        timeAgo = time_ago
-//    )
-//}
-
 fun TasksModel.toTasksEntity(): TasksEntity {
     return TasksEntity(
         id = id,
@@ -259,5 +252,53 @@ fun TasksModel.toTasksEntity(): TasksEntity {
         longitude = longitude,
         user_id = userId.toString(),
         time_ago = timeAgo
+    )
+}
+
+fun AddCustomerReqDTO.mapToModel(): AddCustomerReqModel {
+    return AddCustomerReqModel.Builder()
+        .outletName(this.outletName)
+        .contactPension(this.contactPension)
+        .phoneNumber(this.phoneNumber)
+        .languageId(this.languageId)
+        .outletTypeId(this.outletTypeId)
+        .outletClassId(this.outletClassId)
+        .address(this.address)
+        .lat(this.lat)
+        .lng(this.lng)
+        .userId(this.userId)
+        .userType(this.userType)
+        .build()
+}
+
+fun AddCustomerReqModel.mapToDTO(): AddCustomerReqDTO {
+    return AddCustomerReqDTO(
+        outletName = this.outletName,
+        contactPension = this.contactPension,
+        phoneNumber = this.phoneNumber,
+        languageId = this.languageId,
+        outletTypeId = this.outletTypeId,
+        outletClassId = this.outletClassId,
+        address = this.address,
+        lat = this.lat,
+        lng = this.lng,
+        userId = this.userId,
+        userType = this.userType
+    )
+}
+
+fun AddCustomerResDTO.mapToModel(): AddCustomerResModel {
+    return AddCustomerResModel.Builder()
+        .status(this.status)
+        .message(this.message)
+        .time(this.time)
+        .build()
+}
+
+fun AddCustomerResModel.mapToDTO(): AddCustomerResDTO {
+    return AddCustomerResDTO(
+        status = this.status,
+        message = this.message,
+        time = this.time
     )
 }

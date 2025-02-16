@@ -15,7 +15,9 @@ fun SuccessDialog(
 ) {
     if (showDialog) {
         AlertDialog(
-            onDismissRequest = {},
+            onDismissRequest = {
+
+            },
             title = { Text(text = title) },
             text = { Text(text=  texts) },
             confirmButton = {

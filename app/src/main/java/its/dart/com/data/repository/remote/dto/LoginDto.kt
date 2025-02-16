@@ -54,3 +54,25 @@ data class ErrorDto(
     @SerialName("error_message") val errorMessage: String,
     @SerialName("error_code") val errorCode: Int
 )
+
+@Serializable
+data class AddCustomerReqDTO(
+    @SerialName("outlet_name") val outletName: String,
+    @SerialName("contact_pension") val contactPension: String,
+    @SerialName("phone_number") val phoneNumber: String,
+    @SerialName("language_id") val languageId: Int,
+    @SerialName("outlet_type_id") val outletTypeId: Int,
+    @SerialName("outlet_class_id") val outletClassId: Int,
+    @SerialName("address") val address: String,
+    @SerialName("lat") val lat: Double,
+    @SerialName("lng") val lng: Double,
+    @SerialName("user_id") val userId: Int,
+    @SerialName("user_type") val userType: String
+)
+
+@Serializable
+data class AddCustomerResDTO(
+    @SerialName("status") val status: Boolean,
+    @SerialName("message") val message: String,
+    @SerialName("time") val time: String
+)

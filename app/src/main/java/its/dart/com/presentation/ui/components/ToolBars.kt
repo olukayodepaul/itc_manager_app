@@ -59,6 +59,7 @@ fun ToolBar(
                     fontFamily = fontFamily,
                     letterSpacing = (letterSpacing).sp,
                     lineHeight = 24.sp,
+                    fontWeight = FontWeight.W900
                 )
                 if(subTitle){
                     Text(

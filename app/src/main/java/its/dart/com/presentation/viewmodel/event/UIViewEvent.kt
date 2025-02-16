@@ -14,6 +14,16 @@ sealed class TaskViewEvent {
     data object OnClickClose: TaskViewEvent()
 }
 
+sealed class AddCustomerViewEvent{
+    class OnOutletName(val outletName: String): AddCustomerViewEvent()
+    class OnContactPerson(val contactPerson: String): AddCustomerViewEvent()
+    class OnMobileNumber(val mobileNumber: String): AddCustomerViewEvent()
+    class OnLanguage(val language: Int): AddCustomerViewEvent()
+    class OnOutletType(val outletType: Int): AddCustomerViewEvent()
+    class OnAddress(val address: String) : AddCustomerViewEvent()
+    data object OnclickButton: AddCustomerViewEvent()
+}
+
 sealed class ChatFilter(val id: Int, val label: String) {
 
     data object Monday : ChatFilter(1, "Monday")
@@ -37,3 +47,6 @@ sealed class ChatFilter(val id: Int, val label: String) {
         }
     }
 }
+
+
+
