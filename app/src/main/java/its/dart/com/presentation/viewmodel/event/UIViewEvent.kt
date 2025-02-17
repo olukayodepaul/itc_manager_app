@@ -27,28 +27,20 @@ sealed class AddCustomerViewEvent{
     data object OnErrorClear: AddCustomerViewEvent()
 }
 
-sealed class ChatFilter(val id: Int, val label: String) {
+data class OptionData(
+    val day: String,
+    val id: Int
+)
 
-    data object Monday : ChatFilter(1, "Monday")
-    data object Tuesday : ChatFilter(2, "Tuesday")
-    data object Wednesday : ChatFilter(3, "Wednesday")
-    data object Thursday : ChatFilter(4, "Thursday")
-    data object Friday : ChatFilter(5, "Friday")
-    data object Saturday : ChatFilter(6, "Saturday")
-
-    companion object {
-        fun fromId(id: Int): ChatFilter? {
-            return when (id) {
-                1 -> Monday
-                2 -> Tuesday
-                3 -> Wednesday
-                4 -> Thursday
-                5 -> Friday
-                6 -> Saturday
-                else -> null
-            }
-        }
-    }
+fun getPromoterSupervisor(): List<OptionData> {
+    return listOf(
+        OptionData("Monday", 1),
+        OptionData("Tuesday", 2),
+        OptionData("Wednesday", 3),
+        OptionData("Thursday", 4),
+        OptionData("Friday", 5),
+        OptionData("Saturday", 6)
+    )
 }
 
 

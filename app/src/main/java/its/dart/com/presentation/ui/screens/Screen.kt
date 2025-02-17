@@ -3,21 +3,16 @@ package its.dart.com.presentation.ui.screens
 sealed class Screen(val route: String) {
     data object HomePage : Screen("homePage")
     data object MainPage : Screen("MainPage")
-    data object PromoPage : Screen("PromoPage")
     data object CustomersScreen : Screen("CustomersScreen/{userId}/{userName}") {
         fun createRoute(userId: String, userName: String) = "CustomersScreen/$userId/$userName"
     }
     data object SurveyScreen : Screen("survey/{userId}/{userName}") {
         fun createRoute(userId: String, userName: String) = "survey/$userId/$userName"
     }
-    data object OrderScreen : Screen("OrderProduct/{userId}/{userName}/{identifier}") {
-        fun createRoute(userId: String, userName: String, identifier: String) = "OrderProduct/$userId/$userName/$identifier"
-    }
     data object AddCustomer : Screen("add_customer/{userName}/{userId}") {
         fun createRoute(userName: String, userId: String) = "add_customer/$userName/$userId"
     }
     data object WholeSellerPage : Screen("wholeSellerPage")
-    data object DailyConsumerPage : Screen("DailyConsumerPage")
-    data object DailyRetailPage : Screen("DailyRetailPage")
-    data object PackPlacementPage : Screen("PackPlacementPage")
+
+
 }

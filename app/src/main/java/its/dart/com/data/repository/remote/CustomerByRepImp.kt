@@ -11,14 +11,15 @@ import its.dart.com.domain.repository.remote.model.CustomersModel
 import its.dart.com.mapper.toCustomersModel
 import javax.inject.Inject
 
-
 class CustomerByRepImp @Inject constructor(private val httpClient: HttpClient): CustomerByRepInterface {
 
-    override suspend fun customer(userId: String): CustomersModel {
+    override suspend fun customer(userId: Int, weekDay: Int, properId: Int): CustomersModel {
         return  try {
             val response = httpClient.get("/v3/customers") {
                 url{
                     parameter("userid", userId)
+                    parameter("week_days", weekDay) //subtract from day
+                    parameter("proper_id", properId)
                 }
             }
             response.body<CustomersDto>().toCustomersModel()
@@ -26,5 +27,4 @@ class CustomerByRepImp @Inject constructor(private val httpClient: HttpClient): 
             throw Exception("Customers failed: ${e.message}", e)
         }
     }
-
 }

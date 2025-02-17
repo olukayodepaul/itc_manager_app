@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import its.dart.com.data.repository.local.database.LocalDatabase
+import its.dart.com.domain.preference.PreferenceInt
 import its.dart.com.domain.usecases.LoginUseCases
 import its.dart.com.mapper.toEntityList
 import its.dart.com.mapper.toSalesRepsList
@@ -18,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCases,
-    private val localCache: LocalDatabase
+    private val localCache: LocalDatabase,
+    private val sharePreference: PreferenceInt
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginViewState())
@@ -39,7 +41,6 @@ class LoginViewModel @Inject constructor(
 
     suspend fun resetNavigation() {
         _navController.emit(false)
-        //_navController.value = false
     }
 
     private fun eventHandler(event: LoginViewEvent) {
@@ -76,6 +77,11 @@ class LoginViewModel @Inject constructor(
             if (it.status == 200) {
                 localCache.persistLogin(it.data.rep.toSalesRepsList())
                 localCache.persistProduct(it.products.toEntityList())
+                sharePreference.saveString(key= "username", value = it.data.users.fullName)
+                sharePreference.saveInt(key="sysCategory", value = it.data.users.systemCategoryId)
+                sharePreference.saveInt(key="id", value= it.data.users.id)
+                sharePreference.saveString(key = "lat" , value = it.data.users.depotLat)
+                sharePreference.saveString(key = "lng" , value = it.data.users.depotLng)
                 _uiState.value = state.copy(
                     errorMessage = "",
                     dialogLoader = false

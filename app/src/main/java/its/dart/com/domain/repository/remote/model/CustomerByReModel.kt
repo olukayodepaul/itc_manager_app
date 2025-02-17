@@ -30,7 +30,10 @@ data class AllCustomersModel(
     val posid: String = "0.0",
     val outletName: String,
     val outletAddress: String,
-    val contactPhone: String
+    val contactPhone: String,
+    val repId: Int = 0,
+    val option: Int = 0
+
 ) {
     class Builder {
         private var id: Int = 0
@@ -41,6 +44,8 @@ data class AllCustomersModel(
         private var outletName: String = ""
         private var outletAddress: String = ""
         private var contactPhone: String = ""
+        private var repId: Int = 0
+        private var option: Int = 0
 
         fun setId(id: Int) = apply { this.id = id }
         fun setUrno(urno: Int) = apply { this.urno = urno }
@@ -50,7 +55,9 @@ data class AllCustomersModel(
         fun setOutletName(outletName: String) = apply { this.outletName = outletName }
         fun setOutletAddress(outletAddress: String) = apply { this.outletAddress = outletAddress }
         fun setContactPhone(contactPhone: String) = apply { this.contactPhone = contactPhone }
+        fun setRepId(repId: Int) = apply { this.repId = repId }
+        fun setOption(option: Int) = apply { this.option = option }
 
-        fun build() = AllCustomersModel(id, urno, latitude, longitude, posid, outletName, outletAddress, contactPhone)
+        fun build() = AllCustomersModel(id, urno, latitude, longitude, posid, outletName, outletAddress, contactPhone, repId, option)
     }
 }

@@ -11,6 +11,7 @@ data class CustomersDto(
     val data: List<AllCustomersDto>
 )
 
+//coming from remote repository
 @Serializable
 data class AllCustomersDto (
     val id: Int,
@@ -21,6 +22,8 @@ data class AllCustomersDto (
     @SerialName("outlet_name") val outletName: String,
     @SerialName("outlet_address") val outletAddress: String,
     @SerialName("contact_phone") val contactPhone: String,
+    @SerialName("rep_id") val repId: Int,
+    val option: Int
 )
 
 

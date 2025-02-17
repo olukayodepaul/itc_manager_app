@@ -4,6 +4,8 @@ package  its.dart.com.presentation.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -26,6 +28,8 @@ import androidx.compose.ui.unit.sp
 import its.dart.com.presentation.ui.theme.dartSansFontFamily
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,6 +39,7 @@ fun TextFieldInput(
     onValueChange: (String) -> Unit,
     hint: String,
     type: Boolean = false,
+    isNumericOnly: Boolean = false
 ) {
 
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
@@ -43,6 +48,15 @@ fun TextFieldInput(
         value = value,
         maxLines = 1,
         onValueChange = onValueChange,
+
+        keyboardOptions = KeyboardOptions(
+            keyboardType = if (isNumericOnly) KeyboardType.Number else KeyboardType.Text,
+            imeAction = ImeAction.Done
+        ),
+        keyboardActions = KeyboardActions(
+            onDone = { /* Handle action if needed */ }
+        ),
+
         placeholder = {
             Text(
                 text = hint,
@@ -75,6 +89,9 @@ fun TextFieldInput(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
         ),
-        shape = RoundedCornerShape(12.dp)
+        shape = RoundedCornerShape(12.dp),
+
+
+
     )
 }

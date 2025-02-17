@@ -1,12 +1,12 @@
 package its.dart.com.presentation.ui.screens
 
-import android.view.Window
+
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -25,14 +24,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.luminance
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import its.dart.com.domain.repository.remote.model.ProductModel
 import its.dart.com.presentation.ui.components.CButton
@@ -52,12 +48,11 @@ fun OrderScreen(
     navController: NavHostController,
     userId: String,
     userName: String,
-    identifier: String = "0",
-    window: Window,
+    identifier: String,
     viewModel: OrderViewModel = hiltViewModel()
 ) {
 
-    val order by viewModel.productState.collectAsState()
+    val order by viewModel.productState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = null) {
         viewModel.getProduct()
@@ -131,14 +126,17 @@ fun OrderScreenContent(
                 OrderList(navController, customer)
             }
         }
-        CButton(
-            onClick = {
-                showDialog = true
-            },
-            buttonState = true,
-            text = "Post Order",
-            roundState = true
-        )
+
+        Column(modifier = Modifier.padding(16.dp)) {
+            CButton(
+                onClick = {
+                    showDialog = true
+                },
+                buttonState = true,
+                text = "Post Order",
+                roundState = true
+            )
+        }
 
         SuccessDialog(
             showDialog = showDialog,
@@ -180,7 +178,7 @@ fun OrderList(
                     text = order.item,
                     fontWeight = FontWeight(400),
                     maxLines = 1,
-                    fontSize = 18.sp,
+                    fontSize = 15.sp,
                     color = appColor,
                 )
                 Text(
@@ -192,13 +190,41 @@ fun OrderList(
             }
             Row(
                 modifier = Modifier
-                    .width(90.dp)
-                    .padding(end = 10.dp)
+                    .width(80.dp)
+                    .padding(end = 10.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp) // Adds spacing between items
             ) {
+
+                var inv by remember { mutableStateOf("") }
                 TextFieldInput(
-                    value = "",
-                    onValueChange = {  },
-                    hint = "Qty"
+                    value = inv,
+                    onValueChange = { input ->
+                        // Allow only digits (0-9)
+                        if (input.isEmpty() || input.matches(Regex("^\\d*\$"))) {
+                            inv = input
+                        }
+                    },
+                    hint = "Inv",
+                    isNumericOnly = true
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .width(80.dp)
+                    .padding(end = 10.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                var qty by remember { mutableStateOf("") }
+                TextFieldInput(
+                    value = qty,
+                    onValueChange = { input ->
+                        if (input.isEmpty() || input.matches(Regex("^\\d*\\.?\\d*\$"))) {
+                            qty = input
+                        }
+                    },
+                    hint = "Qty",
+                    isNumericOnly = true
                 )
             }
         }

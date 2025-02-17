@@ -29,17 +29,22 @@ import its.dart.com.presentation.ui.theme.robotoFamily
 @Composable
 fun DailyActivityForm(
     navController: NavHostController,
+    userId: String,
+    userName: String,
+    identifier: String,
 ) {
     Scaffold(
         topBar = {
             ToolBar(
-                title = "Daily Retail Activity Form",
+                title = userName,
                 click = { navController.popBackStack() },
                 clickSearch = {},
                 clickMenu = {},
                 navigation = true,
                 fontSize = 20,
                 fontFamily = robotoFamily,
+                subTitle = true,
+                subTitleItem = "Daily Retail Activity Form",
                 letterSpacing = 0.5,
             )
         }
@@ -68,28 +73,13 @@ fun StockSalesForm(
                 .verticalScroll(scrollState)
         ) {
 
-
-            Row(
-                modifier = Modifier.padding(bottom = 8.dp, start = 0.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                NumberedCircle(number = 1)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "General Information",
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.W500
-                )
-            }
-            AddressDetails()
             Spacer(modifier = Modifier.height(20.dp))
 
             Row(
                 modifier = Modifier.padding(bottom = 8.dp, start = 0.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                NumberedCircle(number = 2)
+                NumberedCircle(number = 1)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "Stock Out",
@@ -112,7 +102,7 @@ fun StockSalesForm(
                 modifier = Modifier.padding(bottom = 8.dp, start = 0.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                NumberedCircle(number = 3)
+                NumberedCircle(number = 2)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "Reward",
@@ -135,7 +125,7 @@ fun StockSalesForm(
                 modifier = Modifier.padding(bottom = 8.dp, start = 0.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                NumberedCircle(number = 4)
+                NumberedCircle(number = 3)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "Sampling",
@@ -155,7 +145,7 @@ fun StockSalesForm(
                 modifier = Modifier.padding(bottom = 8.dp, start = 0.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                NumberedCircle(number = 5)
+                NumberedCircle(number = 4)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "Others",

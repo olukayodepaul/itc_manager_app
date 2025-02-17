@@ -60,6 +60,7 @@ fun Promo(
 ){
 
     val widgetUIState by viewModel.customersState.collectAsStateWithLifecycle()
+    val userName by viewModel.userNameState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.fetchPromoterCustomers()
@@ -73,8 +74,10 @@ fun Promo(
                 clickSearch = {},
                 clickMenu = {},
                 fontSize = 22,
+                subTitle = true,
                 fontFamily = robotoFamily,
-                letterSpacing = -0.2
+                letterSpacing = -0.2,
+                subTitleItem = "Welcome $userName"
             )
         },
         floatingActionButton = {
@@ -140,7 +143,6 @@ fun SurveyCards(
         fontSize = 18.sp,
         fontWeight = FontWeight.Bold
     )
-
 }
 
 @Composable

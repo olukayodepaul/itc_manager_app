@@ -27,30 +27,22 @@ fun getPromoterSurvey(navController: NavHostController): List<UiData> {
             icon = Icons.Filled.DataArray ,
             title = "Daily Consumer Data",
             navIcon = Icons.Filled.ArrowForwardIos,
-            onClick = { navController.navigate("DailyConsumerPage") },
+            onClick = {  },
             color = BlueStart
         ),
         UiData(
             icon = Icons.Filled.DataObject,
             title = "Daily Retail Activity",
             navIcon = Icons.Filled.ArrowForwardIos,
-            onClick = { navController.navigate("DailyRetailPage") },
+            onClick = {  },
             color = OrangeStart
         ),
         UiData(
             icon = Icons.Filled.DataSaverOn,
             title = "Pack Placement",
             navIcon = Icons.Filled.ArrowForwardIos,
-            onClick = { navController.navigate("PackPlacementPage") },
+            onClick = { },
             color = GreenStart
         )
     )
 }
-
-//val languageCache = LanguageCache().apply {
-//    add(0, "Select Language")
-//    add(1, "Yoruba")
-//    add(2, "Igbo")
-//    add(3, "Hausa")
-//    add(4, "English")
-//}

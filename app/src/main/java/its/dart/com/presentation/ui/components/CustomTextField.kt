@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -18,6 +20,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,7 +37,8 @@ fun CustomTextField(
     fontSize: TextUnit = 14.sp,
     fontFamily: FontFamily = robotoFamily,
     fontWeight: FontWeight = FontWeight.W600,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isNumericOnly: Boolean = false
 ) {
     Column(modifier = modifier) {
         Text(
@@ -56,6 +61,13 @@ fun CustomTextField(
                 containerColor = Color(0xFFEEEEEE),
                 focusedBorderColor = Color.LightGray,
                 unfocusedBorderColor = Color.LightGray
+            ),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = if (isNumericOnly) KeyboardType.Number else KeyboardType.Text,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = { /* Handle action if needed */ }
             ),
             leadingIcon = {
                 Icon(

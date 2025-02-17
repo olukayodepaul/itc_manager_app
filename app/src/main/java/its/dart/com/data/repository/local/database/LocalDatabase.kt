@@ -31,11 +31,11 @@ interface LocalDatabase {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun persistCustomer(logins: List<AllCustomersEntity>)
 
-    @Query("SELECT * FROM customers")
-    fun getCustomers(): Flow<List<AllCustomersEntity>>
+    @Query("SELECT * FROM customers WHERE properid =:properid AND rep_id =:rep_id ")
+    fun getCustomers(properid: Int, rep_id: Int): Flow<List<AllCustomersEntity>>
 
-    @Query("SELECT COUNT(id) FROM customers")
-    fun getCustomer(): Flow<Int>
+    @Query("SELECT COUNT(id) FROM customers WHERE properid =:properid AND rep_id =:rep_id ")
+    fun getCustomer(properid: Int, rep_id: Int): Flow<Int>
 
     @Query("DELETE FROM customers")
     suspend fun delCustomer(): Int
@@ -51,7 +51,7 @@ interface LocalDatabase {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun persistOtherCustomers(task: OtherAllCustomersEntity)
 
-    @Query("SELECT * FROM promoter")
+    @Query("SELECT * FROM promoter order by id desc")
     fun getOtherCustomers(): Flow<List<OtherAllCustomersEntity>>
 
 }

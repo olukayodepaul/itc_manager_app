@@ -132,7 +132,9 @@ fun List<AllCustomersDto>.toAllCustomersModelList(): List<AllCustomersModel> {
             posid = customer.posid ?: "0.0",
             outletName = customer.outletName,
             outletAddress = customer.outletAddress,
-            contactPhone = customer.contactPhone
+            contactPhone = customer.contactPhone,
+            repId = customer.repId,
+            option = customer.option
         )
     }
 }
@@ -170,6 +172,8 @@ fun List<AllCustomersEntity>.toAllCustomersModel(): List<AllCustomersModel> {
             .setOutletName(entity.outlet_name)
             .setOutletAddress(entity.outlet_address)
             .setContactPhone(entity.contact_phone)
+            .setRepId(entity.rep_id)
+            .setOption(entity.properid)
             .build()
     }
 }
@@ -184,7 +188,9 @@ fun List<AllCustomersModel>.toAllCustomersEntity(): List<AllCustomersEntity> {
             posid = model.posid,
             outlet_name = model.outletName,
             outlet_address = model.outletAddress,
-            contact_phone = model.contactPhone
+            contact_phone = model.contactPhone,
+            rep_id = model.repId,
+            properid = model.option
         )
     }
 }

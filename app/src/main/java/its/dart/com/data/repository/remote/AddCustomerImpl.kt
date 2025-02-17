@@ -16,7 +16,6 @@ import javax.inject.Inject
 
 
 class AddCustomerImpl  @Inject constructor(private val httpClient: HttpClient): AddCustomer {
-
     override suspend fun postCustomer(customer: AddCustomerReqModel): AddCustomerResModel {
         return try {
             val response = httpClient.post("/v3/add/customer") {
@@ -28,5 +27,4 @@ class AddCustomerImpl  @Inject constructor(private val httpClient: HttpClient): 
             throw Exception("Task request failed: ${e.message}", e)
         }
     }
-
 }

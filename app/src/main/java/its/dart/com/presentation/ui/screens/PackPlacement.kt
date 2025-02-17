@@ -34,12 +34,15 @@ import its.dart.com.presentation.ui.theme.robotoFamily
 @Composable
 fun PackPlacement(
     navController: NavHostController,
+    userId: String,
+    userName: String,
+    identifier: String,
 ) {
 
     Scaffold(
         topBar = {
             ToolBar(
-                title = "Pack Placement",
+                title = userName,
                 click = { navController.popBackStack() },
                 clickSearch = {},
                 clickMenu = {},
@@ -47,6 +50,8 @@ fun PackPlacement(
                 fontSize = 20,
                 fontFamily = robotoFamily,
                 letterSpacing = 0.5,
+                subTitle = true,
+                subTitleItem = "Pack Placement",
             )
         }
     ) { innerPadding ->
@@ -75,7 +80,6 @@ fun PackPlacementContent(
                 .padding(16.dp)
                 .verticalScroll(scrollState)
         ) {
-            PosId()
             Spacer(modifier = Modifier.height(10.dp))
             Handler()
             Spacer(modifier = Modifier.height(10.dp))
@@ -187,7 +191,7 @@ fun BikeSales() {
 fun     SalesManName() {
     var outletName by remember { mutableStateOf("") }
     CustomTextFields(
-        label = "SalesManName",
+        label = "Sales Man's Name",
         value = outletName,
         onValueChange = { outletName = it }
     )

@@ -52,26 +52,13 @@ fun AppNavGraph(
             route = Screen.SurveyScreen.route,
             arguments = listOf(
                 navArgument("userId") { type = NavType.StringType },
-                navArgument("userName") { type = NavType.StringType }
+                navArgument("userName") { type = NavType.StringType },
+
             )
         ) { backStackEntry ->
             val userId = backStackEntry.arguments?.getString("userId") ?: ""
             val userName = backStackEntry.arguments?.getString("userName") ?: ""
             SurveyScreen(navController, userId, userName)
-        }
-
-        composable(
-            route = Screen.OrderScreen.route,
-            arguments = listOf(
-                navArgument("userId") { type = NavType.StringType },
-                navArgument("userName") { type = NavType.StringType },
-                navArgument("identifier") { type = NavType.StringType }
-            )
-        ) { backStackEntry ->
-            val userId = backStackEntry.arguments?.getString("userId") ?: ""
-            val userName = backStackEntry.arguments?.getString("userName") ?: ""
-            val identifier = backStackEntry.arguments?.getString("identifier") ?: ""
-            OrderScreen(navController, userId, userName, identifier, window)
         }
 
         composable(
@@ -86,21 +73,65 @@ fun AppNavGraph(
             AddCustomer(navController = navController, userName, userId)
         }
 
+
         composable(route = Screen.WholeSellerPage.route){
             WholeSellerScreen(navController = navController)
         }
 
-        composable(route = Screen.DailyConsumerPage.route){
-            DailyConsumer(navController = navController)
+        composable(
+            route = "PackPlacementPage/{userId}/{userName}/{identifier}",
+            arguments = listOf(
+                navArgument("userId") { type = NavType.StringType },
+                navArgument("userName") { type = NavType.StringType },
+                navArgument("identifier") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getString("userId") ?: ""
+            val userName = backStackEntry.arguments?.getString("userName") ?: ""
+            val identifier = backStackEntry.arguments?.getString("identifier") ?: ""
+            PackPlacement(navController, userId, userName, identifier)
         }
 
-        composable(route = Screen.DailyRetailPage.route){
-            DailyActivityForm(navController = navController)
+        composable(
+            route = "DailyConsumerPage/{userId}/{userName}/{identifier}",
+            arguments = listOf(
+                navArgument("userId") { type = NavType.StringType },
+                navArgument("userName") { type = NavType.StringType },
+                navArgument("identifier") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getString("userId") ?: ""
+            val userName = backStackEntry.arguments?.getString("userName") ?: ""
+            val identifier = backStackEntry.arguments?.getString("identifier") ?: ""
+            DailyConsumer(navController, userId, userName, identifier)
         }
 
-        composable(route = Screen.PackPlacementPage.route){
-            PackPlacement(navController = navController)
+        composable(
+            route = "DailyRetailPage/{userId}/{userName}/{identifier}",
+            arguments = listOf(
+                navArgument("userId") { type = NavType.StringType },
+                navArgument("userName") { type = NavType.StringType },
+                navArgument("identifier") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getString("userId") ?: ""
+            val userName = backStackEntry.arguments?.getString("userName") ?: ""
+            val identifier = backStackEntry.arguments?.getString("identifier") ?: ""
+            DailyActivityForm(navController, userId, userName, identifier)
         }
 
+        composable(
+            route = "OrderScreen/{userId}/{userName}/{identifier}",
+            arguments = listOf(
+                navArgument("userId") { type = NavType.StringType },
+                navArgument("userName") { type = NavType.StringType },
+                navArgument("identifier") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getString("userId") ?: ""
+            val userName = backStackEntry.arguments?.getString("userName") ?: ""
+            val identifier = backStackEntry.arguments?.getString("identifier") ?: ""
+            OrderScreen(navController, userId, userName, identifier)
+        }
     }
 }

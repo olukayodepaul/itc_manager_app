@@ -23,6 +23,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -35,6 +38,7 @@ import its.dart.com.presentation.ui.components.CustomTextField
 import its.dart.com.presentation.ui.components.DropdownLists
 import its.dart.com.presentation.ui.components.LoadingDialog
 import its.dart.com.presentation.ui.components.OptionalDialog
+import its.dart.com.presentation.ui.components.SuccessDialog
 import its.dart.com.presentation.ui.components.ToolBar
 import its.dart.com.presentation.ui.theme.robotoFamily
 import its.dart.com.presentation.viewmodel.AddCustomerViewModel
@@ -47,11 +51,12 @@ fun AddCustomer(
     userId: String,
     viewModel: AddCustomerViewModel = hiltViewModel()
 ) {
+    val username by viewModel.userNameState.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
             ToolBar(
-                title = userName,
+                title = "$username",
                 click = { navController.popBackStack() },
                 clickSearch = {},
                 clickMenu = {},
@@ -81,6 +86,7 @@ fun AddCustomerContent(
     val scrollState = rememberScrollState()
     val widgetUIState by viewModel.addCustomerState.collectAsStateWithLifecycle()
 
+
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = modifier
@@ -106,7 +112,11 @@ fun AddCustomerContent(
 
             MobileNumber(
                 label = widgetUIState.mobileNumber,
-                onValueChange = {viewModel.onEvent(AddCustomerViewEvent.OnMobileNumber(it))}
+                onValueChange = {input->
+                    if (input.isEmpty() || input.matches(Regex("^\\d*\$"))) {
+                        viewModel.onEvent(AddCustomerViewEvent.OnMobileNumber(input))
+                    }
+                }
             )
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -138,6 +148,7 @@ fun AddCustomerContent(
 
             Spacer(modifier = Modifier.height(30.dp))
 
+            //correct the hide and show dialog error
             HideAndShowOptionalDialog(
                 btDismissState = widgetUIState.dialogLoader,
                 btDismissEvent = {viewModel.onEvent(AddCustomerViewEvent.OnclickDismissButton)},
@@ -154,6 +165,12 @@ fun AddCustomerContent(
                 onDismiss = {}
             )
 
+            SuccessDialog(
+                showDialog = widgetUIState.success,
+                onOkClick = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }
@@ -217,13 +234,14 @@ fun ContactPerson(
 @Composable
 fun MobileNumber(
     label: String,
-    onValueChange:(String)->Unit
+    onValueChange:(String)->Unit,
 ) {
     CustomTextField(
         label = "Mobile Number",
         value = label,
         onValueChange = onValueChange,
-        leadingIcon = Icons.Default.MobileFriendly
+        leadingIcon = Icons.Default.MobileFriendly,
+        isNumericOnly = true
     )
 }
 

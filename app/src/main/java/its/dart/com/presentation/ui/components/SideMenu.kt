@@ -6,6 +6,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
+import android.net.Uri
+import androidx.compose.material.icons.filled.DataArray
+import androidx.compose.material.icons.filled.DataObject
+import androidx.compose.material.icons.filled.DataSaverOn
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.AutoStories
 import androidx.compose.material.icons.outlined.Book
@@ -93,17 +97,18 @@ fun DropdownMenuWithDetails(
     }
 }
 
-
 @Composable
 fun DropdownMenuWithDetail(
     navController: NavHostController,
     details: OtherAllCustomersEntity
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
+    val encodedIdentifier = Uri.encode("promoter")
+    val userId: String = details.id.toString()
+    val userName = Uri.encode(details.outlet_name)
 
     Box(
-        modifier = Modifier
-            .wrapContentSize(Alignment.TopEnd)
+        modifier = Modifier.wrapContentSize(Alignment.TopEnd)
     ) {
         IconButton(onClick = { expanded = !expanded }) {
             Icon(
@@ -117,40 +122,45 @@ fun DropdownMenuWithDetail(
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.wrapContentSize().
-            background(Color.White) // Ensures white background
+            modifier = Modifier.wrapContentSize()
+                .background(Color.White)
                 .border(1.dp, Color.LightGray),
         ) {
             DropdownMenuItem(
-                text = { Text(text ="Location Finder") },
+                text = { Text(text = "Location Finder") },
                 leadingIcon = { Icon(Icons.Outlined.LocationSearching, contentDescription = null) },
                 onClick = { expanded = false }
             )
             DropdownMenuItem(
-                text = { Text(text ="Daily Consumer Data") },
-                leadingIcon = { Icon(Icons.Outlined.AutoStories, contentDescription = null) },
+                text = { Text(text = "Daily Consumer Data") },
+                leadingIcon = { Icon(Icons.Filled.DataArray, contentDescription = null) },
                 onClick = {
                     expanded = false
-                    navController.navigate("DailyConsumerPage")
+                    navController.navigate("DailyConsumerPage/$userId/$userName/$encodedIdentifier")
                 }
             )
             DropdownMenuItem(
-                text = { Text(text ="Daily Retail Activity") },
-                leadingIcon = { Icon(Icons.Outlined.ShoppingCart, contentDescription = null) },
+                text = { Text(text = "Daily Retail Activity") },
+                leadingIcon = { Icon(Icons.Filled.DataObject, contentDescription = null) },
                 onClick = {
                     expanded = false
-                    val identifier  = "0"
-                    navController.navigate("DailyRetailPage")
+                    navController.navigate("DailyRetailPage/$userId/$userName/$encodedIdentifier")
                 }
             )
-
             DropdownMenuItem(
                 text = { Text(text = "Pack Placement") },
-                leadingIcon = { Icon(Icons.Outlined.ShoppingCart, contentDescription = null) },
+                leadingIcon = { Icon(Icons.Filled.DataSaverOn, contentDescription = null) },
                 onClick = {
                     expanded = false
-                    val identifier  = "0"
-                    navController.navigate("PackPlacementPage")
+                    navController.navigate("PackPlacementPage/$userId/$userName/$encodedIdentifier")
+                }
+            )
+            DropdownMenuItem(
+                text = { Text(text = "Order") },
+                leadingIcon = { Icon(Icons.Outlined.ShoppingCart, contentDescription = "") },
+                onClick = {
+                    expanded = false
+                    navController.navigate("OrderScreen/$userId/$userName/$encodedIdentifier")
                 }
             )
         }

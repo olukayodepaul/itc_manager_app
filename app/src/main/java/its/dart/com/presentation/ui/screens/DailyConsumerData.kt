@@ -47,11 +47,14 @@ import its.dart.com.presentation.ui.theme.robotoFamily
 @Composable
 fun DailyConsumer(
     navController: NavHostController,
+    userId: String,
+    userName: String,
+    identifier: String,
 ) {
     Scaffold(
         topBar = {
             ToolBar(
-                title = "Daily Consumer Data Form",
+                title = userName,
                 click = {navController.popBackStack()},
                 clickSearch = {},
                 clickMenu = {},
@@ -59,6 +62,8 @@ fun DailyConsumer(
                 fontSize = 20,
                 fontFamily = robotoFamily,
                 letterSpacing = 0.5,
+                subTitle = true,
+                subTitleItem = "Daily Consumer Data Form"
             )
         }
     ) { innerPadding ->
@@ -87,25 +92,25 @@ fun DailyConsumerContent(
         ) {
 
             ConsumerName()
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             PhoneNumber()
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             Gender()
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             Age()
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             PersonBrand()
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             SampleSKU()
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             AnySales()
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             QtySold()
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             ConsumerFeedback()
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             CheckBoxFeed()
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             CButton(
                 onClick = { showDialog = true },
                 buttonState = true,
@@ -140,8 +145,14 @@ fun PhoneNumber() {
     CustomTextField(
         label = "Mobile Number",
         value = mobileNumber,
-        onValueChange = { mobileNumber = it },
-        leadingIcon = Icons.Default.MobileFriendly
+        onValueChange = { input ->
+            if (input.isEmpty() || input.matches(Regex("^\\d*\$"))) {
+                mobileNumber = input
+            }
+        },
+        leadingIcon = Icons.Default.MobileFriendly,
+        isNumericOnly = true
+
     )
 }
 
@@ -161,12 +172,17 @@ fun Gender() {
 
 @Composable
 fun Age() {
-    var outletName by remember { mutableStateOf("") }
+    var age by remember { mutableStateOf("") }
     CustomTextField(
         label = "Age",
-        value = outletName,
-        onValueChange = { outletName = it },
-        leadingIcon = Icons.Default.EmojiPeople
+        value = age,
+        onValueChange = { input ->
+            if (input.isEmpty() || input.matches(Regex("^\\d*\$"))) {
+                age = input
+            }
+        },
+        leadingIcon = Icons.Default.EmojiPeople,
+        isNumericOnly = true
     )
 }
 
@@ -212,12 +228,18 @@ fun AnySales() {
 
 @Composable
 fun QtySold() {
-    var outletName by remember { mutableStateOf("") }
+    var qtySold by remember { mutableStateOf("") }
     CustomTextField(
         label = "Qty Sold",
-        value = outletName,
-        onValueChange = { outletName = it },
-        leadingIcon = Icons.Default.Money
+        value = qtySold,
+        onValueChange = { input ->
+            // Regex for allowing integer and decimal values
+            if (input.isEmpty() || input.matches(Regex("^[0-9]*\\.?[0-9]*\$"))) {
+                qtySold = input
+            }
+        },
+        leadingIcon = Icons.Default.Money,
+        isNumericOnly = true
     )
 }
 

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import its.dart.com.data.repository.local.entity.OtherAllCustomersEntity
+import its.dart.com.domain.preference.PreferenceInt
 import its.dart.com.domain.repository.local.OtherCustomer
 import its.dart.com.domain.repository.remote.AddCustomer
 import its.dart.com.domain.repository.remote.model.AddCustomerReqModel
@@ -13,17 +14,25 @@ import its.dart.com.presentation.viewmodel.state.GenericState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddCustomerViewModel @Inject constructor(private val remoteRepo: AddCustomer, private val localRepo: OtherCustomer): ViewModel( ) {
+class AddCustomerViewModel @Inject constructor(
+    private val remoteRepo: AddCustomer,
+    private val localRepo: OtherCustomer,
+    private val sharePreference: PreferenceInt
+): ViewModel( ) {
 
     private var _addCustomerState = MutableStateFlow(AddCustomerViewState())
     val addCustomerState: StateFlow<AddCustomerViewState> = _addCustomerState.asStateFlow()
 
-    private val _customersState = MutableStateFlow<List<OtherAllCustomersEntity>>(emptyList())
+    private var _customersState = MutableStateFlow<List<OtherAllCustomersEntity>>(emptyList())
     val customersState: StateFlow<List<OtherAllCustomersEntity>> = _customersState.asStateFlow()
+
+    private var _userNameState = MutableStateFlow("")
+    val userNameState: StateFlow<String> = _userNameState.asStateFlow()
 
     private fun updateState(update: AddCustomerViewState.() -> AddCustomerViewState) {
         _addCustomerState.value = _addCustomerState.value.update()
@@ -56,6 +65,8 @@ class AddCustomerViewModel @Inject constructor(private val remoteRepo: AddCustom
     private fun onClickButton() {
         viewModelScope.launch {
 
+            updateState { copy(dialogLoader = false, loader = true ) }
+
             val state = _addCustomerState.value
 
             val post = AddCustomerReqModel.builder()
@@ -68,24 +79,29 @@ class AddCustomerViewModel @Inject constructor(private val remoteRepo: AddCustom
                 .address(state.address)
                 .lat(0.1)
                 .lng(0.2)
-                .userId(90)
-                .userType("2")
+                .userId(sharePreference.getInt(key="id", defaultValue = 0))
+                .userType(sharePreference.getInt(key="sysCategory", defaultValue = 0).toString())
                 .build()
 
             val fetchCloudData = remoteRepo.postCustomer(post)
 
-            val cache = OtherAllCustomersEntity(
-                id  = fetchCloudData.id,
-                urno = fetchCloudData.id,
-                latitude = "0.1",
-                longitude = "0.3",
-                outlet_name = state.outletName,
-                outlet_address = state.address,
-                contact_phone = state.mobileNumber,
-                outlet_type = "e"
-            )
+            if(fetchCloudData.status==200){
+                val cache = OtherAllCustomersEntity(
+                    id  = fetchCloudData.id,
+                    urno = fetchCloudData.id,
+                    latitude = "0.1",
+                    longitude = "0.3",
+                    outlet_name = state.outletName,
+                    outlet_address = state.address,
+                    contact_phone = state.mobileNumber,
+                    outlet_type = state.outletType.toString()
+                )
+                localRepo.persistOtherCustomers(cache)
+                updateState { copy(loader = false , success = true) }
+                return@launch
+            }
 
-            localRepo.persistOtherCustomers(cache)
+            updateState {copy(dialogLoader = false, loader = false, errorMessage = fetchCloudData.message ) }
         }
     }
 
@@ -117,4 +133,13 @@ class AddCustomerViewModel @Inject constructor(private val remoteRepo: AddCustom
             }
         }
     }
+
+    init{
+        viewModelScope.launch {
+            userNameState.collect {
+                _userNameState.value = sharePreference.getString(key= "username", defaultValue = "")
+            }
+        }
+    }
+
 }

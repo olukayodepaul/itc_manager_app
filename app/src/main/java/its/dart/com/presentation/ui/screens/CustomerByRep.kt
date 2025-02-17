@@ -4,8 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -26,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import its.dart.com.domain.repository.remote.model.AllCustomersModel
+import its.dart.com.presentation.ui.components.ChatFilterOptions
 import its.dart.com.presentation.ui.components.CircleAvatar
 import its.dart.com.presentation.ui.components.DropdownMenuWithDetails
 import its.dart.com.presentation.ui.components.Failure
@@ -35,6 +38,8 @@ import its.dart.com.presentation.ui.theme.appColor
 import its.dart.com.presentation.ui.theme.robotoFamily
 import its.dart.com.presentation.viewmodel.CustomerByRepViewModel
 import its.dart.com.presentation.viewmodel.state.GenericState
+import java.util.Calendar
+
 
 @Composable
 fun CustomerByRep(
@@ -43,10 +48,17 @@ fun CustomerByRep(
     userName: String,
     viewModel: CustomerByRepViewModel = hiltViewModel()
 ) {
+
     val customersState by viewModel.customersState.collectAsState()
+    val selectedId by viewModel.optionState.collectAsState()
 
     LaunchedEffect(userId) {
-        viewModel.getCustomers(userId)
+        val calendar = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1
+        viewModel.getCustomers(userId.toInt(), calendar)
+    }
+
+    LaunchedEffect(Unit){
+        viewModel.getCurrentOptionState()
     }
 
     Scaffold(
@@ -59,9 +71,9 @@ fun CustomerByRep(
                 clickSearch = {},
                 clickMenu = {},
                 navigation = true,
-                fontSize = 20,
+                fontSize = 22,
                 fontFamily = robotoFamily,
-                letterSpacing = 0.5,
+                letterSpacing = -0.2,
                 subTitleItem = "Customers List",
                 subTitle = true,
             )
@@ -73,6 +85,13 @@ fun CustomerByRep(
                 .fillMaxSize()
                 .background(Color(0xFFFFFFFF))
         ) {
+
+            Spacer(modifier = Modifier.height(30.dp))
+            ChatFilterOptions(
+                selectedId = selectedId,
+                onSelectedChange = {viewModel.updateOptionState(it, userId.toInt())}
+            )
+            Spacer(modifier = Modifier.height(10.dp))
             when (val state = customersState) {
                 is GenericState.Loading -> LoadingIndicator()
                 is GenericState.Success -> CustomerList(state.data, navController)

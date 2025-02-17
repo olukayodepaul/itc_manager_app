@@ -35,6 +35,8 @@ data class AllCustomersEntity (
     val outlet_name: String,
     val outlet_address: String,
     val contact_phone: String,
+    val rep_id: Int = 0,
+    val properid: Int = 0,
 )
 
 @Entity(tableName = "tasks")

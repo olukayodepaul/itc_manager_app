@@ -15,7 +15,7 @@ data class LoginViewState(
     val dialogLoader: Boolean  = false
 )
 
-data class TaskViewState(
+data class TaskViewState (
     val resume: String = "00:00:00",
     val clockOut: String = "00:00:00",
     val clockIn: String = "00:00:00",
@@ -23,7 +23,7 @@ data class TaskViewState(
     val dialogLoader: Boolean  = false
 )
 
-data class AddCustomerViewState(
+data class AddCustomerViewState (
     val outletName: String = "",
     val contactPerson: String = "",
     val mobileNumber: String = "",
@@ -32,7 +32,8 @@ data class AddCustomerViewState(
     val address: String = "",
     val errorMessage: String = "",
     val dialogLoader: Boolean  = false,
-    val loader: Boolean = false
+    val loader: Boolean = false,
+    val success: Boolean = false
 )
 
 
