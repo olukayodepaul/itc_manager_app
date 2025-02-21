@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import its.dart.com.data.repository.local.entity.OtherAllCustomersEntity
+import its.dart.com.data.repository.local.entity.PromoterEntity
 import its.dart.com.presentation.model.UiData
 import its.dart.com.presentation.ui.components.ToolBar
 import its.dart.com.presentation.model.getPromoterSurvey
@@ -60,7 +60,6 @@ fun Promo(
 ){
 
     val widgetUIState by viewModel.customersState.collectAsStateWithLifecycle()
-    val userName by viewModel.userNameState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.fetchPromoterCustomers()
@@ -77,7 +76,7 @@ fun Promo(
                 subTitle = true,
                 fontFamily = robotoFamily,
                 letterSpacing = -0.2,
-                subTitleItem = "Welcome $userName"
+                subTitleItem = "Welcome"
             )
         },
         floatingActionButton = {
@@ -181,7 +180,7 @@ fun CardItem(index: Int, item: List<UiData>) {
 
 @Composable
 fun CustomerContentList(
-    salesRep: OtherAllCustomersEntity,
+    salesRep: PromoterEntity,
     navController: NavHostController
 ) {
     Column(

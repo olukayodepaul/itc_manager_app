@@ -3,18 +3,18 @@ package its.dart.com.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import its.dart.com.data.repository.local.entity.OtherAllCustomersEntity
+import its.dart.com.data.repository.local.entity.MerchantEntity
+import its.dart.com.data.repository.local.entity.PromoterEntity
 import its.dart.com.domain.preference.PreferenceInt
 import its.dart.com.domain.repository.local.OtherCustomer
 import its.dart.com.domain.repository.remote.AddCustomer
 import its.dart.com.domain.repository.remote.model.AddCustomerReqModel
+import its.dart.com.domain.repository.remote.model.AddCustomerResModel
 import its.dart.com.presentation.viewmodel.event.AddCustomerViewEvent
 import its.dart.com.presentation.viewmodel.state.AddCustomerViewState
-import its.dart.com.presentation.viewmodel.state.GenericState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,11 +28,15 @@ class AddCustomerViewModel @Inject constructor(
     private var _addCustomerState = MutableStateFlow(AddCustomerViewState())
     val addCustomerState: StateFlow<AddCustomerViewState> = _addCustomerState.asStateFlow()
 
-    private var _customersState = MutableStateFlow<List<OtherAllCustomersEntity>>(emptyList())
-    val customersState: StateFlow<List<OtherAllCustomersEntity>> = _customersState.asStateFlow()
+    private var _customersState = MutableStateFlow<List<PromoterEntity>>(emptyList())
+    val customersState: StateFlow<List<PromoterEntity>> = _customersState.asStateFlow()
 
-    private var _userNameState = MutableStateFlow("")
-    val userNameState: StateFlow<String> = _userNameState.asStateFlow()
+    private var _repId = MutableStateFlow(0)
+    val repId: StateFlow<Int> = _repId.asStateFlow()
+
+    fun setRepId(repId: Int) {
+        _repId.value = repId
+    }
 
     private fun updateState(update: AddCustomerViewState.() -> AddCustomerViewState) {
         _addCustomerState.value = _addCustomerState.value.update()
@@ -67,38 +71,13 @@ class AddCustomerViewModel @Inject constructor(
 
             updateState { copy(dialogLoader = false, loader = true ) }
 
-            val state = _addCustomerState.value
-
-            val post = AddCustomerReqModel.builder()
-                .outletName(state.outletName)
-                .contactPension(state.contactPerson)
-                .phoneNumber(state.mobileNumber)
-                .languageId(state.language)
-                .outletTypeId(state.outletType)
-                .outletClassId(0)
-                .address(state.address)
-                .lat(0.1)
-                .lng(0.2)
-                .userId(sharePreference.getInt(key="id", defaultValue = 0))
-                .userType(sharePreference.getInt(key="sysCategory", defaultValue = 0).toString())
-                .build()
-
+            val systemCategory = sharePreference.getInt(key="sysCategory", defaultValue = 0)
+            val userId = sharePreference.getInt(key="id", defaultValue = 0)
+            val post = createCustomerRequest(userId, systemCategory.toString())
             val fetchCloudData = remoteRepo.postCustomer(post)
 
-            if(fetchCloudData.status==200){
-                val cache = OtherAllCustomersEntity(
-                    id  = fetchCloudData.id,
-                    urno = fetchCloudData.id,
-                    latitude = "0.1",
-                    longitude = "0.3",
-                    outlet_name = state.outletName,
-                    outlet_address = state.address,
-                    contact_phone = state.mobileNumber,
-                    outlet_type = state.outletType.toString()
-                )
-                localRepo.persistOtherCustomers(cache)
-                updateState { copy(loader = false , success = true) }
-                return@launch
+            if(fetchCloudData.status==200 && (systemCategory == 5 ||  systemCategory == 6)){
+                handleSuccessfulResponse(systemCategory, fetchCloudData)
             }
 
             updateState {copy(dialogLoader = false, loader = false, errorMessage = fetchCloudData.message ) }
@@ -128,18 +107,65 @@ class AddCustomerViewModel @Inject constructor(
 
     fun fetchPromoterCustomers() {
         viewModelScope.launch {
-            localRepo.getOtherCustomers().collect{result->
+            localRepo.getOtherPromoters().collect{ result->
                 _customersState.value = result
             }
         }
     }
 
-    init{
-        viewModelScope.launch {
-            userNameState.collect {
-                _userNameState.value = sharePreference.getString(key= "username", defaultValue = "")
+    private fun handleSuccessfulResponse(systemCategory: Int, fetchCloudData: AddCustomerResModel) = viewModelScope.launch {
+        val state = _addCustomerState.value
+        when (systemCategory) {
+            5 -> {
+                val cache  = MerchantEntity(
+                    id = fetchCloudData.id,
+                    urno = fetchCloudData.id,
+                    latitude = "0.1",
+                    longitude = "0.3",
+                    outlet_name = state.outletName,
+                    outlet_address = state.address,
+                    contact_phone = state.mobileNumber,
+                    outlet_type = state.outletType.toString()
+                )
+                localRepo.persistOtherMerchants(cache)
+            }
+            6 -> {
+                val cache = PromoterEntity(
+                    id = fetchCloudData.id,
+                    urno = fetchCloudData.id,
+                    latitude = "0.1",
+                    longitude = "0.3",
+                    outlet_name = state.outletName,
+                    outlet_address = state.address,
+                    contact_phone = state.mobileNumber,
+                    outlet_type = state.outletType.toString()
+                )
+                localRepo.persistOtherPromoters(cache)
             }
         }
+        updateState { copy(loader = false, success = true) }
+        return@launch
+    }
+
+    private fun createCustomerRequest(userId:Int, userType: String): AddCustomerReqModel {
+        val state = _addCustomerState.value
+        val repId = _repId.value
+        return AddCustomerReqModel.builder()
+            .outletName(state.outletName)
+            .contactPension(state.contactPerson)
+            .phoneNumber(state.mobileNumber)
+            .languageId(state.language)
+            .outletTypeId(state.outletType)
+            .outletClassId(0)
+            .address(state.address)
+            .lat(0.1)
+            .lng(0.2)
+            .userId(userId)
+            .userType(userType)
+            .repId(repId)
+            .build()
     }
 
 }
+
+

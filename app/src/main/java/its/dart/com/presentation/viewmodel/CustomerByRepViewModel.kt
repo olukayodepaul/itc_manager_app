@@ -1,6 +1,6 @@
 package its.dart.com.presentation.viewmodel
 
-import android.util.Log
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,7 +10,6 @@ import its.dart.com.domain.usecases.CustomerByRepUseCases
 import its.dart.com.mapper.toAllCustomersEntity
 import its.dart.com.mapper.toAllCustomersModel
 import its.dart.com.presentation.viewmodel.state.GenericState
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,7 +30,7 @@ class CustomerByRepViewModel @Inject constructor(
     val customersState: StateFlow<GenericState<List<AllCustomersModel>>> = _customersState.asStateFlow()
 
     private val _optionState = MutableStateFlow(0)
-    val optionState: StateFlow<Int> = _optionState.asStateFlow()
+    val optionState: StateFlow<Int> = _optionState
 
     fun getCurrentOptionState() {
         _optionState.value = getDayAsNumber()
@@ -63,8 +62,6 @@ class CustomerByRepViewModel @Inject constructor(
                         return@launch
                     }
                 }
-
-                Log.d("epokhai","2")
                 local.getCustomers(option, userId).collectLatest { customerEntities ->
                     _customersState.value = GenericState.Success(customerEntities.toAllCustomersModel().toList())
                 }

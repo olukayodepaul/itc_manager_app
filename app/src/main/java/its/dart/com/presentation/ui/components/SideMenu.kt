@@ -12,7 +12,8 @@ import androidx.compose.material.icons.filled.DataObject
 import androidx.compose.material.icons.filled.DataSaverOn
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.AutoStories
-import androidx.compose.material.icons.outlined.Book
+import androidx.compose.material.icons.outlined.Call
+import androidx.compose.material.icons.outlined.Chat
 import androidx.compose.material.icons.outlined.LocationSearching
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.DropdownMenu
@@ -30,7 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import its.dart.com.data.repository.local.entity.OtherAllCustomersEntity
+import its.dart.com.data.repository.local.entity.PromoterEntity
 import its.dart.com.domain.repository.remote.model.AllCustomersModel
 
 
@@ -72,7 +73,7 @@ fun DropdownMenuWithDetails(
                 leadingIcon = { Icon(Icons.Outlined.AutoStories, contentDescription = null) },
                 onClick = {
                     expanded = false
-                    navController.navigate("survey/${details.id}/${details.outletName}")
+                    navController.navigate("survey/${details.id}/${details.outletName}/${details.urno}")
                 }
             )
             DropdownMenuItem(
@@ -86,8 +87,17 @@ fun DropdownMenuWithDetails(
             )
 
             DropdownMenuItem(
-                text = { Text("Add Customer") },
-                leadingIcon = { Icon(Icons.Outlined.Book, contentDescription = null) },
+                text = { Text("Make a Call") },
+                leadingIcon = { Icon(Icons.Outlined.Call, contentDescription = null) },
+                onClick = {
+                    expanded = false
+                    navController.navigate("add_customer/${details.outletName}")
+                }
+            )
+
+            DropdownMenuItem(
+                text = { Text("Chat") },
+                leadingIcon = { Icon(Icons.Outlined.Chat, contentDescription = null) },
                 onClick = {
                     expanded = false
                     navController.navigate("add_customer/${details.outletName}")
@@ -100,7 +110,7 @@ fun DropdownMenuWithDetails(
 @Composable
 fun DropdownMenuWithDetail(
     navController: NavHostController,
-    details: OtherAllCustomersEntity
+    details: PromoterEntity
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
     val encodedIdentifier = Uri.encode("promoter")

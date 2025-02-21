@@ -51,7 +51,7 @@ data class TasksEntity (
 
 
 @Entity(tableName = "promoter")
-data class OtherAllCustomersEntity (
+data class PromoterEntity (
     @PrimaryKey(autoGenerate = true) val id: Int,
     val urno: Int,
     val latitude: String? = "0.0",
@@ -61,3 +61,16 @@ data class OtherAllCustomersEntity (
     val contact_phone: String,
     val outlet_type: String
 )
+
+@Entity(tableName = "merchant")
+data class MerchantEntity (
+    @PrimaryKey(autoGenerate = true) val id: Int,
+    val urno: Int,
+    val latitude: String? = "0.0",
+    val longitude: String? = "0.0",
+    val outlet_name: String,
+    val outlet_address: String,
+    val contact_phone: String,
+    val outlet_type: String
+)
+

@@ -318,7 +318,8 @@ data class AddCustomerReqModel(
     val lat: Double,
     val lng: Double,
     val userId: Int,
-    val userType: String
+    val userType: String,
+    val repId: Int
 ) {
 
     companion object {
@@ -337,6 +338,7 @@ data class AddCustomerReqModel(
         private var lng: Double = 0.0
         private var userId: Int = 0
         private var userType: String = ""
+        private var repId: Int = 0
 
         fun outletName(outletName: String) = apply { this.outletName = outletName }
         fun contactPension(contactPension: String) = apply { this.contactPension = contactPension }
@@ -349,10 +351,11 @@ data class AddCustomerReqModel(
         fun lng(lng: Double) = apply { this.lng = lng }
         fun userId(userId: Int) = apply { this.userId = userId }
         fun userType(userType: String) = apply { this.userType = userType }
+        fun repId(repId: Int) = apply { this.repId = repId }
 
         fun build() = AddCustomerReqModel(
             outletName, contactPension, phoneNumber, languageId,
-            outletTypeId, outletClassId, address, lat, lng, userId, userType
+            outletTypeId, outletClassId, address, lat, lng, userId, userType , repId
         )
     }
 }
@@ -377,5 +380,7 @@ data class AddCustomerResModel(
         fun build() = AddCustomerResModel(status, message, time, id)
     }
 }
+
+
 
 

@@ -1,9 +1,12 @@
 package its.dart.com.domain.repository.local
 
-import its.dart.com.data.repository.local.entity.OtherAllCustomersEntity
+import its.dart.com.data.repository.local.entity.MerchantEntity
+import its.dart.com.data.repository.local.entity.PromoterEntity
 import kotlinx.coroutines.flow.Flow
 
 interface OtherCustomer {
-    fun getOtherCustomers(): Flow<List<OtherAllCustomersEntity>>
-    suspend fun persistOtherCustomers(task: OtherAllCustomersEntity)
+    fun getOtherPromoters(): Flow<List<PromoterEntity>>
+    suspend fun persistOtherPromoters(task: PromoterEntity)
+    suspend fun persistOtherMerchants(task: MerchantEntity)
+    fun getOtherMerchant(): Flow<List<MerchantEntity>>
 }

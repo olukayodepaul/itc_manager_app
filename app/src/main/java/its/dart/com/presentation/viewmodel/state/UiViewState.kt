@@ -33,7 +33,56 @@ data class AddCustomerViewState (
     val errorMessage: String = "",
     val dialogLoader: Boolean  = false,
     val loader: Boolean = false,
-    val success: Boolean = false
+    val success: Boolean = false,
+    val repId: Int = 0
+)
+
+data class SurveyState(
+
+    //one
+    val salesRepVisit:String = "",
+    val salesRepVisitDate:String = "",
+    val salesRepVisitSequence: String = "",
+    val salesRepVisitProactive: String = "",
+
+    //two
+    val howSatisfy: String = "",
+    val unResolveIssue: String = "",
+    val salesRating: String = "",
+    val salesRepVisitResponsiveness: String = "",
+
+    //three
+    var salesPerformanceProductPurchase: String  = "",
+    var targetSuperPrice: String = "",
+    var targetSuperUOM:String = "",
+    var targetMentholPrice: String = "",
+    var targetMentholUOM:String = "",
+    var execPrice: String = "",
+    var execUOM:String = "",
+    var execClickPrice: String = "",
+    var execClickUOM:String = "",
+    var targetSuperPurchase: String = "",
+    var targetMentholPurchase:String = "",
+    var executivePurchase: String = "",
+    var executiveClickPurchase:String = "",
+
+    //four
+    val whatCanWeToImproveService: String = "",
+    val whatWudYouRecommend: String = "",
+    var comment:String = "",
+
+    //fifth
+    val productAvailabilitySuper: String = "",
+    val productAvailabilityMenthol: String = "",
+    var productAvailabilityExec:String = "",
+    var productAvailabilityExecClick:String = "",
+
+    //Others
+    val loaders: Boolean = false,
+    val messageNotification: String = "",
+    val urno: String = "",
+
+
 )
 
 

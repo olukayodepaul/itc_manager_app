@@ -23,9 +23,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -47,16 +44,19 @@ import its.dart.com.presentation.viewmodel.event.AddCustomerViewEvent
 @Composable
 fun AddCustomer(
     navController: NavHostController,
-    userName: String,
-    userId: String,
+    repId: String,
+    repName: String,
     viewModel: AddCustomerViewModel = hiltViewModel()
 ) {
-    val username by viewModel.userNameState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit){
+        viewModel.setRepId(repId.toIntOrNull() ?: 0)
+    }
 
     Scaffold(
         topBar = {
             ToolBar(
-                title = "$username",
+                title = "$repName",
                 click = { navController.popBackStack() },
                 clickSearch = {},
                 clickMenu = {},
@@ -108,6 +108,7 @@ fun AddCustomerContent(
                 label = widgetUIState.contactPerson,
                 onValueChange = {viewModel.onEvent(AddCustomerViewEvent.OnContactPerson(it))}
             )
+
             Spacer(modifier = Modifier.height(10.dp))
 
             MobileNumber(

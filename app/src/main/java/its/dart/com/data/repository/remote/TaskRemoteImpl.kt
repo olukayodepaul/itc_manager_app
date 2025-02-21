@@ -15,7 +15,6 @@ import its.dart.com.mapper.toTaskRequestDto
 import javax.inject.Inject
 
 class TaskRemoteImpl @Inject constructor(private val httpClient: HttpClient) : TaskRemote {
-
     override suspend fun taskRequest(body: TaskRequestModel): TaskModel {
         return try {
             val response = httpClient.post("/v3/task") {
@@ -27,5 +26,4 @@ class TaskRemoteImpl @Inject constructor(private val httpClient: HttpClient) : T
             throw Exception("Task request failed: ${e.message}", e)
         }
     }
-
 }

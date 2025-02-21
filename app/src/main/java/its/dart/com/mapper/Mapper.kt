@@ -289,7 +289,8 @@ fun AddCustomerReqModel.mapToDTO(): AddCustomerReqDTO {
         lat = this.lat,
         lng = this.lng,
         userId = this.userId,
-        userType = this.userType
+        userType = this.userType,
+        repId = this.repId
     )
 }
 

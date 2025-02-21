@@ -43,5 +43,48 @@ fun getPromoterSupervisor(): List<OptionData> {
     )
 }
 
+sealed class SurveyEvent {
+    // First
+    data class SalesRepVisit(val salesRepVisit: String) : SurveyEvent()
+    data class SalesRepVisitDate(val salesRepVisitDate: String) : SurveyEvent()
+    data class SalesRepVisitSequence(val salesRepVisitSequence: String) : SurveyEvent()
+    data class SalesRepVisitProactive(val salesRepVisitProactive: String) : SurveyEvent()
+
+    // Second Two
+    data class HowSatisfy(val howSatisfy: String) : SurveyEvent()
+    data class UnResolveIssue(val unResolveIssue: String) : SurveyEvent()
+    data class SalesRating(val salesRating: String) : SurveyEvent()
+    data class SalesRepVisitResponsiveness(val salesRepVisitResponsiveness: String) : SurveyEvent()
+
+    //third
+    data class SalesPerformanceProductPurchase(val salesPerformanceProductPurchase: String ): SurveyEvent()
+    data class TargetSuperPrice(val targetSuperPrice: String) : SurveyEvent()
+    data class TargetSuperUOM(val targetSuperUOM: String) : SurveyEvent()
+    data class TargetMentholPrice(val targetMentholPrice: String) : SurveyEvent()
+    data class TargetMentholUOM(val targetMentholUOM: String) : SurveyEvent()
+    data class ExecPrice(val execPrice: String) : SurveyEvent()
+    data class ExecUOM(val execUOM: String) : SurveyEvent()
+    data class ExecClickPrice(val execClickPrice: String) : SurveyEvent()
+    data class ExecClickUOM(val execClickUOM: String) : SurveyEvent()
+    data class TargetSuperPurchase(val targetSuperPurchase: String) : SurveyEvent()
+    data class TargetMentholPurchase(val targetMentholPurchase: String) : SurveyEvent()
+    data class ExecutivePurchase(val executivePurchase: String) : SurveyEvent()
+    data class ExecutiveClickPurchase(val executiveClickPurchase: String) : SurveyEvent()
+
+    //fourth
+    data class WhatCanWeToImproveService(val whatCanWeToImproveService: String): SurveyEvent()
+    data class WhatWudYouRecommend(val whatWudYouRecommend: String): SurveyEvent()
+    data class Comment(val comment: String): SurveyEvent()
+
+    // Section Five
+    data class ProductAvailabilitySuper(val productAvailabilitySuper: String) : SurveyEvent()
+    data class ProductAvailabilityMenthol(val productAvailabilityMenthol: String) : SurveyEvent()
+    data class ProductAvailabilityExec(val productAvailabilityExec: String) : SurveyEvent()
+    data class ProductAvailabilityExecClick(val productAvailabilityExecClick: String) : SurveyEvent()
+    data class Urno(val urno: String) : SurveyEvent()
+
+    //clicking view  data
+    data object OnclickButton: SurveyEvent()
+}
 
 
