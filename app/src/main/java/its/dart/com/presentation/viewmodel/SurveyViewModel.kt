@@ -60,16 +60,18 @@ class SurveyViewModel @Inject constructor(
             is SurveyEvent.ProductAvailabilityExec -> updateSurveyState { copy(productAvailabilityExec = event.productAvailabilityExec) }
             is SurveyEvent.ProductAvailabilityExecClick -> updateSurveyState { copy(productAvailabilityExecClick = event.productAvailabilityExecClick) }
             is SurveyEvent.Urno->updateSurveyState { copy(urno = event.urno) }
+            is SurveyEvent.Navigation->updateSurveyState { copy(navigation = event.navigation) }
+            is SurveyEvent.OnDismiss->onDismiss()
+            is SurveyEvent.OnConfirm->onConfirm()
             is SurveyEvent.OnclickButton -> onClick()
+            is SurveyEvent.OnOkClick -> onOkClick()
         }
     }
 
-
-
-    private fun onClick() {
-
+    private fun onConfirm(){
         viewModelScope.launch {
-            updateSurveyState { copy(loaders = true) }
+
+            updateSurveyState { copy(loaders = true, btDismissState = false) }
             val survey = _surveyState.value
 
             val result = SurveyStateDTO(
@@ -106,20 +108,31 @@ class SurveyViewModel @Inject constructor(
                 userId = sharePreference.getInt(key="id", defaultValue = 0).toString(),
             )
 
+            //bottom sheet for error.
             remoteRepository.taskRequest(result)
                 .onSuccess { result->
-                    if(result.status == 200){
-
+                    if(result.status == 200) {
+                        updateSurveyState { copy(showDialog = true) }
                     }else{
-
+                        //error page
                     }
                     updateSurveyState { copy(loaders = false) }
                 }
                 .onFailure { error->
-                    //error
-                    //message
+                    //error page. bottom sheet
                 }
         }
+    }
+
+    private fun onDismiss(){
+        updateSurveyState { copy(btDismissState = false) }
+    }
+
+    private fun onOkClick() {
+        updateSurveyState { copy(showDialog = false, navigation = true) }
+    }
+    private fun onClick() {
+        updateSurveyState { copy(btDismissState = true) }
     }
 
     private fun updateSurveyState(update: SurveyState.() -> SurveyState) {

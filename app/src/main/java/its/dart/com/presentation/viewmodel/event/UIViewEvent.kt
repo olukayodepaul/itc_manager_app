@@ -82,9 +82,14 @@ sealed class SurveyEvent {
     data class ProductAvailabilityExec(val productAvailabilityExec: String) : SurveyEvent()
     data class ProductAvailabilityExecClick(val productAvailabilityExecClick: String) : SurveyEvent()
     data class Urno(val urno: String) : SurveyEvent()
+    data class Navigation(val navigation: Boolean) : SurveyEvent()
 
     //clicking view  data
     data object OnclickButton: SurveyEvent()
+    data object OnDismiss: SurveyEvent()
+    data object OnConfirm: SurveyEvent()
+    data object OnOkClick: SurveyEvent()
+
 }
 
 

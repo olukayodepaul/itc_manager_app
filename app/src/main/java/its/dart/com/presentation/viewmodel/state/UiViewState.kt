@@ -79,8 +79,14 @@ data class SurveyState(
 
     //Others
     val loaders: Boolean = false,
+    val navigation:Boolean = false,
     val messageNotification: String = "",
     val urno: String = "",
+
+    //Interaction
+    val btDismissState:Boolean = false,
+    val showDialog: Boolean = false
+
 
 
 )

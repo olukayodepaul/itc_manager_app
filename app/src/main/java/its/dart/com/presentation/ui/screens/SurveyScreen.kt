@@ -31,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import its.dart.com.presentation.ui.components.CButton
 import its.dart.com.presentation.ui.components.LoadingDialog
+import its.dart.com.presentation.ui.components.OptionalDialog
 import its.dart.com.presentation.ui.components.ProductCheckbox
 import its.dart.com.presentation.ui.components.SuccessDialog
 import its.dart.com.presentation.ui.components.TextFieldInput
@@ -57,6 +58,11 @@ fun SurveyScreen(
         viewModel.onEvent(SurveyEvent.Urno(urno))
     }
 
+    if(uiState.navigation) {
+        navController.popBackStack()
+        viewModel.onEvent(SurveyEvent.Navigation(false))
+    }
+
     Scaffold(
         topBar = {
             ToolBar(
@@ -76,6 +82,7 @@ fun SurveyScreen(
         CustomerSurveyScreen(
             navController = navController,
             modifier = Modifier.padding(innerPadding),
+            userName,
             viewModel
         )
     }
@@ -85,6 +92,7 @@ fun SurveyScreen(
 fun CustomerSurveyScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
+    userName: String,
     viewModel: SurveyViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.surveyState.collectAsStateWithLifecycle()
@@ -113,6 +121,21 @@ fun CustomerSurveyScreen(
                 showDialog = uiState.loaders,
                 onDismiss = {}
             )
+
+            OptionalDialog(
+                btDismissState = uiState.btDismissState,
+                btDismissEvent = {viewModel.onEvent(SurveyEvent.OnDismiss)},
+                btConfirmEvent = {viewModel.onEvent(SurveyEvent.OnConfirm)},
+                text = "Post 1 survey for $userName to server",
+                btConfirmTitle = "Confirm",
+                btDismissTitle ="Cancel",
+            )
+
+            SuccessDialog(
+                showDialog = uiState.showDialog,
+                onOkClick = {viewModel.onEvent(SurveyEvent.OnOkClick)}
+            )
+
         }
     }
 }
@@ -642,5 +665,4 @@ fun ProductLikeToPurchase(
             }
         )
     }
-
 }
