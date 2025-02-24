@@ -35,6 +35,9 @@ interface LocalDatabase {
     @Query("SELECT * FROM customers WHERE properid =:properid AND rep_id =:rep_id ")
     fun getCustomers(properid: Int, rep_id: Int): Flow<List<AllCustomersEntity>>
 
+    @Query("SELECT * FROM customers WHERE properid =:properId AND rep_id =:userId AND (outlet_name LIKE '%' || :search || '%' OR contact_phone LIKE '%' || :search || '%' )")
+    suspend fun searchCustomers(search: String, properId: Int, userId: Int): List<AllCustomersEntity>
+
     @Query("SELECT COUNT(id) FROM customers WHERE properid =:properid AND rep_id =:rep_id ")
     fun getCustomer(properid: Int, rep_id: Int): Flow<Int>
 

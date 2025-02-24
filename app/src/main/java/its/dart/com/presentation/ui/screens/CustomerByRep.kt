@@ -47,6 +47,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import its.dart.com.domain.repository.remote.model.AllCustomersModel
 import its.dart.com.presentation.ui.components.ChatFilterOptions
@@ -76,6 +77,7 @@ fun CustomerByRep(
     val customersState by viewModel.customersState.collectAsState()
     val selectedId by viewModel.optionState.collectAsState()
     val calendar = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
+    val searchState by viewModel.search.collectAsStateWithLifecycle()
 
     LaunchedEffect(repId) {
         if(calendar in 2..7) {
@@ -87,7 +89,6 @@ fun CustomerByRep(
         viewModel.getCurrentOptionState()
     }
 
-    var text by remember { mutableStateOf("") }
     var active by remember { mutableStateOf(false) }
     var changeSearchAndTooBar by remember { mutableStateOf(false) }
 
@@ -98,16 +99,14 @@ fun CustomerByRep(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
-                    query = text,
-                    onQueryChange = { text = it },
+                    query = searchState,
+                    onQueryChange = {viewModel.searchEvent(it,repId.toInt(), setToDefault = 1)},
                     onSearch = { active = true },
                     active = active,
                     trailingIcon = {
                                    Icon(
-                                       modifier = Modifier.clickable {
-                                                 text = ""
-                                       },
-                                       imageVector = Icons.Default.Cancel ,
+                                       modifier = Modifier.clickable { viewModel.searchEmptySearch(repId.toInt()) },
+                                       imageVector = Icons.Default.Cancel,
                                        contentDescription = null,
                                        tint = mainGray,
                                    )
@@ -119,6 +118,7 @@ fun CustomerByRep(
                                contentDescription = null,
                                modifier  = Modifier.clickable {
                                    changeSearchAndTooBar = false
+                                   viewModel.searchEvent("",repId.toInt(), setToDefault = 2)
                                })
 
                            Spacer(modifier = Modifier.width(8.dp))
@@ -144,12 +144,7 @@ fun CustomerByRep(
                             text = "Ask Ai or Search Me"
                         )
                     }
-                )
-                {
-                    Column {
-
-                    }
-                }
+                ) {}
             }else{
                 ToolBar(
                     title = "$repName",
