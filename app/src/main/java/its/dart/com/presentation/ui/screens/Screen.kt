@@ -6,8 +6,8 @@ sealed class Screen(val route: String) {
 
     data object MainPage : Screen("MainPage")
 
-    data object CustomersScreen : Screen("CustomersScreen/{repId}/{repName}") {
-        fun createRoute(repId: String, repName: String) = "CustomersScreen/$repId/$repName"
+    data object CustomersScreen : Screen("CustomersScreen/{repId}/{repName}/{routId}") {
+        fun createRoute(repId: String, repName: String, routId: String) = "CustomersScreen/$repId/$repName/$routId"
     }
 
     data object SurveyScreen : Screen("survey/{userId}/{userName}/{urno}") {
@@ -19,5 +19,9 @@ sealed class Screen(val route: String) {
     }
 
     data object WholeSellerPage : Screen("wholeSellerPage")
+
+    data object OrderScreen : Screen("order/{userId}/{userName}/{urno}") {
+        fun createRoute(userId: String, userName: String, urno: String) = "survey/$userId/$userName/$urno"
+    }
 
 }

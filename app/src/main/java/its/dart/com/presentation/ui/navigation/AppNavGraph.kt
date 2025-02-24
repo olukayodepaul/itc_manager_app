@@ -40,12 +40,14 @@ fun AppNavGraph(
             route = Screen.CustomersScreen.route,
             arguments = listOf(
                 navArgument("repId") { type = NavType.StringType },
-                navArgument("repName") { type = NavType.StringType }
+                navArgument("repName") { type = NavType.StringType },
+                navArgument("routId") { type = NavType.StringType }
             )
         ) { backStackEntry ->
-            val repId = backStackEntry.arguments?.getString("repId") ?: ""
             val repName = backStackEntry.arguments?.getString("repName") ?: ""
-            CustomerByRep(navController, repId, repName)
+            val repId = backStackEntry.arguments?.getString("repId") ?: ""
+            val routId = backStackEntry.arguments?.getString("routId") ?: ""
+            CustomerByRep(navController, repId, repName, routId)
         }
 
         composable(
@@ -122,18 +124,20 @@ fun AppNavGraph(
         }
 
         composable(
-            route = "OrderScreen/{userId}/{userName}/{identifier}",
+            route = Screen.OrderScreen.route,
             arguments = listOf(
                 navArgument("userId") { type = NavType.StringType },
                 navArgument("userName") { type = NavType.StringType },
-                navArgument("identifier") { type = NavType.StringType }
-            )
+                navArgument("urno") { type = NavType.StringType },
+
+                )
         ) { backStackEntry ->
             val userId = backStackEntry.arguments?.getString("userId") ?: ""
             val userName = backStackEntry.arguments?.getString("userName") ?: ""
-            val identifier = backStackEntry.arguments?.getString("identifier") ?: ""
-            OrderScreen(navController, userId, userName, identifier)
+            val urno = backStackEntry.arguments?.getString("urno") ?: ""
+            OrderScreen(navController, userId, userName, urno)
         }
+
 
     }
 }

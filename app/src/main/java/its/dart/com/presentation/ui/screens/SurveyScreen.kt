@@ -2,6 +2,7 @@
 
 package its.dart.com.presentation.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -31,6 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import its.dart.com.presentation.ui.components.CButton
 import its.dart.com.presentation.ui.components.LoadingDialog
+import its.dart.com.presentation.ui.components.ModelsBottomSheets
 import its.dart.com.presentation.ui.components.OptionalDialog
 import its.dart.com.presentation.ui.components.ProductCheckbox
 import its.dart.com.presentation.ui.components.SuccessDialog
@@ -40,6 +42,7 @@ import its.dart.com.presentation.ui.theme.appColor
 import its.dart.com.presentation.ui.theme.mainGray
 import its.dart.com.presentation.ui.theme.robotoFamily
 import its.dart.com.presentation.viewmodel.SurveyViewModel
+import its.dart.com.presentation.viewmodel.event.AddCustomerViewEvent
 import its.dart.com.presentation.viewmodel.event.LoginViewEvent
 import its.dart.com.presentation.viewmodel.event.SurveyEvent
 
@@ -52,10 +55,14 @@ fun SurveyScreen(
     urno: String,
     viewModel: SurveyViewModel = hiltViewModel()
 ) {
+
+    Log.d("epokhai3", "${userId}")
+
     val uiState by viewModel.surveyState.collectAsStateWithLifecycle()
+    val sheetState = rememberModalBottomSheetState()
 
     LaunchedEffect(Unit){
-        viewModel.onEvent(SurveyEvent.Urno(urno))
+        viewModel.onEvent(SurveyEvent.Urno(urno, userId.toInt()))
     }
 
     if(uiState.navigation) {
@@ -83,7 +90,8 @@ fun SurveyScreen(
             navController = navController,
             modifier = Modifier.padding(innerPadding),
             userName,
-            viewModel
+            viewModel,
+            sheetState
         )
     }
 }
@@ -93,7 +101,9 @@ fun CustomerSurveyScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     userName: String,
-    viewModel: SurveyViewModel = hiltViewModel()
+    viewModel: SurveyViewModel = hiltViewModel(),
+    sheetState: SheetState,
+
 ) {
     val uiState by viewModel.surveyState.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
@@ -134,6 +144,13 @@ fun CustomerSurveyScreen(
             SuccessDialog(
                 showDialog = uiState.showDialog,
                 onOkClick = {viewModel.onEvent(SurveyEvent.OnOkClick)}
+            )
+
+            ModelsBottomSheets(
+                showAndHideErrorMessage = uiState.showAndHideErrorMessage,
+                onSheetStateChange = {result-> viewModel.onEvent(SurveyEvent.OnShowAndHideErrorMessage(result))},
+                sheetState = sheetState,
+                errorMessage = uiState.errorMessage
             )
 
         }
@@ -227,6 +244,25 @@ fun Second(
     )
 
     Spacer(modifier = Modifier.height(8.dp))
+
+
+
+    Text(
+        text = "Did the sales representative regularly visit you?",
+        style = MaterialTheme.typography.bodyMedium,
+        modifier = Modifier.padding(bottom = 4.dp)
+    )
+    DropDownMenu(
+        options = listOf(
+            "Yes",
+            "No"
+        ),
+        selectedOption = uiState.regularVisit,
+        onOptionSelected = { viewModel.onEvent(SurveyEvent.RegularVisit(it)) }
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
 
     Text(
         text = "Are there any unresolved issues or complaints?",

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import android.net.Uri
+import android.util.Log
 import androidx.compose.material.icons.filled.DataArray
 import androidx.compose.material.icons.filled.DataObject
 import androidx.compose.material.icons.filled.DataSaverOn
@@ -73,7 +74,7 @@ fun DropdownMenuWithDetails(
                 leadingIcon = { Icon(Icons.Outlined.AutoStories, contentDescription = null) },
                 onClick = {
                     expanded = false
-                    navController.navigate("survey/${details.id}/${details.outletName}/${details.urno}")
+                    navController.navigate("survey/${details.repId}/${details.outletName}/${details.urno}")
                 }
             )
             DropdownMenuItem(
@@ -81,28 +82,27 @@ fun DropdownMenuWithDetails(
                 leadingIcon = { Icon(Icons.Outlined.ShoppingCart, contentDescription = null) },
                 onClick = {
                     expanded = false
-                    val identifier  = "0"
-                    navController.navigate("OrderProduct/${details.id}/${details.outletName}/$identifier")
+                    navController.navigate("order/${details.repId}/${details.outletName}/${details.urno}")
                 }
             )
 
-            DropdownMenuItem(
-                text = { Text("Make a Call") },
-                leadingIcon = { Icon(Icons.Outlined.Call, contentDescription = null) },
-                onClick = {
-                    expanded = false
-                    navController.navigate("add_customer/${details.outletName}")
-                }
-            )
-
-            DropdownMenuItem(
-                text = { Text("Chat") },
-                leadingIcon = { Icon(Icons.Outlined.Chat, contentDescription = null) },
-                onClick = {
-                    expanded = false
-                    navController.navigate("add_customer/${details.outletName}")
-                }
-            )
+//            DropdownMenuItem(
+//                text = { Text("Make a Call") },
+//                leadingIcon = { Icon(Icons.Outlined.Call, contentDescription = null) },
+//                onClick = {
+//                    expanded = false
+//                    navController.navigate("add_customer/${details.outletName}")
+//                }
+//            )
+//
+//            DropdownMenuItem(
+//                text = { Text("Chat") },
+//                leadingIcon = { Icon(Icons.Outlined.Chat, contentDescription = null) },
+//                onClick = {
+//                    expanded = false
+//                    navController.navigate("add_customer/${details.outletName}")
+//                }
+//            )
         }
     }
 }

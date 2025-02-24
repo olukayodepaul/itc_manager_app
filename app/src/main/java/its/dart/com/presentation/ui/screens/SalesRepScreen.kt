@@ -6,6 +6,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForwardIos
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -71,7 +74,7 @@ fun SalesRepScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                navController.navigate("CustomersScreen/${salesRep.id}/${salesRep.fullName}")
+                                navController.navigate("CustomersScreen/${salesRep.id}/${salesRep.fullName}/${salesRep.routeName}")
                             }
                     ) {
                         Content(
@@ -88,9 +91,11 @@ fun SalesRepScreen(
 fun Content(
     salesRep: RepsModel
 ) {
-    Spacer(modifier = Modifier
-        .fillMaxWidth()
-        .padding(5.dp))
+    Spacer(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(5.dp)
+    )
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -114,20 +119,31 @@ fun Content(
                 color = appColor,
             )
             Text(
-                text = "${salesRep.routeName} ${salesRep.routeId}",
+                text = "${salesRep.time ?: "00:00:00"} ${salesRep.routeName} ${salesRep.routeId}",
                 maxLines = 1,
                 fontSize = 14.sp,
                 color = Color.Gray,
             )
         }
-        Text(
-            text = salesRep.time ?: "00:00:00",
-            color = if (salesRep.state == 1) appColorBlack else Color.White,
-            fontWeight = FontWeight(600),
-            fontSize = 14.sp,
-        )
+
+        Box(
+            modifier = Modifier
+                .wrapContentSize(Alignment.TopEnd)
+        ) {
+            IconButton(onClick = {}) {
+                Icon(
+                    Icons.Default.ArrowForwardIos,
+                    tint = Color.Gray.copy(alpha = 1f),
+                    contentDescription = "More options",
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+        }
+
     }
-    Spacer(modifier = Modifier
-        .fillMaxWidth()
-        .padding(5.dp))
+    Spacer(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(5.dp)
+    )
 }

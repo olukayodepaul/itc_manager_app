@@ -135,21 +135,27 @@ data class ProductModel(
     val id: Int,
     val item: String,
     val code: String,
-    val qty: String? = null
+    val qty: String? = "0",
+    val inv: String? = "0",
+    val uom: String? = "Case"
 ) {
     class Builder {
         private var id: Int = 0
         private var item: String = ""
         private var code: String = ""
-        private var qty: String? = null
+        private var qty: String? = "0"
+        private var inv: String? = "0"
+        private var uom: String? = "Case"
 
         fun id(id: Int) = apply { this.id = id }
         fun item(item: String) = apply { this.item = item }
         fun code(code: String) = apply { this.code = code }
         fun qty(qty: String?) = apply { this.qty = qty }
+        fun inv(inv: String?) = apply { this.inv = inv }
+        fun uom(uom: String?) = apply { this.uom = uom }
 
         fun build(): ProductModel {
-            return ProductModel(id, item, code, qty)
+            return ProductModel(id, item, code, qty, inv, uom)
         }
     }
 }

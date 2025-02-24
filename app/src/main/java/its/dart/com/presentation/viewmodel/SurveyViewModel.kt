@@ -59,8 +59,10 @@ class SurveyViewModel @Inject constructor(
             is SurveyEvent.ProductAvailabilityMenthol -> updateSurveyState { copy(productAvailabilityMenthol = event.productAvailabilityMenthol) }
             is SurveyEvent.ProductAvailabilityExec -> updateSurveyState { copy(productAvailabilityExec = event.productAvailabilityExec) }
             is SurveyEvent.ProductAvailabilityExecClick -> updateSurveyState { copy(productAvailabilityExecClick = event.productAvailabilityExecClick) }
-            is SurveyEvent.Urno->updateSurveyState { copy(urno = event.urno) }
+            is SurveyEvent.Urno->updateSurveyState { copy(urno = event.urno, repId = event.repId) }
             is SurveyEvent.Navigation->updateSurveyState { copy(navigation = event.navigation) }
+            is SurveyEvent.RegularVisit->updateSurveyState { copy(regularVisit = event.regularVisit) }
+            is SurveyEvent.OnShowAndHideErrorMessage -> updateSurveyState { copy(showAndHideErrorMessage = event.disMiss) }
             is SurveyEvent.OnDismiss->onDismiss()
             is SurveyEvent.OnConfirm->onConfirm()
             is SurveyEvent.OnclickButton -> onClick()
@@ -80,6 +82,7 @@ class SurveyViewModel @Inject constructor(
                 salesRepVisitSequence = survey.salesRepVisitSequence,
                 salesRepVisitProactive = survey.salesRepVisitProactive,
                 howSatisfy = survey.howSatisfy,
+                regularVisit = survey.regularVisit,
                 unResolveIssue = survey.unResolveIssue,
                 salesRating = survey.salesRating,
                 salesRepVisitResponsiveness = survey.salesRepVisitResponsiveness,
@@ -104,8 +107,9 @@ class SurveyViewModel @Inject constructor(
                 productAvailabilityExec = survey.productAvailabilityExec,
                 productAvailabilityExecClick = survey.productAvailabilityExecClick,
                 urno = survey.urno,
-                categoryId = sharePreference.getInt(key="sysCategory", defaultValue = 0).toString(),
-                userId = sharePreference.getInt(key="id", defaultValue = 0).toString(),
+                supervisorCategoryId = sharePreference.getInt(key="sysCategory", defaultValue = 0).toString(),
+                supervisorId = sharePreference.getInt(key="id", defaultValue = 0).toString(),
+                repId = survey.repId
             )
 
             //bottom sheet for error.
@@ -114,12 +118,12 @@ class SurveyViewModel @Inject constructor(
                     if(result.status == 200) {
                         updateSurveyState { copy(showDialog = true) }
                     }else{
-                        //error page
+                        updateSurveyState { copy(showAndHideErrorMessage = true, errorMessage = result.message) }
                     }
                     updateSurveyState { copy(loaders = false) }
                 }
                 .onFailure { error->
-                    //error page. bottom sheet
+                    updateSurveyState { copy(showAndHideErrorMessage = true, errorMessage = error.message.toString()) }
                 }
         }
     }

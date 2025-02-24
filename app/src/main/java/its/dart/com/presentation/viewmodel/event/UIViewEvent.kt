@@ -25,6 +25,8 @@ sealed class AddCustomerViewEvent{
     data object OnclickDismissButton: AddCustomerViewEvent()
     data object OnclickConfirmButton: AddCustomerViewEvent()
     data object OnErrorClear: AddCustomerViewEvent()
+    data object OnSuccessFulReset: AddCustomerViewEvent()
+    class OnShowAndHideErrorMessage(val disMiss: Boolean) : AddCustomerViewEvent()
 }
 
 data class OptionData(
@@ -52,6 +54,7 @@ sealed class SurveyEvent {
 
     // Second Two
     data class HowSatisfy(val howSatisfy: String) : SurveyEvent()
+    data class RegularVisit(val regularVisit: String) : SurveyEvent()
     data class UnResolveIssue(val unResolveIssue: String) : SurveyEvent()
     data class SalesRating(val salesRating: String) : SurveyEvent()
     data class SalesRepVisitResponsiveness(val salesRepVisitResponsiveness: String) : SurveyEvent()
@@ -81,13 +84,15 @@ sealed class SurveyEvent {
     data class ProductAvailabilityMenthol(val productAvailabilityMenthol: String) : SurveyEvent()
     data class ProductAvailabilityExec(val productAvailabilityExec: String) : SurveyEvent()
     data class ProductAvailabilityExecClick(val productAvailabilityExecClick: String) : SurveyEvent()
-    data class Urno(val urno: String) : SurveyEvent()
+    data class Urno(val urno: String, val repId: Int) : SurveyEvent()
     data class Navigation(val navigation: Boolean) : SurveyEvent()
+    class OnShowAndHideErrorMessage(val disMiss: Boolean) : SurveyEvent()
 
     //clicking view  data
     data object OnclickButton: SurveyEvent()
     data object OnDismiss: SurveyEvent()
     data object OnConfirm: SurveyEvent()
+
     data object OnOkClick: SurveyEvent()
 
 }

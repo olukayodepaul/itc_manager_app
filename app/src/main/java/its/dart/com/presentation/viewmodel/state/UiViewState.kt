@@ -31,14 +31,14 @@ data class AddCustomerViewState (
     val outletType: Int = 0,
     val address: String = "",
     val errorMessage: String = "",
-    val dialogLoader: Boolean  = false,
+    val showAndHideErrorMessage: Boolean = false,
+    val confirmDialog: Boolean  = false,
     val loader: Boolean = false,
     val success: Boolean = false,
     val repId: Int = 0
 )
 
 data class SurveyState(
-
     //one
     val salesRepVisit:String = "",
     val salesRepVisitDate:String = "",
@@ -47,6 +47,7 @@ data class SurveyState(
 
     //two
     val howSatisfy: String = "",
+    val regularVisit: String = "",
     val unResolveIssue: String = "",
     val salesRating: String = "",
     val salesRepVisitResponsiveness: String = "",
@@ -80,16 +81,27 @@ data class SurveyState(
     //Others
     val loaders: Boolean = false,
     val navigation:Boolean = false,
-    val messageNotification: String = "",
     val urno: String = "",
+    val repId: Int = 0,
+
+    val errorMessage: String = "",
+    val showAndHideErrorMessage: Boolean = false,
 
     //Interaction
     val btDismissState:Boolean = false,
     val showDialog: Boolean = false
-
-
-
 )
 
+data class OrderState(
+    //Others
+    val loaders: Boolean = false,
+    val navigation:Boolean = false,
+    val urno: Int = 0,
+    val repId: Int = 0,
+    val errorMessage: String = "",
+    val showAndHideErrorMessage: Boolean = false,
+    val confirmDialog: Boolean  = false,
+    val success: Boolean = false,
+)
 
 

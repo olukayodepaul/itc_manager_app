@@ -70,15 +70,17 @@ fun CustomerByRep(
     navController: NavHostController,
     repId: String,
     repName: String,
+    routId: String,
     viewModel: CustomerByRepViewModel = hiltViewModel()
 ) {
-
     val customersState by viewModel.customersState.collectAsState()
     val selectedId by viewModel.optionState.collectAsState()
+    val calendar = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
 
     LaunchedEffect(repId) {
-        val calendar = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1
-        viewModel.getCustomers(repId.toInt(), calendar)
+        if(calendar in 2..7) {
+            viewModel.getCustomers(repId.toInt(), calendar - 1)
+        }
     }
 
     LaunchedEffect(Unit) {
@@ -163,7 +165,7 @@ fun CustomerByRep(
                     fontSize = 22,
                     fontFamily = robotoFamily,
                     letterSpacing = -0.2,
-                    subTitleItem = "Customers List",
+                    subTitleItem = routId,
                     subTitle = true,
                 )
             }
@@ -194,22 +196,19 @@ fun CustomerByRep(
             Spacer(modifier = Modifier.height(30.dp))
             ChatFilterOptions(
                 selectedId = selectedId,
-                onSelectedChange = { viewModel.updateOptionState(it, repId.toInt()) }
+                currentDay = calendar,
+                onSelectedChange = { viewModel.updateOptionState(it, repId.toInt())}
             )
             Spacer(modifier = Modifier.height(10.dp))
             when (val state = customersState) {
-                is GenericState.Loading -> LoadingIndicator()
-                is GenericState.Success -> {
-                    if (state.data.isNullOrEmpty()) {
-                        Failure(
-                            errorMessage = "" ?: "Unknown error",
-                            onRetry = {},
-                        )
-                        return@Column
+                is GenericState.Loading -> {
+                    if(calendar in 2..7){
+                        LoadingIndicator()
                     }
+                }
+                is GenericState.Success -> {
                     CustomerList(state.data, navController)
                 }
-
                 is GenericState.Failure -> {
                     Failure(
                         errorMessage = state.exception.message ?: "Unknown error",
@@ -301,7 +300,7 @@ fun ContentList(
                     color = appColor,
                 )
                 Text(
-                    text = "${salesRep.outletAddress}",
+                    text = "${salesRep.outletAddress} ${salesRep.urno} ${salesRep.contactPhone}",
                     maxLines = 1,
                     fontSize = 14.sp,
                     color = Color.Gray,

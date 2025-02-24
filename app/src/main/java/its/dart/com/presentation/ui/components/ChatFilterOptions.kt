@@ -25,6 +25,7 @@ import its.dart.com.presentation.viewmodel.event.getPromoterSupervisor
 @Composable
 fun ChatFilterOptions(
     selectedId: Int,
+    currentDay: Int,
     onSelectedChange: (Int) -> Unit
 ) {
     val options = getPromoterSupervisor()
@@ -43,7 +44,7 @@ fun ChatFilterOptions(
                         if (eachItems.id == selectedId) Color.Blue.copy(alpha = 0.2f)
                         else Color.LightGray.copy(alpha = 0.2f)
                     )
-                    .clickable { onSelectedChange(eachItems.id) }
+                    .clickable { if (currentDay in 2..7) onSelectedChange(eachItems.id) }
                     .padding(horizontal = 12.dp, vertical = 8.dp)
             ) {
                 Column(

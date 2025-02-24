@@ -48,7 +48,9 @@ class AddCustomerViewModel @Inject constructor(
     private fun language(language: Int) = updateState { copy(language = language) }
     private fun outletType(outletType: Int) = updateState { copy(outletType = outletType) }
     private fun address(address: String) = updateState { copy(address = address) }
-    private fun onClickDismissButton() = updateState { copy(dialogLoader = false) }
+    private fun onClickDismissButton() = updateState { copy(confirmDialog = false) }
+
+
     private fun onClickConfirmButton() {
 
         val state = _addCustomerState.value
@@ -60,27 +62,38 @@ class AddCustomerViewModel @Inject constructor(
             state.outletType == 0 ||
             state.address.isBlank()
         ) {
-            updateState { copy(errorMessage = "All fields are required!") }
+            updateState {
+                copy(
+                    showAndHideErrorMessage = true,
+                    loader = false,
+                    errorMessage = "All fields are required!"
+                )
+            }
             return
         }
-        updateState { copy(errorMessage = "", dialogLoader = true) }
+        //show con
+        updateState {copy(showAndHideErrorMessage = false, loader = false, errorMessage = "" , confirmDialog = true) }
     }
 
     private fun onClickButton() {
         viewModelScope.launch {
 
-            updateState { copy(dialogLoader = false, loader = true ) }
+            updateState {copy(showAndHideErrorMessage = false, loader = true, errorMessage = "" , confirmDialog = false) }
 
             val systemCategory = sharePreference.getInt(key="sysCategory", defaultValue = 0)
             val userId = sharePreference.getInt(key="id", defaultValue = 0)
             val post = createCustomerRequest(userId, systemCategory.toString())
             val fetchCloudData = remoteRepo.postCustomer(post)
 
-            if(fetchCloudData.status==200 && (systemCategory == 5 ||  systemCategory == 6)){
-                handleSuccessfulResponse(systemCategory, fetchCloudData)
+            if(fetchCloudData.status==200){
+                if(systemCategory == 4){
+                    updateState { copy(success = true) }
+                }else{
+                    handleSuccessfulResponse(systemCategory, fetchCloudData)
+                }
             }
 
-            updateState {copy(dialogLoader = false, loader = false, errorMessage = fetchCloudData.message ) }
+            updateState {copy(showAndHideErrorMessage = false, loader = false, errorMessage = "" ) }
         }
     }
 
@@ -102,7 +115,13 @@ class AddCustomerViewModel @Inject constructor(
             is AddCustomerViewEvent.OnclickDismissButton -> onClickDismissButton()
             is AddCustomerViewEvent.OnclickConfirmButton -> onClickConfirmButton()
             is AddCustomerViewEvent.OnErrorClear->{ updateState { copy(errorMessage = "")}}
+            is AddCustomerViewEvent.OnSuccessFulReset->updateState { copy(success = false) }
+            is AddCustomerViewEvent.OnShowAndHideErrorMessage-> messageAndBottomSheet(event.disMiss)
         }
+    }
+
+    private fun messageAndBottomSheet(disMiss: Boolean){
+        updateState { copy(showAndHideErrorMessage = disMiss) }
     }
 
     fun fetchPromoterCustomers() {
@@ -113,6 +132,7 @@ class AddCustomerViewModel @Inject constructor(
         }
     }
 
+    //persist successful by each app user except for the supervisor
     private fun handleSuccessfulResponse(systemCategory: Int, fetchCloudData: AddCustomerResModel) = viewModelScope.launch {
         val state = _addCustomerState.value
         when (systemCategory) {

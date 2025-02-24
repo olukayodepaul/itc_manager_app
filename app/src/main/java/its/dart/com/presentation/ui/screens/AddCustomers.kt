@@ -1,7 +1,6 @@
 package its.dart.com.presentation.ui.screens
 
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,14 +18,20 @@ import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.LocationSearching
 import androidx.compose.material.icons.filled.MobileFriendly
 import androidx.compose.material.icons.filled.TypeSpecimen
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -34,6 +39,7 @@ import its.dart.com.presentation.ui.components.CButton
 import its.dart.com.presentation.ui.components.CustomTextField
 import its.dart.com.presentation.ui.components.DropdownLists
 import its.dart.com.presentation.ui.components.LoadingDialog
+import its.dart.com.presentation.ui.components.ModelsBottomSheets
 import its.dart.com.presentation.ui.components.OptionalDialog
 import its.dart.com.presentation.ui.components.SuccessDialog
 import its.dart.com.presentation.ui.components.ToolBar
@@ -41,6 +47,8 @@ import its.dart.com.presentation.ui.theme.robotoFamily
 import its.dart.com.presentation.viewmodel.AddCustomerViewModel
 import its.dart.com.presentation.viewmodel.event.AddCustomerViewEvent
 
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddCustomer(
     navController: NavHostController,
@@ -49,9 +57,12 @@ fun AddCustomer(
     viewModel: AddCustomerViewModel = hiltViewModel()
 ) {
 
-    LaunchedEffect(Unit){
+    val sheetState = rememberModalBottomSheetState()
+
+    LaunchedEffect(Unit) {
         viewModel.setRepId(repId.toIntOrNull() ?: 0)
     }
+
 
     Scaffold(
         topBar = {
@@ -72,16 +83,19 @@ fun AddCustomer(
         AddCustomerContent(
             navController = navController,
             modifier = Modifier.padding(innerPadding),
-            viewModel = viewModel
+            viewModel = viewModel,
+            sheetState = sheetState
         )
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddCustomerContent(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModel: AddCustomerViewModel = hiltViewModel()
+    viewModel: AddCustomerViewModel = hiltViewModel(),
+    sheetState: SheetState
 ) {
     val scrollState = rememberScrollState()
     val widgetUIState by viewModel.addCustomerState.collectAsStateWithLifecycle()
@@ -149,16 +163,11 @@ fun AddCustomerContent(
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            //correct the hide and show dialog error
+            //confirm and dismiss dialog
             HideAndShowOptionalDialog(
-                btDismissState = widgetUIState.dialogLoader,
+                btDismissState = widgetUIState.confirmDialog,
                 btDismissEvent = {viewModel.onEvent(AddCustomerViewEvent.OnclickDismissButton)},
                 btConfirmEvent = {viewModel.onEvent(AddCustomerViewEvent.OnclickButton)}
-            )
-
-            ShowErrorToast(
-                errorMessage= widgetUIState.errorMessage,
-                onClearErrorMessage = {viewModel.onEvent(AddCustomerViewEvent.OnErrorClear)}
             )
 
             LoadingDialog(
@@ -169,20 +178,17 @@ fun AddCustomerContent(
             SuccessDialog(
                 showDialog = widgetUIState.success,
                 onOkClick = {
+                    viewModel.onEvent(AddCustomerViewEvent.OnSuccessFulReset)
                     navController.popBackStack()
                 }
             )
-        }
-    }
-}
 
-@Composable
-fun ShowErrorToast(errorMessage: String?, onClearErrorMessage: () -> Unit) {
-    val context = LocalContext.current
-    LaunchedEffect(errorMessage) {
-        errorMessage?.let { message ->
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-            onClearErrorMessage()
+            ModelsBottomSheets(
+                showAndHideErrorMessage = widgetUIState.showAndHideErrorMessage,
+                onSheetStateChange = {result-> viewModel.onEvent(AddCustomerViewEvent.OnShowAndHideErrorMessage(result))},
+                sheetState = sheetState,
+                errorMessage = widgetUIState.errorMessage
+            )
         }
     }
 }
@@ -314,5 +320,3 @@ fun Address(
         leadingIcon = Icons.Default.LocationSearching
     )
 }
-
-

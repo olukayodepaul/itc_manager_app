@@ -86,6 +86,7 @@ data class SurveyStateDTO(
     @SerialName("sales_rep_visit_sequence") val salesRepVisitSequence: String = "",
     @SerialName("sales_rep_visit_proactive") val salesRepVisitProactive: String = "",
     @SerialName("how_satisfy") val howSatisfy: String = "",
+    @SerialName("regular_visit") val regularVisit: String = "",
     @SerialName("un_resolve_issue") val unResolveIssue: String = "",
     @SerialName("sales_rating") val salesRating: String = "",
     @SerialName("sales_rep_visit_responsiveness") val salesRepVisitResponsiveness: String = "",
@@ -110,10 +111,12 @@ data class SurveyStateDTO(
     @SerialName("product_availability_exec") val productAvailabilityExec: String = "",
     @SerialName("product_availability_exec_click") val productAvailabilityExecClick: String = "",
     val urno: String = "",
-    @SerialName("category_id") val categoryId: String = "",
-    @SerialName("user_id") val userId: String = ""
+    @SerialName("supervisor_category_id") val supervisorCategoryId: String = "",
+    @SerialName("supervisor_id") val supervisorId: String = "",
+    @SerialName("rep_id") val repId: Int = 0
 )
 
+//save Response
 @Serializable
 data class SurveyStateResDTO(
     @SerialName("status") val status: Int,
@@ -121,6 +124,24 @@ data class SurveyStateResDTO(
     val id: Int
 )
 
+@Serializable
+data class OrderDTO(
+    val urno: Int = 0,
+    @SerialName("supervisor_category_id") val supervisorCategoryId: String,
+    @SerialName("supervisor_id") val supervisorId: String,
+    @SerialName("rep_id") val repId: Int = 0,
+    val body : List<OrderBodyDTO>
+)
+
+@Serializable
+data class OrderBodyDTO(
+    val id: Int,
+    val item: String,
+    val code: String,
+    val qty: String,
+    val inv: String,
+    val uom: String
+)
 
 //{
 //  sales_rep_visit: 'Weekly',
