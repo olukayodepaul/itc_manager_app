@@ -22,7 +22,6 @@ val IconBgColor = Color(0xFF000000)
 val IconBgColors = Color(0xFFFf47100)
 var mainGray = Color(0xFF323447)
 
-
 val PurpleStart = Color(0xFFD24BE9)
 val PurpleEnd = Color(0xFFDF8FEC)
 val BlueStart = Color(0xFF2196F3)

@@ -16,9 +16,11 @@ import its.dart.com.data.repository.remote.AddCustomerImpl
 import its.dart.com.data.repository.remote.CustomerByRepImp
 import its.dart.com.data.repository.remote.LoginRemoteDataImpl
 import its.dart.com.data.repository.remote.OrderImpl
+import its.dart.com.data.repository.remote.PackPlacementImp
 import its.dart.com.data.repository.remote.SurveyImpl
 import its.dart.com.data.repository.remote.TaskRemoteImpl
 import its.dart.com.domain.preference.PreferenceInt
+import its.dart.com.domain.repository.PackPlacement
 import its.dart.com.domain.repository.local.OtherCustomer
 import its.dart.com.domain.repository.remote.TaskRemote
 import its.dart.com.domain.repository.local.TasksRepository
@@ -145,6 +147,14 @@ object AppModule {
         httpClient: HttpClient
     ) : OrderInt {
         return OrderImpl(httpClient)
+    }
+
+    @Provides
+    @Singleton
+    fun providePackPlacement(
+        httpClient: HttpClient
+    ): PackPlacement {
+        return PackPlacementImp(httpClient)
     }
 
 }

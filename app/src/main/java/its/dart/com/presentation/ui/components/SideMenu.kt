@@ -7,14 +7,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import android.net.Uri
-import android.util.Log
 import androidx.compose.material.icons.filled.DataArray
 import androidx.compose.material.icons.filled.DataObject
 import androidx.compose.material.icons.filled.DataSaverOn
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.AutoStories
-import androidx.compose.material.icons.outlined.Call
-import androidx.compose.material.icons.outlined.Chat
 import androidx.compose.material.icons.outlined.LocationSearching
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.DropdownMenu
@@ -85,24 +82,6 @@ fun DropdownMenuWithDetails(
                     navController.navigate("order/${details.repId}/${details.outletName}/${details.urno}")
                 }
             )
-
-//            DropdownMenuItem(
-//                text = { Text("Make a Call") },
-//                leadingIcon = { Icon(Icons.Outlined.Call, contentDescription = null) },
-//                onClick = {
-//                    expanded = false
-//                    navController.navigate("add_customer/${details.outletName}")
-//                }
-//            )
-//
-//            DropdownMenuItem(
-//                text = { Text("Chat") },
-//                leadingIcon = { Icon(Icons.Outlined.Chat, contentDescription = null) },
-//                onClick = {
-//                    expanded = false
-//                    navController.navigate("add_customer/${details.outletName}")
-//                }
-//            )
         }
     }
 }
@@ -162,7 +141,7 @@ fun DropdownMenuWithDetail(
                 leadingIcon = { Icon(Icons.Filled.DataSaverOn, contentDescription = null) },
                 onClick = {
                     expanded = false
-                    navController.navigate("PackPlacementPage/$userId/$userName/$encodedIdentifier")
+                    navController.navigate("PackPlacementPage/${details.id}/${details.outlet_name}/${details.urno}")
                 }
             )
             DropdownMenuItem(
@@ -170,7 +149,7 @@ fun DropdownMenuWithDetail(
                 leadingIcon = { Icon(Icons.Outlined.ShoppingCart, contentDescription = "") },
                 onClick = {
                     expanded = false
-                    navController.navigate("OrderScreen/$userId/$userName/$encodedIdentifier")
+                    navController.navigate("order/${details.id}/${details.outlet_name}/${details.urno}")
                 }
             )
         }

@@ -105,3 +105,31 @@ data class OrderState(
 )
 
 
+data class PackPlacementState(
+    //data stat
+    //ome
+    val skuHandler: String = "",
+
+    //two
+    val freePackPlacementTGTSuper: String = "",
+    val freePackPlacementTGTMLT: String = "",
+    val freePackPlacementExec: String = "",
+
+    //three
+    val qtyBought: String = "",
+    val bikeSales: String = "",
+    val salesManID: String = "",
+
+    //widget state
+    val errorMessage: String = "",
+    val showAndHideErrorMessage: Boolean = false,
+    val confirmDialog: Boolean  = false,
+    val success: Boolean = false,
+    val loaders: Boolean = false,
+    val urno: Int = 0,
+    val customerId: Int = 0
+)
+
+
+
+

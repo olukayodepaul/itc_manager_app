@@ -33,7 +33,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -56,10 +58,13 @@ import its.dart.com.presentation.viewmodel.AddCustomerViewModel
 @Composable
 fun Promo(
     navController: NavHostController,
-    viewModel: AddCustomerViewModel = hiltViewModel()
+    viewModel: AddCustomerViewModel = hiltViewModel(),
 ){
 
+    //use the share preference
     val widgetUIState by viewModel.customersState.collectAsStateWithLifecycle()
+    val userName by viewModel.userName.collectAsStateWithLifecycle()
+    val userId by viewModel.userId.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.fetchPromoterCustomers()
@@ -68,7 +73,7 @@ fun Promo(
     Scaffold(
         topBar = {
             ToolBar(
-                title = "Promoter",
+                title ="$userName",
                 click = {},
                 clickSearch = {},
                 clickMenu = {},
@@ -76,15 +81,13 @@ fun Promo(
                 subTitle = true,
                 fontFamily = robotoFamily,
                 letterSpacing = -0.2,
-                subTitleItem = "Welcome"
+                subTitleItem = "Promoters"
             )
         },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    val userName = "Musa Muhammed"
-                    val userId = "userid"
-                    navController.navigate("add_customer/$userName/$userId")
+                    navController.navigate("add_customer/$userId/${userName}")
                 },
                 containerColor = mainGray,
                 shape = CircleShape,
@@ -195,7 +198,7 @@ fun CustomerContentList(
             verticalAlignment = Alignment.CenterVertically
         ) {
             CircleAvatar(
-                initialName = salesRep.outlet_name,
+                initialName = salesRep.outlet_name.uppercase(),
                 id = salesRep.id
             )
             Column(
@@ -204,7 +207,7 @@ fun CustomerContentList(
                     .padding(start = 10.dp)
             ) {
                 Text(
-                    text = salesRep.outlet_name,
+                    text = salesRep.outlet_name.capitalize(),
                     fontWeight = FontWeight(400),
                     maxLines = 1,
                     fontSize = 18.sp,

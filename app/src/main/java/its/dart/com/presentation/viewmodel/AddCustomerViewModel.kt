@@ -34,10 +34,16 @@ class AddCustomerViewModel @Inject constructor(
     private var _repId = MutableStateFlow(0)
     val repId: StateFlow<Int> = _repId.asStateFlow()
 
+    private val _userName = MutableStateFlow("")
+    val userName: StateFlow<String> = _userName.asStateFlow()
+
+    private val _userId = MutableStateFlow(0)
+    val userId: StateFlow<Int> = _userId.asStateFlow()
+
+
     fun setRepId(repId: Int) {
         _repId.value = repId
     }
-
     private fun updateState(update: AddCustomerViewState.() -> AddCustomerViewState) {
         _addCustomerState.value = _addCustomerState.value.update()
     }
@@ -66,7 +72,7 @@ class AddCustomerViewModel @Inject constructor(
                 copy(
                     showAndHideErrorMessage = true,
                     loader = false,
-                    errorMessage = "All fields are required!"
+                    errorMessage = "All fields are required! You must provide all inputs before adding a new customer or outlet."
                 )
             }
             return
@@ -116,13 +122,11 @@ class AddCustomerViewModel @Inject constructor(
             is AddCustomerViewEvent.OnclickConfirmButton -> onClickConfirmButton()
             is AddCustomerViewEvent.OnErrorClear->{ updateState { copy(errorMessage = "")}}
             is AddCustomerViewEvent.OnSuccessFulReset->updateState { copy(success = false) }
-            is AddCustomerViewEvent.OnShowAndHideErrorMessage-> messageAndBottomSheet(event.disMiss)
+            is AddCustomerViewEvent.OnShowAndHideErrorMessage-> updateState { copy(showAndHideErrorMessage = event.disMiss) }
         }
     }
 
-    private fun messageAndBottomSheet(disMiss: Boolean){
-        updateState { copy(showAndHideErrorMessage = disMiss) }
-    }
+
 
     fun fetchPromoterCustomers() {
         viewModelScope.launch {
@@ -184,6 +188,15 @@ class AddCustomerViewModel @Inject constructor(
             .userType(userType)
             .repId(repId)
             .build()
+    }
+
+    init {
+        viewModelScope.launch {
+            _userName.value = sharePreference.getString("username", "")
+        }
+        viewModelScope.launch {
+            _userId.value = sharePreference.getInt(key="id", defaultValue = 0)
+        }
     }
 
 }

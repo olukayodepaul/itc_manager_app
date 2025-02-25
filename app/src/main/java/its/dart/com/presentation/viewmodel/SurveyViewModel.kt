@@ -142,4 +142,5 @@ class SurveyViewModel @Inject constructor(
     private fun updateSurveyState(update: SurveyState.() -> SurveyState) {
         _surveyState.value = _surveyState.value.update()
     }
+
 }

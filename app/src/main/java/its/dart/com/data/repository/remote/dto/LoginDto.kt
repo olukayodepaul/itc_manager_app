@@ -143,36 +143,19 @@ data class OrderBodyDTO(
     val uom: String
 )
 
-//{
-//  sales_rep_visit: 'Weekly',
-//  sales_rep_visit_date: '2022',
-//  sales_rep_visit_sequence: 'Yes',
-//  sales_rep_visit_proactive: 'No',
-//  how_satisfy: 'Very Dissatisfied',
-//  un_resolve_issue: 'Yes',
-//  sales_rating: 'Poor',
-//  sales_rep_visit_responsiveness: 'Neutral',
-//  sales_performance_product_purchase: 'EXECUTIVE',
-//  target_super_price: '0',
-//  target_super_uom: 'Pack',
-//  target_menthol_price: '4',
-//  target_menthol_uom: 'Pack',
-//  exec_price: '4',
-//  exec_uom: 'Roll',
-//  exec_click_price: '3',
-//  exec_click_uom: 'Roll',
-//  target_super_purchase: 'TARGET SUPER RV',
-//  target_menthol_purchase: 'TARGET MENTHOL RV',
-//  executive_purchase: 'EXECUTIVE',
-//  executive_click_purchase: 'EXECUTIVE CLICK',
-//  what_can_we_to_improve_service: '0030303',
-//  what_wud_you_recommend: 'No',
-//  comment: '737ee',
-//  product_availability_super: 'TARGET SUPER RV',
-//  product_availability_menthol: 'TARGET MENTHOL RV',
-//  product_availability_exec: 'EXECUTIVE',
-//  product_availability_exec_click: 'EXECUTIVE CLICK',
-//  urno: '2999',
-//add the userId
-//  user_id: '6' this is system
-//}
+@Serializable
+data class PackPlacementDTO(
+    val urno: Int = 0,
+    @SerialName("supervisor_category_id") val supervisorCategoryId: Int,
+    @SerialName("supervisor_id") val supervisorId: Int,
+    @SerialName("customer_id") val customerId: Int = 0,
+    val skuHandler: String = "",
+    @SerialName("free_pack_placement_tgt_super")  val freePackPlacementTGTSuper : String= "",
+    @SerialName("free_pack_placement_tgt_mlt")  val freePackPlacementTGTMLT : String= "",
+    @SerialName("free_pack_placement_exec")  val freePackPlacementExec : String= "",
+    @SerialName("qty_bought")  val qtyBought : String= "",
+    @SerialName("bike_sales")  val bikeSales : String= "",
+    @SerialName("sales_man_id")  val salesManID : String= "",
+)
+
+

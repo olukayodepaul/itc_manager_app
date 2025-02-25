@@ -97,4 +97,23 @@ sealed class SurveyEvent {
 
 }
 
+sealed class PackPlacementEvent {
+    data class SkuHandler(val skuHandler: String) : PackPlacementEvent()
+    data class FreePackPlacementTGTSuper(val freePackPlacementTGTSuper: String): PackPlacementEvent()
+    data class FreePackPlacementTGTMLT(val freePackPlacementTGTMLT: String): PackPlacementEvent()
+    data class FreePackPlacementExec(val freePackPlacementExec: String): PackPlacementEvent()
+    data class QtyBought(val qtyBought: String) : PackPlacementEvent()
+    data class BikeSales(val bikeSales: String): PackPlacementEvent()
+    data class SalesManID(val salesManID: String): PackPlacementEvent()
+    class OnShowAndHideErrorMessage(val disMiss: Boolean) : PackPlacementEvent()
+    class OnSetCustomerIdAndURNO(val urno: Int, val customerId: Int) : PackPlacementEvent()
+    data object OnConfirmEvent: PackPlacementEvent()
+    //button event
+    data object ShowOptionalDialog: PackPlacementEvent()
+    data object HideOptionalDialog: PackPlacementEvent()
+    data object ShowSuccessfulDialog: PackPlacementEvent()
+
+
+}
+
 
