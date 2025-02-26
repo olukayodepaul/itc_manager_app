@@ -165,3 +165,28 @@ sealed class DailyRetailActivityEvent {
 
 }
 
+
+sealed class DailyActivityForm{
+    data class OnConsumerName(val consumerName: String) : DailyActivityForm()
+    data class OnPhoneNumber(val phoneNumber: String) : DailyActivityForm()
+    data class OnGender(val gender: String) : DailyActivityForm()
+    data class OnAge(val age: String) : DailyActivityForm()
+    data class OnAnySales(val anySales: String) : DailyActivityForm()
+    data class OnPersonalBrands(val personalBrands: String) : DailyActivityForm()
+    data class OnSampleSuper(val sampleSuper: String): DailyActivityForm()
+    data class OnSampleMenthol(val sampleMenthol: String): DailyActivityForm()
+    data class OnSampleExec(val sampleExec: String): DailyActivityForm()
+    data class OnSampleExecClick(val sampleExecClick: String) : DailyActivityForm()
+    data class OnQtySoldSuperUOM(val qtySoldSuperUOM: String) : DailyActivityForm()
+    data class OnQtySoldSuper(val qtySoldSuper: String) : DailyActivityForm()
+    data class OnQtySoldMentholUOM(val qtySoldMentholUOM: String) : DailyActivityForm()
+    data class OnQtySoldMenthol(val qtySoldMenthol: String) : DailyActivityForm()
+    data class OnQtySoldExecUOM(val qtySoldExecUOM: String) : DailyActivityForm()
+    data class OnQtySoldExec(val qtySoldExec: String) : DailyActivityForm()
+    data class OnQtySoldExecClickUOM(val qtySoldExecClickUOM: String) : DailyActivityForm()
+    data class OnQtySoldExecClick(val qtySoldExecClick: String) : DailyActivityForm()
+    data class OnPMBLTH(val PMBLTH: String) : DailyActivityForm()
+    data class OnPMBPEN(val PMBPEN: String) : DailyActivityForm()
+    data class OnPMBWB(val PMBWB: String) : DailyActivityForm()
+    data class OnComment(val comment: String) : DailyActivityForm()
+}

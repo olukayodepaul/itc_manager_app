@@ -21,7 +21,7 @@ fun ProductCheckbox(
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.Top
     ) {
         Checkbox(
             checked = isChecked,

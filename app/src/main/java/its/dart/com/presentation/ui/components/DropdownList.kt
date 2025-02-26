@@ -32,6 +32,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.TextStyle
@@ -61,12 +62,10 @@ fun DropdownLists(
 
     Text(
         text = label,
+        style = MaterialTheme.typography.bodyMedium,
         modifier = Modifier.padding(bottom = 4.dp),
-        style = TextStyle(
-            fontSize = fontSize,
-            fontFamily = fontFamily,
-            fontWeight = fontWeight
-        )
+        fontSize = 20.sp,
+        fontWeight = FontWeight.W900
     )
 
     Box(modifier = Modifier.fillMaxWidth()) {

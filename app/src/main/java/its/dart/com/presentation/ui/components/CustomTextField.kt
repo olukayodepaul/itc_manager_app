@@ -10,6 +10,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -43,12 +44,10 @@ fun CustomTextField(
     Column(modifier = modifier) {
         Text(
             text = label,
+            style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.padding(bottom = 4.dp),
-            style = TextStyle(
-                fontSize = fontSize,
-                fontFamily = fontFamily,
-                fontWeight = fontWeight
-            )
+            fontSize = 20.sp,
+            fontWeight = FontWeight.W900
         )
         OutlinedTextField(
             value = value,

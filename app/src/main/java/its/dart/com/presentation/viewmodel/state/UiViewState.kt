@@ -179,6 +179,46 @@ data class DailyRetailActivityState(
     val loaders: Boolean = false,
     val urno: Int = 0,
     val customerId: Int = 0
+)
+
+data class DailyConsumerState(
+    val consumerName: String = "",
+    val phoneNumber: String = "",
+    val gender: String = "",
+    val age: String = "",
+
+    //sample sku should be list
+    val sampleSuper: String = "",
+    val sampleMenthol: String = "",
+    var sampleExec:String = "",
+    var sampleExecClick:String = "",
+
+    //any sales
+    val anySales: String = "",
+
+    //personal brands
+    val personalBrands: String = "",
+
+    //quantity sold per sku
+    val qtySoldSuperUOM: String = "",
+    val qtySoldSuper: String = "",
+
+    val qtySoldMentholUOM: String = "",
+    val qtySoldMenthol: String = "",
+
+    val qtySoldExecUOM: String = "",
+    val qtySoldExec: String = "",
+
+    val qtySoldExecClickUOM: String = "",
+    val qtySoldExecClick: String = "",
+
+    //pmb
+    val PMBLTH: String = "",
+    val PMBPEN: String = "",
+    var PMBWB:String = "",
+
+    var comment:String =""
+
 
 )
 
