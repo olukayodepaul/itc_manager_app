@@ -1,26 +1,23 @@
 package its.dart.com.data.repository.remote
 
-import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import its.dart.com.data.repository.remote.dto.OrderDTO
+import its.dart.com.data.repository.remote.dto.DailyActivityViewDTO
 import its.dart.com.data.repository.remote.dto.SurveyStateResDTO
-import its.dart.com.domain.repository.remote.OrderInt
+import its.dart.com.domain.repository.remote.DailyActivityInt
 import javax.inject.Inject
 
-
-class OrderImpl @Inject constructor(private val httpClient: HttpClient) : OrderInt {
-    override suspend fun taskRequest(body: OrderDTO): Result<SurveyStateResDTO> {
+class DailyActivityImpl @Inject constructor(private val httpClient: HttpClient) : DailyActivityInt {
+    override suspend fun taskPackPlacement(body: DailyActivityViewDTO): Result<SurveyStateResDTO> {
         return runCatching {
-            val response = httpClient.post("/v3/orders") {
+            val response = httpClient.post("/v3/daily/activity") {
                 contentType(ContentType.Application.Json)
                 setBody(body)
             }
-            Log.d("epokai", "${response.body<SurveyStateResDTO>()}")
             response.body<SurveyStateResDTO>()
         }
     }

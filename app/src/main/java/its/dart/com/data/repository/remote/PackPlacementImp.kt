@@ -8,7 +8,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import its.dart.com.data.repository.remote.dto.PackPlacementDTO
 import its.dart.com.data.repository.remote.dto.SurveyStateResDTO
-import its.dart.com.domain.repository.PackPlacement
+import its.dart.com.domain.repository.remote.PackPlacement
 import javax.inject.Inject
 
 class PackPlacementImp @Inject constructor(private val httpClient: HttpClient) : PackPlacement {

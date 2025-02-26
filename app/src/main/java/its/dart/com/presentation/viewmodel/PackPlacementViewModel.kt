@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import its.dart.com.data.repository.remote.dto.PackPlacementDTO
 import its.dart.com.domain.preference.PreferenceInt
-import its.dart.com.domain.repository.PackPlacement
+import its.dart.com.domain.repository.remote.PackPlacement
 import its.dart.com.presentation.viewmodel.event.PackPlacementEvent
 import its.dart.com.presentation.viewmodel.state.PackPlacementState
 import kotlinx.coroutines.Dispatchers
@@ -34,41 +34,34 @@ class PackPlacementViewModel @Inject constructor(
         _uiState.value = _uiState.value.update()
     }
 
-    private fun eventHandler(event: PackPlacementEvent) {
-        updatePackPlacementState {
-            when (event) {
-                is PackPlacementEvent.SkuHandler -> copy(skuHandler = event.skuHandler)
-                is PackPlacementEvent.FreePackPlacementTGTSuper -> copy(freePackPlacementTGTSuper = event.freePackPlacementTGTSuper)
-                is PackPlacementEvent.FreePackPlacementTGTMLT -> copy(freePackPlacementTGTMLT = event.freePackPlacementTGTMLT)
-                is PackPlacementEvent.FreePackPlacementExec -> copy(freePackPlacementExec = event.freePackPlacementExec)
-                is PackPlacementEvent.QtyBought -> copy(qtyBought = event.qtyBought)
-                is PackPlacementEvent.BikeSales -> copy(bikeSales = event.bikeSales)
-                is PackPlacementEvent.SalesManID -> copy(salesManID = event.salesManID)
-                is PackPlacementEvent.HideOptionalDialog -> copy(confirmDialog = false)
-                is PackPlacementEvent.ShowSuccessfulDialog -> copy(success = true)
-                is PackPlacementEvent.OnSetCustomerIdAndURNO -> copy(
-                    urno = event.urno,
-                    customerId = event.customerId
-                )
 
-                is PackPlacementEvent.OnShowAndHideErrorMessage -> copy(showAndHideErrorMessage = event.disMiss)
+    private fun eventHandler(event: PackPlacementEvent) {
+            when (event) {
+                is PackPlacementEvent.SkuHandler -> updatePackPlacementState{copy(skuHandler = event.skuHandler)}
+                is PackPlacementEvent.FreePackPlacementTGTSuper -> updatePackPlacementState{copy(freePackPlacementTGTSuper = event.freePackPlacementTGTSuper)}
+                is PackPlacementEvent.FreePackPlacementTGTMLT -> updatePackPlacementState{copy(freePackPlacementTGTMLT = event.freePackPlacementTGTMLT)}
+                is PackPlacementEvent.FreePackPlacementExec -> updatePackPlacementState{copy(freePackPlacementExec = event.freePackPlacementExec)}
+                is PackPlacementEvent.QtyBought -> updatePackPlacementState{copy(qtyBought = event.qtyBought)}
+                is PackPlacementEvent.BikeSales -> updatePackPlacementState{copy(bikeSales = event.bikeSales)}
+                is PackPlacementEvent.SalesManID -> updatePackPlacementState{copy(salesManID = event.salesManID)}
+                is PackPlacementEvent.HideOptionalDialog -> updatePackPlacementState{copy(confirmDialog = false)}
+                is PackPlacementEvent.ShowSuccessfulDialog -> updatePackPlacementState{copy(success = true)}
+                is PackPlacementEvent.OnSetCustomerIdAndURNO -> updatePackPlacementState{copy(urno = event.urno, customerId = event.customerId)}
+                is PackPlacementEvent.OnShowAndHideErrorMessage -> updatePackPlacementState{copy(showAndHideErrorMessage = event.disMiss)}
                 is PackPlacementEvent.ShowOptionalDialog -> {
                     if (!isValidState(_uiState.value)) {
-                        copy(
+                        updatePackPlacementState{copy(
                             showAndHideErrorMessage = true,
                             errorMessage = "All fields are required! You must provide all inputs before adding a pack placement."
-                        )
+                        )}
                     } else {
-                        copy(confirmDialog = true)
+                        updatePackPlacementState{copy(confirmDialog = true)}
                     }
                 }
-
                 is PackPlacementEvent.OnConfirmEvent -> {
                     onConfirmEvent()
-                    this
                 }
             }
-        }
     }
 
     private fun onConfirmEvent() = viewModelScope.launch {
@@ -123,7 +116,6 @@ class PackPlacementViewModel @Inject constructor(
         return withContext(Dispatchers.IO) {
             val supervisorCategoryId = sharePreference.getInt("sysCategory", 0)
             val supervisorId = sharePreference.getInt("id", 0)
-
             PackPlacementDTO(
                 urno = state.urno,
                 supervisorCategoryId = supervisorCategoryId,

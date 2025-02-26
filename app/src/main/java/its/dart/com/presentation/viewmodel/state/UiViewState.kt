@@ -130,6 +130,55 @@ data class PackPlacementState(
     val customerId: Int = 0
 )
 
+data class DailyRetailActivityState(
+    //one
+    val tTGTSuperStockOut: String = "",
+    val tTGTMLTStockOut: String = "",
+    val execKSStockOut: String = "",
+    val execCKStockOut: String = "",
+
+    //two
+    val tTGTSuperSalesMadeUOM: String = "",
+    val tTGTSuperSalesMade: String = "",
+
+    val tTGTMLTSalesMadeUOM: String = "",
+    val tTGTMLTSalesMade: String = "",
+
+    val execKSSalesMadeUOM: String = "",
+    val execKSSalesMade: String = "",
+
+    val execCKSalesMadeUOM: String = "",
+    val execCKSalesMade: String = "",
+
+    //three
+    val itcSalesMan: String = "",
+
+    //four
+    val tTGTSuperRewardUOM: String = "",
+    val tTGTSuperReward: String = "",
+
+    val tTGTMLTRewardUOM: String = "",
+    val tTGTMLTReward: String = "",
+
+    val execKSRewardUOM: String = "",
+    val execKSReward: String = "",
+
+    val execCKRewardUOM: String = "",
+    val execCKReward: String = "",
+
+    //five
+    val execKSSampling: String = "",
+    val execCKSampling: String = "",
 
 
+    //widget state
+    val errorMessage: String = "",
+    val showAndHideErrorMessage: Boolean = false,
+    val confirmDialog: Boolean  = false,
+    val success: Boolean = false,
+    val loaders: Boolean = false,
+    val urno: Int = 0,
+    val customerId: Int = 0
+
+)
 

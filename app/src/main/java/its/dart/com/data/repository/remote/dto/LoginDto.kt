@@ -159,3 +159,31 @@ data class PackPlacementDTO(
 )
 
 
+@Serializable
+data class DailyActivityViewDTO(
+    @SerialName("tgt_super_stock_out") val tTGTSuperStockOut: String,
+    @SerialName("tgt_mlt_stock_out") val tTGTMLTStockOut: String,
+    @SerialName("exec_ks_stock_out") val execKSStockOut: String,
+    @SerialName("exec_ck_stock_out") val execCKStockOut: String,
+    @SerialName("tgt_super_sales_made_uom") val tTGTSuperSalesMadeUOM: String,
+    @SerialName("tgt_super_sales_made") val tTGTSuperSalesMade: String,
+    @SerialName("tgt_mlt_sales_made_uom") val tTGTMLTSalesMadeUOM: String,
+    @SerialName("tgt_mlt_sales_made") val tTGTMLTSalesMade: String,
+    @SerialName("exec_ks_sales_made_uom") val execKSSalesMadeUOM: String,
+    @SerialName("exec_ks_sales_made") val execKSSalesMade: String,
+    @SerialName("exec_ck_sales_made_uom") val execCKSalesMadeUOM: String,
+    @SerialName("exec_ck_sales_made") val execCKSalesMade: String,
+    @SerialName("itc_sales_man") val itcSalesMan: String,
+    @SerialName("tgt_super_reward_uom") val tTGTSuperRewardUOM: String,
+    @SerialName("tgt_super_reward") val tTGTSuperReward: String,
+    @SerialName("tgt_mlt_reward_uom") val tTGTMLTRewardUOM: String,
+    @SerialName("tgt_mlt_reward") val tTGTMLTReward: String,
+    @SerialName("exec_ks_reward_uom") val execKSRewardUOM: String,
+    @SerialName("exec_ks_reward") val execKSReward: String,
+    @SerialName("exec_ck_reward_uom") val execCKRewardUOM: String,
+    @SerialName("exec_ck_reward") val execCKReward: String,
+    @SerialName("exec_ks_sampling") val execKSSampling: String,
+    @SerialName("exec_ck_sampling") val execCKSampling: String
+)
+
+

@@ -1,38 +1,44 @@
 package its.dart.com.presentation.ui.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AdfScanner
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import its.dart.com.presentation.ui.components.CButton
-import its.dart.com.presentation.ui.components.CustomTextFields
-import its.dart.com.presentation.ui.components.DropdownLists
-import its.dart.com.presentation.ui.components.DropdownListsNoneIcon
-import its.dart.com.presentation.ui.components.ProductCheckbox
+import its.dart.com.presentation.ui.components.LoadingDialog
+import its.dart.com.presentation.ui.components.ModelsBottomSheets
 import its.dart.com.presentation.ui.components.SuccessDialog
 import its.dart.com.presentation.ui.components.ToolBar
 import its.dart.com.presentation.ui.theme.robotoFamily
+import its.dart.com.presentation.viewmodel.DailyActivityViewModel
+import its.dart.com.presentation.viewmodel.event.DailyRetailActivityEvent
+import its.dart.com.presentation.viewmodel.event.PackPlacementEvent
 
 @Composable
-fun DailyActivityForm(
+fun DailyRetailActivity(
     navController: NavHostController,
     userId: String,
     userName: String,
-    identifier: String,
+    urno: String,
+    viewModel: DailyActivityViewModel = hiltViewModel()
 ) {
+
     Scaffold(
         topBar = {
             ToolBar(
@@ -49,199 +55,299 @@ fun DailyActivityForm(
             )
         }
     ) { innerPadding ->
-        StockSalesForm(
-            navController = navController,
-            modifier = Modifier.padding(innerPadding)
+
+        DailySurvayActivity(
+            modifier = Modifier.padding(innerPadding),
+            navController,
+            viewModel
         )
     }
+
 }
 
 @Composable
-fun StockSalesForm(
+fun DailySurvayActivity(
+    modifier: Modifier = Modifier,
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    viewModel: DailyActivityViewModel = hiltViewModel()
 ) {
     val scrollState = rememberScrollState()
-    var showDialog by remember { mutableStateOf(false) }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .background(Color.White)
-                .padding(16.dp)
-                .verticalScroll(scrollState)
-        ) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .padding(16.dp)
+            .verticalScroll(scrollState)
+    ) {
 
-            Spacer(modifier = Modifier.height(20.dp))
+        OutOfStock(
+            checkedSuper = uiState.tTGTSuperStockOut,
+            onCheckedChangeSuper = { viewModel.onEvent(DailyRetailActivityEvent.OnTGTSuperStockOut(it))},
+            checkedMTL = uiState.tTGTMLTStockOut,
+            onCheckedChangeMTL = { viewModel.onEvent(DailyRetailActivityEvent.OnTGTMLTStockOut(it)) },
+            checkedEXEC = uiState.execKSStockOut,
+            onCheckedChangeEXEC = { viewModel.onEvent(DailyRetailActivityEvent.OnExecKSStockOut(it)) },
+            checkedEXECCK = uiState.execCKStockOut,
+            onCheckedChangeEXECCK = { viewModel.onEvent(DailyRetailActivityEvent.OnExecCKStockOut(it)) }
+        )
 
-            Row(
-                modifier = Modifier.padding(bottom = 8.dp, start = 0.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                NumberedCircle(number = 1)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "Stock Out",
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.W500
-                )
-            }
+        SalesMade(
+            item = "SALES MADE",
+            uomValueSuper = uiState.tTGTSuperSalesMadeUOM,
+            onUOMPriceChangeSuper = {viewModel.onEvent(DailyRetailActivityEvent.OnTGTSuperSalesMadeUOM(it))},
+            quantityValueSuper = uiState.tTGTSuperSalesMade,
+            onQuantityChangeSuper =  {viewModel.onEvent(DailyRetailActivityEvent.OnTGTSuperSalesMade(it))},
 
-            TargetSup()
-            Spacer(modifier = Modifier.height(10.dp))
-            TargetMtl()
-            Spacer(modifier = Modifier.height(10.dp))
-            TargetEXCKS()
-            Spacer(modifier = Modifier.height(10.dp))
-            TargetEXCCK()
-            Spacer(modifier = Modifier.height(20.dp))
+            uomValueMLT = uiState.tTGTMLTSalesMadeUOM,
+            onUOMPriceChangeMLT = {viewModel.onEvent(DailyRetailActivityEvent.OnTGTMLTSalesMadeUOM(it))},
+            quantityValueMLT = uiState.tTGTMLTSalesMade,
+            onQuantityChangeMLT = {viewModel.onEvent(DailyRetailActivityEvent.OnTGTMLTSalesMade(it))},
 
-            Row(
-                modifier = Modifier.padding(bottom = 8.dp, start = 0.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                NumberedCircle(number = 2)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "Reward",
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.W500
-                )
-            }
+            uomValueEXEC = uiState.execKSSalesMadeUOM,
+            onUOMPriceChangeEXEC = {viewModel.onEvent(DailyRetailActivityEvent.OnExecKSSalesMadeUOM(it))},
+            quantityValueEXEC = uiState.execKSSalesMade,
+            onQuantityChangeEXEC = {viewModel.onEvent(DailyRetailActivityEvent.OnExecKSSalesMade(it))},
 
-            TargetSup()
-            Spacer(modifier = Modifier.height(10.dp))
-            TargetMtl()
-            Spacer(modifier = Modifier.height(10.dp))
-            TargetEXCKS()
-            Spacer(modifier = Modifier.height(10.dp))
-            TargetEXCCK()
+            uomValueEXECCK = uiState.execCKSalesMadeUOM,
+            onUOMPriceChangeEXECCK = {viewModel.onEvent(DailyRetailActivityEvent.OnExecCKSalesMadeUOM(it))},
+            quantityValueEXECCK = uiState.execCKSalesMade,
+            onQuantityChangeEXECCK = {viewModel.onEvent(DailyRetailActivityEvent.OnExecCKSalesMade(it))},
+        )
 
-            Spacer(modifier = Modifier.height(20.dp))
-            Row(
-                modifier = Modifier.padding(bottom = 8.dp, start = 0.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                NumberedCircle(number = 3)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "Sampling",
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.W500
-                )
-            }
+        SalesMade(
+            item = "REWARD",
+            uomValueSuper = uiState.tTGTSuperRewardUOM,
+            onUOMPriceChangeSuper = {viewModel.onEvent(DailyRetailActivityEvent.OnTGTSuperRewardUOM(it))},
+            quantityValueSuper = uiState.tTGTSuperReward,
+            onQuantityChangeSuper =  {viewModel.onEvent(DailyRetailActivityEvent.OnTGTSuperReward(it))},
 
-            SamplingEXCKS()
-            Spacer(modifier = Modifier.height(10.dp))
-            Spacer(modifier = Modifier.height(10.dp))
-            SamplingXCCK()
-            Spacer(modifier = Modifier.height(20.dp))
+            uomValueMLT = uiState.tTGTMLTRewardUOM,
+            onUOMPriceChangeMLT = {viewModel.onEvent(DailyRetailActivityEvent.OnTGTMLTRewardUOM(it))},
+            quantityValueMLT = uiState.tTGTMLTReward,
+            onQuantityChangeMLT = {viewModel.onEvent(DailyRetailActivityEvent.OnTGTMLTReward(it))},
 
-            Row(
-                modifier = Modifier.padding(bottom = 8.dp, start = 0.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                NumberedCircle(number = 4)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "Others",
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.W500
-                )
-            }
+            uomValueEXEC = uiState.execKSRewardUOM,
+            onUOMPriceChangeEXEC = {viewModel.onEvent(DailyRetailActivityEvent.OnExecKSRewardUOM(it))},
+            quantityValueEXEC = uiState.execKSReward,
+            onQuantityChangeEXEC = {viewModel.onEvent(DailyRetailActivityEvent.OnExecKSReward(it))},
 
-            ITCSalesMen()
-            Spacer(modifier = Modifier.height(20.dp))
+            uomValueEXECCK = uiState.execCKRewardUOM,
+            onUOMPriceChangeEXECCK = {viewModel.onEvent(DailyRetailActivityEvent.OnExecCKRewardUOM(it))},
+            quantityValueEXECCK = uiState.execCKReward,
+            onQuantityChangeEXECCK = {viewModel.onEvent(DailyRetailActivityEvent.OnExecCKReward(it))},
+        )
 
-            CButton(
-                onClick = { showDialog = true },
-                buttonState = true,
-                text = "Submit"
-            )
-        }
+        ItcSalesMan(
+            uomValue = uiState.itcSalesMan,
+            onOptionSelected = {viewModel.onEvent(DailyRetailActivityEvent.OnITCSalesMan(it))}
+        )
+
+        SampleExecKS(
+            item = "SAMPLING  (EXC KS)",
+            uomValue = uiState.execKSSampling,
+            onOptionSelected = {viewModel.onEvent(DailyRetailActivityEvent.OnExecKSSampling(it))}
+        )
+
+        SampleExecKS(
+            item = "SAMPLING  (EXC CK)",
+            uomValue = uiState.execCKSampling,
+            onOptionSelected = {viewModel.onEvent(DailyRetailActivityEvent.OnExecCKSampling(it))}
+        )
+
+        CButton(
+            onClick = { viewModel.onEvent(DailyRetailActivityEvent.OnConfirmEvent) },
+            buttonState = true,
+            text = "Post"
+        )
+
+        HideAndShowOptionalDialog(
+            btDismissState = uiState.confirmDialog,
+            btDismissEvent = {viewModel.onEvent(DailyRetailActivityEvent.HideOptionalDialog)},
+            btConfirmEvent = {viewModel.onEvent(DailyRetailActivityEvent.SyncDataToServer)}
+        )
+
+        LoadingDialog(
+            showDialog = uiState.loaders,
+            onDismiss = {}
+        )
 
         SuccessDialog(
-            showDialog = showDialog,
+            showDialog = uiState.success,
             onOkClick = {
-                showDialog = false
+                viewModel.onEvent(DailyRetailActivityEvent.HideSuccessfulDialog)
                 navController.popBackStack()
             }
         )
+//
+//        ModelsBottomSheets(
+//            showAndHideErrorMessage = uiState.showAndHideErrorMessage,
+//            onSheetStateChange = {result-> viewModel.event(PackPlacementEvent.OnShowAndHideErrorMessage(result))},
+//            sheetState = sheetState,
+//            errorMessage = uiState.errorMessage
+//        )
+
     }
 }
 
 @Composable
-fun AddressDetails() {
-    var streetName by remember { mutableStateOf("") }
-    var localGov by remember { mutableStateOf("") }
-    var landMark by remember { mutableStateOf("") }
-    CustomTextFields(label = "Customer Name/PosID", value = streetName, onValueChange = { streetName = it })
-    CustomTextFields(label = "Phone", value = localGov, onValueChange = { localGov = it })
-    CustomTextFields(label = "Address", value = landMark, onValueChange = { landMark = it })
-}
+fun OutOfStock(
+    checkedSuper: String,
+    onCheckedChangeSuper: (String) -> Unit,
+    checkedMTL: String,
+    onCheckedChangeMTL: (String) -> Unit,
+    checkedEXEC: String,
+    onCheckedChangeEXEC: (String) -> Unit,
+    checkedEXECCK: String,
+    onCheckedChangeEXECCK: (String) -> Unit,
+) {
 
-@Composable
-fun TargetSup() {
-    var tgtSup by remember { mutableStateOf("") }
-    CustomTextFields(label = "TGT SUPp", value = tgtSup, onValueChange = { tgtSup = it })
-}
+    Text(
+        text = "OUT OF STOCK (OOS)",
+        style = MaterialTheme.typography.bodyMedium,
+        modifier = Modifier.padding(bottom = 4.dp),
+        fontSize = 20.sp,
+        fontWeight = FontWeight.W900
+    )
 
-@Composable
-fun TargetMtl() {
-    var tgtMtl by remember { mutableStateOf("") }
-    CustomTextFields(label = "TGT MTL", value = tgtMtl, onValueChange = { tgtMtl = it })
-}
+    Spacer(modifier = Modifier.height(16.dp))
+    val options = listOf("TARGET SUPER RV", "TARGET MENTHOL RV", "EXECUTIVE", "EXECUTIVE CLICK")
+    ProductLikeToPurchase(
+        option = options[0],
+        checked = checkedSuper,
+        onCheckedChange = { onCheckedChangeSuper(it) }
+    )
 
-@Composable
-fun TargetEXCKS() {
-    var tgtMtl by remember { mutableStateOf("") }
-    CustomTextFields(label = "EXC KS", value = tgtMtl, onValueChange = { tgtMtl = it })
-}
+    ProductLikeToPurchase(
+        option = options[1],
+        checked = checkedMTL,
+        onCheckedChange = { onCheckedChangeMTL(it) }
+    )
 
-@Composable
-fun TargetEXCCK() {
-    var tgtMtl by remember { mutableStateOf("") }
-    CustomTextFields(label = "EXC CK", value = tgtMtl, onValueChange = { tgtMtl = it })
-}
+    ProductLikeToPurchase(
+        option = options[2],
+        checked = checkedEXEC,
+        onCheckedChange = { onCheckedChangeEXEC(it) }
+    )
 
-@Composable
-fun SamplingEXCKS() {
-    val options = listOf("Select", "STICKS", "LIKE","DISLIKE")
-    var selectedOption by remember { mutableStateOf(options.first()) }
-    DropdownListsNoneIcon(
-        options = options,
-        selectedOption = selectedOption,
-        onOptionSelected = { selectedOption = it },
-        label = "SAMPLING EXC KS"
+    ProductLikeToPurchase(
+        option = options[3],
+        checked = checkedEXECCK,
+        onCheckedChange = { onCheckedChangeEXECCK(it) }
     )
 }
 
 @Composable
-fun SamplingXCCK() {
-    val options = listOf("Select", "STICKS", "LIKE","DISLIKE")
-    var selectedOption by remember { mutableStateOf(options.first()) }
-    DropdownListsNoneIcon(
-        options = options,
-        selectedOption = selectedOption,
-        onOptionSelected = { selectedOption = it },
-        label = "SAMPLING XC CK "
+fun SalesMade(
+
+    item: String,
+    uomValueSuper: String,
+    onUOMPriceChangeSuper: (String) -> Unit,
+    quantityValueSuper: String,
+    onQuantityChangeSuper: (String) -> Unit,
+
+    uomValueMLT: String,
+    onUOMPriceChangeMLT: (String) -> Unit,
+    quantityValueMLT: String,
+    onQuantityChangeMLT: (String) -> Unit,
+
+    uomValueEXEC: String,
+    onUOMPriceChangeEXEC: (String) -> Unit,
+    quantityValueEXEC: String,
+    onQuantityChangeEXEC: (String) -> Unit,
+
+    uomValueEXECCK: String,
+    onUOMPriceChangeEXECCK: (String) -> Unit,
+    quantityValueEXECCK: String,
+    onQuantityChangeEXECCK: (String) -> Unit,
+
+    ) {
+
+    Text(
+        text = item,
+        style = MaterialTheme.typography.bodyMedium,
+        modifier = Modifier.padding(bottom = 4.dp),
+        fontSize = 20.sp,
+        fontWeight = FontWeight.W900
+
+    )
+
+    val options = listOf("TARGET SUPER RV", "TARGET MENTHOL RV", "EXECUTIVE", "EXECUTIVE CLICK")
+
+    ProductEnter(
+        priceLabel = options[0],
+        uomValue = uomValueSuper,
+        onUOMPriceChange = { onUOMPriceChangeSuper(it) },
+        quantityValue = quantityValueSuper,
+        onQuantityChange = { onQuantityChangeSuper(it) }
+    )
+
+    ProductEnter(
+        priceLabel = options[1],
+        uomValue = uomValueMLT,
+        onUOMPriceChange = { onUOMPriceChangeMLT(it) },
+        quantityValue = quantityValueMLT,
+        onQuantityChange = { onQuantityChangeMLT(it) }
+    )
+
+    ProductEnter(
+        priceLabel = options[2],
+        uomValue = uomValueEXEC,
+        onUOMPriceChange = { onUOMPriceChangeEXEC(it) },
+        quantityValue = quantityValueEXEC,
+        onQuantityChange = { onQuantityChangeEXEC(it) }
+    )
+
+    ProductEnter(
+        priceLabel = options[3],
+        uomValue = uomValueEXECCK,
+        onUOMPriceChange = { onUOMPriceChangeEXECCK(it) },
+        quantityValue = quantityValueEXECCK,
+        onQuantityChange = { onQuantityChangeEXECCK(it) }
+    )
+
+}
+
+
+@Composable
+fun ItcSalesMan(
+    uomValue: String,
+    onOptionSelected: (String) -> Unit
+) {
+    Text(
+        text = "ITC SALESMAN?",
+        style = MaterialTheme.typography.bodyMedium,
+        modifier = Modifier.padding(bottom = 4.dp),
+        fontSize = 20.sp,
+        fontWeight = FontWeight.W900
+    )
+    DropDownMenu(
+        options = listOf("YES", "NO"),
+        selectedOption = uomValue,
+        onOptionSelected = { onOptionSelected(it) }
     )
 }
 
 @Composable
-fun ITCSalesMen() {
-    val options = listOf("Select", "YES", "No")
-    var selectedOption by remember { mutableStateOf(options.first()) }
-    DropdownListsNoneIcon(
-        options = options,
-        selectedOption = selectedOption,
-        onOptionSelected = { selectedOption = it },
-        label = "ITC SALESMAN??"
+fun SampleExecKS(
+    item: String,
+    uomValue: String,
+    onOptionSelected: (String) -> Unit
+) {
+    Text(
+        text = item,
+        style = MaterialTheme.typography.bodyMedium,
+        modifier = Modifier.padding(bottom = 4.dp),
+        fontSize = 20.sp,
+        fontWeight = FontWeight.W900
+    )
+
+    DropDownMenu(
+        options = listOf("STICKS", "LIKE", "DISLIKE"),
+        selectedOption = uomValue,
+        onOptionSelected = { onOptionSelected(it) }
     )
 }
+
 

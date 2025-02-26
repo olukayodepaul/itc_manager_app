@@ -9,7 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import its.dart.com.presentation.ui.screens.AddCustomer
 import its.dart.com.presentation.ui.screens.CustomerByRep
-import its.dart.com.presentation.ui.screens.DailyActivityForm
+import its.dart.com.presentation.ui.screens.DailyRetailActivity
 import its.dart.com.presentation.ui.screens.DailyConsumer
 import its.dart.com.presentation.ui.screens.MainScreen
 import its.dart.com.presentation.ui.screens.LoginScreen
@@ -120,7 +120,7 @@ fun AppNavGraph(
             val userId = backStackEntry.arguments?.getString("userId") ?: ""
             val userName = backStackEntry.arguments?.getString("userName") ?: ""
             val identifier = backStackEntry.arguments?.getString("identifier") ?: ""
-            DailyActivityForm(navController, userId, userName, identifier)
+            DailyRetailActivity(navController, userId, userName, identifier)
         }
 
         composable(

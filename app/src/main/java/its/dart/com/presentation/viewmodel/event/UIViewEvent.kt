@@ -116,4 +116,52 @@ sealed class PackPlacementEvent {
 
 }
 
+sealed class DailyRetailActivityEvent {
+
+    // Stock Out Events
+    data class OnTGTSuperStockOut(val tTGTSuperStockOut: String) : DailyRetailActivityEvent()
+    data class OnTGTMLTStockOut(val tTGTMLTStockOut: String) : DailyRetailActivityEvent()
+    data class OnExecKSStockOut(val execKSStockOut: String) : DailyRetailActivityEvent()
+    data class OnExecCKStockOut(val execCKStockOut: String) : DailyRetailActivityEvent()
+
+    // Sales Made Events
+    data class OnTGTSuperSalesMadeUOM(val tTGTSuperSalesMadeUOM: String) : DailyRetailActivityEvent()
+    data class OnTGTSuperSalesMade(val tTGTSuperSalesMade: String) : DailyRetailActivityEvent()
+
+    data class OnTGTMLTSalesMadeUOM(val tTGTMLTSalesMadeUOM: String) : DailyRetailActivityEvent()
+    data class OnTGTMLTSalesMade(val tTGTMLTSalesMade: String) : DailyRetailActivityEvent()
+
+    data class OnExecKSSalesMadeUOM(val execKSSalesMadeUOM: String) : DailyRetailActivityEvent()
+    data class OnExecKSSalesMade(val execKSSalesMade: String) : DailyRetailActivityEvent()
+
+    data class OnExecCKSalesMadeUOM(val execCKSalesMadeUOM: String) : DailyRetailActivityEvent()
+    data class OnExecCKSalesMade(val execCKSalesMade: String) : DailyRetailActivityEvent()
+
+    // ITC SalesMan Event
+    data class OnITCSalesMan(val itcSalesMan: String) : DailyRetailActivityEvent()
+
+    // Reward Events
+    data class OnTGTSuperRewardUOM(val tTGTSuperRewardUOM: String) : DailyRetailActivityEvent()
+    data class OnTGTSuperReward(val tTGTSuperReward: String) : DailyRetailActivityEvent()
+
+    data class OnTGTMLTRewardUOM(val tTGTMLTRewardUOM: String) : DailyRetailActivityEvent()
+    data class OnTGTMLTReward(val tTGTMLTReward: String) : DailyRetailActivityEvent()
+
+    data class OnExecKSRewardUOM(val execKSRewardUOM: String) : DailyRetailActivityEvent()
+    data class OnExecKSReward(val execKSReward: String) : DailyRetailActivityEvent()
+
+    data class OnExecCKRewardUOM(val execCKRewardUOM: String) : DailyRetailActivityEvent()
+    data class OnExecCKReward(val execCKReward: String) : DailyRetailActivityEvent()
+
+    // Sampling Events
+    data class OnExecKSSampling(val execKSSampling: String) : DailyRetailActivityEvent()
+    data class OnExecCKSampling(val execCKSampling: String) : DailyRetailActivityEvent()
+
+    //button event
+    data object OnConfirmEvent: DailyRetailActivityEvent()
+    data object HideOptionalDialog: DailyRetailActivityEvent()
+    data object SyncDataToServer: DailyRetailActivityEvent()
+    data object HideSuccessfulDialog: DailyRetailActivityEvent()
+
+}
 

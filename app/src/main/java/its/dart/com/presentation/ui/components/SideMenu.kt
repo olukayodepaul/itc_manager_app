@@ -92,9 +92,6 @@ fun DropdownMenuWithDetail(
     details: PromoterEntity
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
-    val encodedIdentifier = Uri.encode("promoter")
-    val userId: String = details.id.toString()
-    val userName = Uri.encode(details.outlet_name)
 
     Box(
         modifier = Modifier.wrapContentSize(Alignment.TopEnd)
@@ -125,7 +122,7 @@ fun DropdownMenuWithDetail(
                 leadingIcon = { Icon(Icons.Filled.DataArray, contentDescription = null) },
                 onClick = {
                     expanded = false
-                    navController.navigate("DailyConsumerPage/$userId/$userName/$encodedIdentifier")
+                    navController.navigate("DailyConsumerPage/${details.id}/${details.outlet_name}/${details.urno}")
                 }
             )
             DropdownMenuItem(
@@ -133,7 +130,7 @@ fun DropdownMenuWithDetail(
                 leadingIcon = { Icon(Icons.Filled.DataObject, contentDescription = null) },
                 onClick = {
                     expanded = false
-                    navController.navigate("DailyRetailPage/$userId/$userName/$encodedIdentifier")
+                    navController.navigate("DailyRetailPage/${details.id}/${details.outlet_name}/${details.urno}")
                 }
             )
             DropdownMenuItem(

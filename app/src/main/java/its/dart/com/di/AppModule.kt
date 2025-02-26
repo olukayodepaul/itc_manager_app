@@ -14,18 +14,20 @@ import its.dart.com.data.repository.local.database.LocalDatabase
 import its.dart.com.data.repository.prefence.PreferenceImp
 import its.dart.com.data.repository.remote.AddCustomerImpl
 import its.dart.com.data.repository.remote.CustomerByRepImp
+import its.dart.com.data.repository.remote.DailyActivityImpl
 import its.dart.com.data.repository.remote.LoginRemoteDataImpl
 import its.dart.com.data.repository.remote.OrderImpl
 import its.dart.com.data.repository.remote.PackPlacementImp
 import its.dart.com.data.repository.remote.SurveyImpl
 import its.dart.com.data.repository.remote.TaskRemoteImpl
 import its.dart.com.domain.preference.PreferenceInt
-import its.dart.com.domain.repository.PackPlacement
+import its.dart.com.domain.repository.remote.PackPlacement
 import its.dart.com.domain.repository.local.OtherCustomer
 import its.dart.com.domain.repository.remote.TaskRemote
 import its.dart.com.domain.repository.local.TasksRepository
 import its.dart.com.domain.repository.remote.AddCustomer
 import its.dart.com.domain.repository.remote.CustomerByRepInterface
+import its.dart.com.domain.repository.remote.DailyActivityInt
 import its.dart.com.domain.repository.remote.LoginRemoteRepositoryDataInterface
 import its.dart.com.domain.repository.remote.OrderInt
 import its.dart.com.domain.repository.remote.SurveyInt
@@ -157,4 +159,12 @@ object AppModule {
         return PackPlacementImp(httpClient)
     }
 
+    @Provides
+    @Singleton
+    fun provideDailyActivity(
+        httpClient: HttpClient
+    ): DailyActivityInt
+    {
+        return DailyActivityImpl(httpClient)
+    }
 }

@@ -109,25 +109,25 @@ fun PackPlacementContent(
 
             Handler(
                 handler = uiState.skuHandler,
-                handlerEvent = {items->}
+                handlerEvent = {viewModel.event(PackPlacementEvent.SkuHandler(it))}
             )
 
             FreePackPlacement(
                 tgtSuper = uiState.freePackPlacementTGTSuper,
-                tgtSuperEvent = {},
+                tgtSuperEvent = {viewModel.event(PackPlacementEvent.FreePackPlacementTGTSuper(it))},
                 tgtMtl = uiState.freePackPlacementTGTMLT,
-                tgtMtlEvent = {},
+                tgtMtlEvent = {viewModel.event(PackPlacementEvent.FreePackPlacementTGTMLT(it))},
                 exe = uiState.freePackPlacementExec,
-                exeEvent = {}
+                exeEvent = {viewModel.event(PackPlacementEvent.FreePackPlacementExec(it))}
             )
 
             Others(
                 qtyBought = uiState.qtyBought,
-                onQtyBought = {},
+                onQtyBought = {viewModel.event(PackPlacementEvent.QtyBought(it))},
                 bikeSales = uiState.bikeSales,
-                onBikeSales = {},
+                onBikeSales = {viewModel.event(PackPlacementEvent.BikeSales(it))},
                 saleMan = uiState.salesManID,
-                onSaleMan = {}
+                onSaleMan = {viewModel.event(PackPlacementEvent.SalesManID(it))}
             )
 
             CButton(
@@ -251,6 +251,20 @@ fun Others(
     saleMan: String,
     onSaleMan: (String)->Unit
 ){
+
+    Row(
+        modifier = Modifier.padding(bottom = 8.dp, start = 0.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        NumberedCircle(number = 3)
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = "Other Questions",
+            style = MaterialTheme.typography.headlineSmall,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.W500
+        )
+    }
 
     Column {
         CustomTextFields(
