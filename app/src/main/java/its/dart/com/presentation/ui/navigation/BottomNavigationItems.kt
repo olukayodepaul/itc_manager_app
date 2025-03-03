@@ -1,5 +1,6 @@
 package its.dart.com.presentation.ui.navigation
 
+import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTimeFilled
 import androidx.compose.material.icons.filled.CardGiftcard
@@ -22,93 +23,39 @@ data class TabItem(
     val title: String,
     val unselectedIcon: ImageVector,
     val selectedIcon: ImageVector,
-    val content: @Composable () -> Unit
+    val content: @Composable () -> Unit,
 )
 
 // Function to return tab items based on category
 fun getTabItems(navController: NavHostController, category: Int): List<TabItem> {
-    return when (category) {
-        4 -> listOf(
-            TabItem(
-                title = "Attendance",
-                unselectedIcon = Icons.Outlined.AccessTime,
-                selectedIcon = Icons.Filled.AccessTimeFilled,
-                content = { AttendantScreen() }
-            ),
-            TabItem(
-                title = "Supervisor",
-                unselectedIcon = Icons.Outlined.Shop,
-                selectedIcon = Icons.Filled.Shop,
-                content = { SalesRepScreen(navController) }
-            ),
-            TabItem(
-                title = "Promoter",
-                unselectedIcon = Icons.Outlined.CardGiftcard,
-                selectedIcon = Icons.Filled.CardGiftcard,
-                content = { /* TODO: Implement Promoter Screen */ }
-            ),
-            TabItem(
-                title = "Merchant",
-                unselectedIcon = Icons.Outlined.ShoppingCart,
-                selectedIcon = Icons.Filled.ShoppingCart,
-                content = { /* TODO: Implement Merchant Screen */ }
-            )
-        )
 
-        5 -> listOf(
-            TabItem(
-                title = "Attendance",
-                unselectedIcon = Icons.Outlined.AccessTime,
-                selectedIcon = Icons.Filled.AccessTimeFilled,
-                content = { AttendantScreen() }
-            ),
-            TabItem(
-                title = "Supervisor",
-                unselectedIcon = Icons.Outlined.Shop,
-                selectedIcon = Icons.Filled.Shop,
-                content = { /* TODO: Implement Supervisor Screen */ }
-            ),
-            TabItem(
-                title = "Promoter",
-                unselectedIcon = Icons.Outlined.CardGiftcard,
-                selectedIcon = Icons.Filled.CardGiftcard,
-                content = { Promo(navController) }
-            ),
-            TabItem(
-                title = "Merchant",
-                unselectedIcon = Icons.Outlined.ShoppingCart,
-                selectedIcon = Icons.Filled.ShoppingCart,
-                content = { /* TODO: Implement Merchant Screen */ }
-            )
-        )
+    Log.d("epokhai", "$category")
+    return listOf(
+        TabItem(
+            title = "Attendance",
+            unselectedIcon = Icons.Outlined.AccessTime,
+            selectedIcon = Icons.Filled.AccessTimeFilled,
+            content = {  AttendantScreen() }
 
-        6 -> listOf(
-            TabItem(
-                title = "Attendance",
-                unselectedIcon = Icons.Outlined.AccessTime,
-                selectedIcon = Icons.Filled.AccessTimeFilled,
-                content = { AttendantScreen() }
-            ),
-            TabItem(
-                title = "Supervisor",
-                unselectedIcon = Icons.Outlined.Shop,
-                selectedIcon = Icons.Filled.Shop,
-                content = { /* TODO: Implement Supervisor Screen */ }
-            ),
-            TabItem(
-                title = "Promoter",
-                unselectedIcon = Icons.Outlined.CardGiftcard,
-                selectedIcon = Icons.Filled.CardGiftcard,
-                content = { /* TODO: Implement Promoter Screen */ }
-            ),
-            TabItem(
-                title = "Merchant",
-                unselectedIcon = Icons.Outlined.ShoppingCart,
-                selectedIcon = Icons.Filled.ShoppingCart,
-                content = { WholeSellerScreen(navController) }
-            )
+        ),
+        TabItem(
+            title = "Supervisor",
+            unselectedIcon = Icons.Outlined.Shop,
+            selectedIcon = Icons.Filled.Shop,
+            content = { if(category==3) SalesRepScreen(navController) else  null}
+        ),
+        TabItem(
+            title = "Promoter",
+            unselectedIcon = Icons.Outlined.CardGiftcard,
+            selectedIcon = Icons.Filled.CardGiftcard,
+            content = { if(category==6) Promo(navController) else null}
+        ),
+        TabItem(
+            title = "Merchant",
+            unselectedIcon = Icons.Outlined.ShoppingCart,
+            selectedIcon = Icons.Filled.ShoppingCart,
+            content = { if(category==5) WholeSellerScreen(navController) else null }
         )
-
-        else -> emptyList() // Handle unexpected category values
-    }
+    )
 }
+

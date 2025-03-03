@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.compose.material3.*
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,16 +26,12 @@ fun MainScreen(
 ) {
 
     val getCategoryId by viewMode.userState.collectAsStateWithLifecycle()
+    var selectedTabIndex by rememberSaveable { mutableStateOf(0) }
+
     val tabItems = remember {
             getTabItems(navController,
             category = getCategoryId
         )
-    }
-    var selectedTabIndex by rememberSaveable { mutableStateOf(0) }
-
-
-    LaunchedEffect(Unit){
-        viewMode.updateUserId()
     }
 
     Scaffold(

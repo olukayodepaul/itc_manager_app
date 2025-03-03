@@ -110,7 +110,7 @@ fun CircularLogo() {
         modifier = Modifier
             .size(70.dp)
             .clip(CircleShape)
-            .background(Color(0xFF008b00)),
+            .background(Color(0xFF000000)),
         contentAlignment = Alignment.Center
     ) {
         Text(
