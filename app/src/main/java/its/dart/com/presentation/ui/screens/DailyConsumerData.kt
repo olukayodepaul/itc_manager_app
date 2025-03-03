@@ -19,10 +19,14 @@ import androidx.compose.material.icons.filled.EmojiPeople
 import androidx.compose.material.icons.filled.GifBox
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.PeopleOutline
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
@@ -30,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,28 +44,40 @@ import androidx.navigation.NavHostController
 import its.dart.com.presentation.ui.components.CButton
 import its.dart.com.presentation.ui.components.CustomTextField
 import its.dart.com.presentation.ui.components.DropdownLists
+import its.dart.com.presentation.ui.components.LoadingDialog
+import its.dart.com.presentation.ui.components.ModelsBottomSheets
 import its.dart.com.presentation.ui.components.ProductCheckbox
+import its.dart.com.presentation.ui.components.SuccessDialog
 import its.dart.com.presentation.ui.components.TextFieldInput
 import its.dart.com.presentation.ui.components.ToolBar
+import its.dart.com.presentation.ui.theme.appColorBlack
 import its.dart.com.presentation.ui.theme.mainGray
 import its.dart.com.presentation.ui.theme.robotoFamily
 import its.dart.com.presentation.viewmodel.DailyConsumerViewModel
+import its.dart.com.presentation.viewmodel.event.AddCustomerViewEvent
 import its.dart.com.presentation.viewmodel.event.DailyActivityForm
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DailyConsumer(
     navController: NavHostController,
-    userId: String,
-    userName: String,
+    customerId: String,
+    customerName: String,
     urno: String,
     viewModel: DailyConsumerViewModel = hiltViewModel()
 ) {
 
+    val sheetState = rememberModalBottomSheetState()
+
+    LaunchedEffect(key1 = urno){
+        viewModel.onEvent(DailyActivityForm.OnSetCustomerIdAndURNO(urno.toInt(), customerId.toInt()))
+    }
+
     Scaffold(
         topBar = {
             ToolBar(
-                title = userName,
+                title = customerName,
                 click = {navController.popBackStack()},
                 clickSearch = {},
                 clickMenu = {},
@@ -76,16 +93,19 @@ fun DailyConsumer(
         DailyConsumerContent(
             navController = navController,
             modifier = Modifier.padding(innerPadding),
-            viewModel
+            viewModel,
+            sheetState = sheetState
         )
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DailyConsumerContent(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModel: DailyConsumerViewModel = hiltViewModel()
+    viewModel: DailyConsumerViewModel = hiltViewModel(),
+    sheetState: SheetState
 ) {
     val scrollState = rememberScrollState()
     val iuState by  viewModel.uiState.collectAsStateWithLifecycle()
@@ -113,7 +133,7 @@ fun DailyConsumerContent(
                 valuePersonalBrand = iuState.personalBrands,
                 onValuePersonalBrand = {viewModel.onEvent(DailyActivityForm.OnPersonalBrands(it))}
             )
-
+            Spacer(modifier = Modifier.height(13.dp))
             SampleSku(
                 checkedSuper = iuState.sampleSuper,
                 onCheckedChangeSuper = {viewModel.onEvent(DailyActivityForm.OnSampleSuper(it))},
@@ -123,6 +143,17 @@ fun DailyConsumerContent(
                 onCheckedChangeEXEC = {viewModel.onEvent(DailyActivityForm.OnSampleExec(it))},
                 checkedEXECCK = iuState.sampleExecClick,
                 onCheckedChangeEXECCK = {viewModel.onEvent(DailyActivityForm.OnSampleExecClick(it))}
+            )
+
+            Spacer(modifier = Modifier.height(13.dp))
+
+            Text(
+                text = "QUANTITY SOLD",
+                modifier = Modifier.padding(bottom = 4.dp),
+                fontSize = 15.sp,
+                color = appColorBlack,
+                fontWeight = FontWeight.W800,
+                fontFamily = robotoFamily
             )
 
             val options = listOf("TARGET SUPER RV", "TARGET MENTHOL RV", "EXECUTIVE", "EXECUTIVE CLICK")
@@ -158,16 +189,7 @@ fun DailyConsumerContent(
                 onQuantityChange = {viewModel.onEvent(DailyActivityForm.OnQtySoldExecClick(it))}
             )
 
-            SampleSku(
-                checkedSuper = iuState.sampleSuper,
-                onCheckedChangeSuper = {viewModel.onEvent(DailyActivityForm.OnSampleSuper(it))},
-                checkedMTL = iuState.sampleMenthol,
-                onCheckedChangeMTL = {viewModel.onEvent(DailyActivityForm.OnSampleMenthol(it))},
-                checkedEXEC = iuState.sampleExec,
-                onCheckedChangeEXEC = {viewModel.onEvent(DailyActivityForm.OnSampleExec(it))},
-                checkedEXECCK = iuState.sampleExecClick,
-                onCheckedChangeEXECCK = {viewModel.onEvent(DailyActivityForm.OnSampleExecClick(it))}
-            )
+            Spacer(modifier = Modifier.height(13.dp))
 
             PMS(
                 checkedSuper = iuState.PMBLTH,
@@ -186,6 +208,7 @@ fun DailyConsumerContent(
                 "⭐☆☆☆☆ – Terrible experience! Poor customer service and faulty product."
             )
 
+            Spacer(modifier = Modifier.height(13.dp))
             DropdownLists(
                 options = feedback,
                 selectedOption = iuState.comment,
@@ -193,13 +216,49 @@ fun DailyConsumerContent(
                 label = "Comment"
             )
 
+            Spacer(modifier = Modifier.height(13.dp))
+            ProductCheckbox(
+                option = "The checking is an acknowledgment that the person has entered the information correctly and agrees to be the one who entered it.",
+                checked = iuState.acknowledge,
+                onCheckedChange = {
+                    viewModel.onEvent(DailyActivityForm.OnAcknowledge(it))
+                }
+            )
+
+            Spacer(modifier = Modifier.height(18.dp))
+
             CButton(
-                onClick = {  },
+                onClick = { viewModel.onEvent(DailyActivityForm.OnConfirmEvent) },
                 buttonState = true,
                 text = "Post"
             )
-        }
 
+            HideAndShowOptionalDialog(
+                btDismissState = iuState.confirmDialog,
+                btDismissEvent = {viewModel.onEvent(DailyActivityForm.HideOptionalDialog)},
+                btConfirmEvent = {viewModel.onEvent(DailyActivityForm.SyncDataToServer)}
+            )
+
+            LoadingDialog(
+                showDialog = iuState.loaders,
+                onDismiss = {}
+            )
+
+            SuccessDialog(
+                showDialog = iuState.success,
+                onOkClick = {
+                    viewModel.onEvent(DailyActivityForm.HideSuccessfulDialog)
+                    navController.popBackStack()
+                }
+            )
+
+            ModelsBottomSheets(
+                showAndHideErrorMessage = iuState.showAndHideErrorMessage,
+                onSheetStateChange = {result-> viewModel.onEvent(DailyActivityForm.OnShowAndHideErrorMessage(result))},
+                sheetState = sheetState,
+                errorMessage = iuState.errorMessage
+            )
+        }
     }
 }
 
@@ -225,6 +284,8 @@ fun ConsumerName(
         leadingIcon = Icons.Default.Home
     )
 
+    Spacer(modifier = Modifier.height(13.dp))
+
     CustomTextField(
         label = "Phone Number",
         value = valuePhoneNumber,
@@ -236,6 +297,8 @@ fun ConsumerName(
         leadingIcon = Icons.Default.Home
     )
 
+    Spacer(modifier = Modifier.height(13.dp))
+
     val options = listOf("Select", "Male", "Female",)
     DropdownLists(
         options = options,
@@ -244,6 +307,8 @@ fun ConsumerName(
         label = "Gender",
         leadingIcon = Icons.Default.PeopleOutline
     )
+
+    Spacer(modifier = Modifier.height(13.dp))
 
     CustomTextField(
         label = "Age",
@@ -257,6 +322,8 @@ fun ConsumerName(
         isNumericOnly = true
     )
 
+    Spacer(modifier = Modifier.height(13.dp))
+
     val anySalesOptions = listOf("yes", "No",)
     DropdownLists(
         options = anySalesOptions,
@@ -265,6 +332,8 @@ fun ConsumerName(
         label = "Any Sales",
         leadingIcon = Icons.Default.PeopleOutline
     )
+
+    Spacer(modifier = Modifier.height(13.dp))
 
 
     val personalBrandOptions = listOf("Select", "B & H boost", "sterling blue", "B & H flavour",
@@ -295,15 +364,16 @@ fun SampleSku(
     onCheckedChangeEXECCK: (String) -> Unit,
 ) {
 
+
     Text(
         text = "SAMPLE SKU",
-        style = MaterialTheme.typography.bodyMedium,
         modifier = Modifier.padding(bottom = 4.dp),
-        fontSize = 20.sp,
-        fontWeight = FontWeight.W900
+        fontSize = 15.sp,
+        color = appColorBlack,
+        fontWeight = FontWeight.W800,
+        fontFamily = robotoFamily
     )
 
-    Spacer(modifier = Modifier.height(16.dp))
     val options = listOf("TARGET SUPER RV", "TARGET MENTHOL RV", "EXECUTIVE", "EXECUTIVE CLICK")
     ProductLikeToPurchase(
         option = options[0],
@@ -343,10 +413,11 @@ fun PMS(
 
     Text(
         text = "PMS",
-        style = MaterialTheme.typography.bodyMedium,
         modifier = Modifier.padding(bottom = 4.dp),
-        fontSize = 20.sp,
-        fontWeight = FontWeight.W900
+        fontSize = 15.sp,
+        color = appColorBlack,
+        fontWeight = FontWeight.W800,
+        fontFamily = robotoFamily
     )
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -381,6 +452,7 @@ fun QuantitySold(
     quantityValue: String,
     onQuantityChange: (String) -> Unit
 ) {
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -433,17 +505,3 @@ fun QuantitySold(
     }
 }
 
-@Composable
-fun CheckBoxFeed(){
-
-    var selected by remember { mutableStateOf<String?>(null) }
-    val proOne = "agreed"
-
-    ProductCheckbox(
-        productName = "The checking is an acknowledgment that the person has entered the information correctly and agrees to be the one who entered it.",
-        isChecked = selected === proOne,
-        onCheckedChange = { newValue ->
-            selected = if (newValue) proOne else ""
-        }
-    )
-}

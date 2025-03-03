@@ -116,7 +116,6 @@ data class PackPlacementState(
     val freePackPlacementExec: String = "",
 
     //three
-    val qtyBought: String = "",
     val bikeSales: String = "",
     val salesManID: String = "",
 
@@ -127,7 +126,20 @@ data class PackPlacementState(
     val success: Boolean = false,
     val loaders: Boolean = false,
     val urno: Int = 0,
-    val customerId: Int = 0
+    val customerId: Int = 0,
+
+    val tTGTSuperSalesMadeUOM: String = "",
+    val tTGTSuperSalesMade: String = "",
+
+    val tTGTMLTSalesMadeUOM: String = "",
+    val tTGTMLTSalesMade: String = "",
+
+    val execKSSalesMadeUOM: String = "",
+    val execKSSalesMade: String = "",
+
+    val execCKSalesMadeUOM: String = "",
+    val execCKSalesMade: String = ""
+
 )
 
 data class DailyRetailActivityState(
@@ -217,8 +229,19 @@ data class DailyConsumerState(
     val PMBPEN: String = "",
     var PMBWB:String = "",
 
-    var comment:String =""
+    var comment:String ="",
 
+    var acknowledge:String ="Not Confirm",
+
+
+    //widget state
+    val errorMessage: String = "",
+    val showAndHideErrorMessage: Boolean = false,
+    val confirmDialog: Boolean  = false,
+    val success: Boolean = false,
+    val loaders: Boolean = false,
+    val urno: Int = 0,
+    val customerId: Int = 0
 
 )
 

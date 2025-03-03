@@ -299,6 +299,7 @@ fun AddCustomerResDTO.mapToModel(): AddCustomerResModel {
         .status(this.status)
         .message(this.message)
         .time(this.time)
+        .id(this.id)
         .build()
 }
 

@@ -49,7 +49,6 @@ data class TasksEntity (
     val time_ago: String? = "0.0",
 )
 
-
 @Entity(tableName = "promoter")
 data class PromoterEntity (
     @PrimaryKey(autoGenerate = true) val id: Int,

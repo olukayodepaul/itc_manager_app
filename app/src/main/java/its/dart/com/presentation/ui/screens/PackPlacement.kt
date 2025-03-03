@@ -41,6 +41,7 @@ import its.dart.com.presentation.ui.components.SuccessDialog
 import its.dart.com.presentation.ui.components.ToolBar
 import its.dart.com.presentation.ui.theme.robotoFamily
 import its.dart.com.presentation.viewmodel.PackPlacementViewModel
+import its.dart.com.presentation.viewmodel.event.DailyRetailActivityEvent
 import its.dart.com.presentation.viewmodel.event.PackPlacementEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,11 +56,10 @@ fun PackPlacement(
 
     val sheetState = rememberModalBottomSheetState()
 
+    //change to init in the view model.
     LaunchedEffect(Unit){
         viewModel.event(PackPlacementEvent.OnSetCustomerIdAndURNO(urno.toInt(), customerId.toInt()))
     }
-
-
 
     Scaffold(
         topBar = {
@@ -111,7 +111,7 @@ fun PackPlacementContent(
                 handler = uiState.skuHandler,
                 handlerEvent = {viewModel.event(PackPlacementEvent.SkuHandler(it))}
             )
-
+            Spacer(modifier = Modifier.height(18.dp))
             FreePackPlacement(
                 tgtSuper = uiState.freePackPlacementTGTSuper,
                 tgtSuperEvent = {viewModel.event(PackPlacementEvent.FreePackPlacementTGTSuper(it))},
@@ -120,16 +120,35 @@ fun PackPlacementContent(
                 exe = uiState.freePackPlacementExec,
                 exeEvent = {viewModel.event(PackPlacementEvent.FreePackPlacementExec(it))}
             )
-
+            Spacer(modifier = Modifier.height(18.dp))
             Others(
-                qtyBought = uiState.qtyBought,
-                onQtyBought = {viewModel.event(PackPlacementEvent.QtyBought(it))},
                 bikeSales = uiState.bikeSales,
                 onBikeSales = {viewModel.event(PackPlacementEvent.BikeSales(it))},
                 saleMan = uiState.salesManID,
-                onSaleMan = {viewModel.event(PackPlacementEvent.SalesManID(it))}
-            )
+                onSaleMan = {viewModel.event(PackPlacementEvent.SalesManID(it))},
 
+                item = "Quantity Bought",
+                uomValueSuper = uiState.tTGTSuperSalesMadeUOM,
+                onUOMPriceChangeSuper = {viewModel.event(PackPlacementEvent.OnTGTSuperSalesMadeUOM(it))},
+                quantityValueSuper = uiState.tTGTSuperSalesMade,
+                onQuantityChangeSuper =  {viewModel.event(PackPlacementEvent.OnTGTSuperSalesMade(it))},
+
+                uomValueMLT = uiState.tTGTMLTSalesMadeUOM,
+                onUOMPriceChangeMLT = {viewModel.event(PackPlacementEvent.OnTGTMLTSalesMadeUOM(it))},
+                quantityValueMLT = uiState.tTGTMLTSalesMade,
+                onQuantityChangeMLT = {viewModel.event(PackPlacementEvent.OnTGTMLTSalesMade(it))},
+
+                uomValueEXEC = uiState.execKSSalesMadeUOM,
+                onUOMPriceChangeEXEC = {viewModel.event(PackPlacementEvent.OnExecKSSalesMadeUOM(it))},
+                quantityValueEXEC = uiState.execKSSalesMade,
+                onQuantityChangeEXEC = {viewModel.event(PackPlacementEvent.OnExecKSSalesMade(it))},
+
+                uomValueEXECCK = uiState.execCKSalesMadeUOM,
+                onUOMPriceChangeEXECCK = {viewModel.event(PackPlacementEvent.OnExecCKSalesMadeUOM(it))},
+                quantityValueEXECCK = uiState.execCKSalesMade,
+                onQuantityChangeEXECCK = {viewModel.event(PackPlacementEvent.OnExecCKSalesMade(it))},
+            )
+            Spacer(modifier = Modifier.height(30.dp))
             CButton(
                 onClick = { viewModel.event(PackPlacementEvent.ShowOptionalDialog) },
                 buttonState = true,
@@ -244,12 +263,31 @@ fun FreePackPlacement(
 
 @Composable
 fun Others(
-    qtyBought: String,
-    onQtyBought: (String) ->Unit,
     bikeSales: String,
     onBikeSales: (String) ->Unit,
     saleMan: String,
-    onSaleMan: (String)->Unit
+    onSaleMan: (String)->Unit,
+
+    item: String,
+    uomValueSuper: String,
+    onUOMPriceChangeSuper: (String) -> Unit,
+    quantityValueSuper: String,
+    onQuantityChangeSuper: (String) -> Unit,
+
+    uomValueMLT: String,
+    onUOMPriceChangeMLT: (String) -> Unit,
+    quantityValueMLT: String,
+    onQuantityChangeMLT: (String) -> Unit,
+
+    uomValueEXEC: String,
+    onUOMPriceChangeEXEC: (String) -> Unit,
+    quantityValueEXEC: String,
+    onQuantityChangeEXEC: (String) -> Unit,
+
+    uomValueEXECCK: String,
+    onUOMPriceChangeEXECCK: (String) -> Unit,
+    quantityValueEXECCK: String,
+    onQuantityChangeEXECCK: (String) -> Unit,
 ){
 
     Row(
@@ -267,12 +305,42 @@ fun Others(
     }
 
     Column {
-        CustomTextFields(
-            label = "Qty Bought",
-            value = qtyBought,
-            onValueChange = { onQtyBought(it) }
+
+        val option = listOf("TARGET SUPER RV", "TARGET MENTHOL RV", "EXECUTIVE", "EXECUTIVE CLICK")
+
+        ProductEnter(
+            priceLabel = option[0],
+            uomValue = uomValueSuper,
+            onUOMPriceChange = { onUOMPriceChangeSuper(it) },
+            quantityValue = quantityValueSuper,
+            onQuantityChange = { onQuantityChangeSuper(it) }
+        )
+        Spacer(modifier = Modifier.height(3.dp))
+        ProductEnter(
+            priceLabel = option[1],
+            uomValue = uomValueMLT,
+            onUOMPriceChange = { onUOMPriceChangeMLT(it) },
+            quantityValue = quantityValueMLT,
+            onQuantityChange = { onQuantityChangeMLT(it) }
+        )
+        Spacer(modifier = Modifier.height(3.dp))
+        ProductEnter(
+            priceLabel = option[2],
+            uomValue = uomValueEXEC,
+            onUOMPriceChange = { onUOMPriceChangeEXEC(it) },
+            quantityValue = quantityValueEXEC,
+            onQuantityChange = { onQuantityChangeEXEC(it) }
+        )
+        Spacer(modifier = Modifier.height(3.dp))
+        ProductEnter(
+            priceLabel = option[3],
+            uomValue = uomValueEXECCK,
+            onUOMPriceChange = { onUOMPriceChangeEXECCK(it) },
+            quantityValue = quantityValueEXECCK,
+            onQuantityChange = { onQuantityChangeEXECCK(it) }
         )
 
+        Spacer(modifier = Modifier.height(18.dp))
         val options = listOf("Select", "Yes", "No",)
         DropdownListsNoneIcon(
             options = options,
@@ -280,7 +348,7 @@ fun Others(
             onOptionSelected = { onBikeSales(it) },
             label = "Bike Sales"
         )
-
+        Spacer(modifier = Modifier.height(18.dp))
         CustomTextFields(
             label = "Sales Man's Name",
             value = saleMan,
@@ -289,5 +357,3 @@ fun Others(
     }
 
 }
-
-

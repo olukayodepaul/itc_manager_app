@@ -25,6 +25,7 @@ import its.dart.com.presentation.ui.components.LoadingDialog
 import its.dart.com.presentation.ui.components.ModelsBottomSheets
 import its.dart.com.presentation.ui.components.SuccessDialog
 import its.dart.com.presentation.ui.components.ToolBar
+import its.dart.com.presentation.ui.theme.appColorBlack
 import its.dart.com.presentation.ui.theme.robotoFamily
 import its.dart.com.presentation.viewmodel.DailyActivityViewModel
 import its.dart.com.presentation.viewmodel.event.DailyRetailActivityEvent
@@ -33,16 +34,20 @@ import its.dart.com.presentation.viewmodel.event.PackPlacementEvent
 @Composable
 fun DailyRetailActivity(
     navController: NavHostController,
-    userId: String,
-    userName: String,
+    customerId: String,
+    customerName: String,
     urno: String,
     viewModel: DailyActivityViewModel = hiltViewModel()
 ) {
 
+    LaunchedEffect(key1 = urno){
+        viewModel.onEvent(DailyRetailActivityEvent.OnSetCustomerIdAndURNO(urno.toInt(), customerId.toInt()))
+    }
+
     Scaffold(
         topBar = {
             ToolBar(
-                title = userName,
+                title = customerName,
                 click = { navController.popBackStack() },
                 clickSearch = {},
                 clickMenu = {},
@@ -92,7 +97,7 @@ fun DailySurvayActivity(
             checkedEXECCK = uiState.execCKStockOut,
             onCheckedChangeEXECCK = { viewModel.onEvent(DailyRetailActivityEvent.OnExecCKStockOut(it)) }
         )
-
+        Spacer(modifier = Modifier.height(13.dp))
         SalesMade(
             item = "SALES MADE",
             uomValueSuper = uiState.tTGTSuperSalesMadeUOM,
@@ -115,7 +120,7 @@ fun DailySurvayActivity(
             quantityValueEXECCK = uiState.execCKSalesMade,
             onQuantityChangeEXECCK = {viewModel.onEvent(DailyRetailActivityEvent.OnExecCKSalesMade(it))},
         )
-
+        Spacer(modifier = Modifier.height(13.dp))
         SalesMade(
             item = "REWARD",
             uomValueSuper = uiState.tTGTSuperRewardUOM,
@@ -138,24 +143,24 @@ fun DailySurvayActivity(
             quantityValueEXECCK = uiState.execCKReward,
             onQuantityChangeEXECCK = {viewModel.onEvent(DailyRetailActivityEvent.OnExecCKReward(it))},
         )
-
+        Spacer(modifier = Modifier.height(13.dp))
         ItcSalesMan(
             uomValue = uiState.itcSalesMan,
             onOptionSelected = {viewModel.onEvent(DailyRetailActivityEvent.OnITCSalesMan(it))}
         )
-
+        Spacer(modifier = Modifier.height(13.dp))
         SampleExecKS(
             item = "SAMPLING  (EXC KS)",
             uomValue = uiState.execKSSampling,
             onOptionSelected = {viewModel.onEvent(DailyRetailActivityEvent.OnExecKSSampling(it))}
         )
-
+        Spacer(modifier = Modifier.height(13.dp))
         SampleExecKS(
             item = "SAMPLING  (EXC CK)",
             uomValue = uiState.execCKSampling,
             onOptionSelected = {viewModel.onEvent(DailyRetailActivityEvent.OnExecCKSampling(it))}
         )
-
+        Spacer(modifier = Modifier.height(20.dp))
         CButton(
             onClick = { viewModel.onEvent(DailyRetailActivityEvent.OnConfirmEvent) },
             buttonState = true,
@@ -205,13 +210,13 @@ fun OutOfStock(
 
     Text(
         text = "OUT OF STOCK (OOS)",
-        style = MaterialTheme.typography.bodyMedium,
         modifier = Modifier.padding(bottom = 4.dp),
-        fontSize = 20.sp,
-        fontWeight = FontWeight.W900
+        fontSize = 15.sp,
+        color = appColorBlack,
+        fontWeight = FontWeight.W800,
+        fontFamily = robotoFamily
     )
 
-    Spacer(modifier = Modifier.height(16.dp))
     val options = listOf("TARGET SUPER RV", "TARGET MENTHOL RV", "EXECUTIVE", "EXECUTIVE CLICK")
     ProductLikeToPurchase(
         option = options[0],
@@ -266,11 +271,11 @@ fun SalesMade(
 
     Text(
         text = item,
-        style = MaterialTheme.typography.bodyMedium,
         modifier = Modifier.padding(bottom = 4.dp),
-        fontSize = 20.sp,
-        fontWeight = FontWeight.W900
-
+        fontSize = 15.sp,
+        color = appColorBlack,
+        fontWeight = FontWeight.W800,
+        fontFamily = robotoFamily
     )
 
     val options = listOf("TARGET SUPER RV", "TARGET MENTHOL RV", "EXECUTIVE", "EXECUTIVE CLICK")
@@ -282,7 +287,7 @@ fun SalesMade(
         quantityValue = quantityValueSuper,
         onQuantityChange = { onQuantityChangeSuper(it) }
     )
-
+    Spacer(modifier = Modifier.height(3.dp))
     ProductEnter(
         priceLabel = options[1],
         uomValue = uomValueMLT,
@@ -290,7 +295,7 @@ fun SalesMade(
         quantityValue = quantityValueMLT,
         onQuantityChange = { onQuantityChangeMLT(it) }
     )
-
+    Spacer(modifier = Modifier.height(3.dp))
     ProductEnter(
         priceLabel = options[2],
         uomValue = uomValueEXEC,
@@ -298,7 +303,7 @@ fun SalesMade(
         quantityValue = quantityValueEXEC,
         onQuantityChange = { onQuantityChangeEXEC(it) }
     )
-
+    Spacer(modifier = Modifier.height(3.dp))
     ProductEnter(
         priceLabel = options[3],
         uomValue = uomValueEXECCK,
@@ -315,12 +320,14 @@ fun ItcSalesMan(
     uomValue: String,
     onOptionSelected: (String) -> Unit
 ) {
+
     Text(
         text = "ITC SALESMAN?",
-        style = MaterialTheme.typography.bodyMedium,
         modifier = Modifier.padding(bottom = 4.dp),
-        fontSize = 20.sp,
-        fontWeight = FontWeight.W900
+        fontSize = 15.sp,
+        color = appColorBlack,
+        fontWeight = FontWeight.W200,
+        fontFamily = robotoFamily
     )
     DropDownMenu(
         options = listOf("YES", "NO"),
@@ -335,12 +342,14 @@ fun SampleExecKS(
     uomValue: String,
     onOptionSelected: (String) -> Unit
 ) {
+
     Text(
         text = item,
-        style = MaterialTheme.typography.bodyMedium,
         modifier = Modifier.padding(bottom = 4.dp),
-        fontSize = 20.sp,
-        fontWeight = FontWeight.W900
+        fontSize = 15.sp,
+        color = appColorBlack,
+        fontWeight = FontWeight.W200,
+        fontFamily = robotoFamily
     )
 
     DropDownMenu(

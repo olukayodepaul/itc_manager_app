@@ -15,25 +15,28 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun ProductCheckbox(
-    productName: String,
-    isChecked: Boolean,
-    onCheckedChange: (Boolean) -> Unit
+    option: String,
+    checked: String,
+    onCheckedChange: (String) -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Top
     ) {
         Checkbox(
-            checked = isChecked,
-            onCheckedChange = onCheckedChange,
+            checked = checked == "Confirm",
+            onCheckedChange = {
+                val newValue = if (it) "Confirm" else "Not Confirm"
+                onCheckedChange(newValue)
+            },
             colors = CheckboxDefaults.colors(
-                checkedColor = Color(0xFF008b00),
+                checkedColor = Color(0xFF000000),
                 uncheckedColor = Color.Gray,
                 checkmarkColor = Color.White
             )
         )
         Text(
-            text = productName,
+            text = option,
             fontSize = 13.sp
         )
     }

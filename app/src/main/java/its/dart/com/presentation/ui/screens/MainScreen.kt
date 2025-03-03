@@ -26,9 +26,14 @@ fun MainScreen(
     viewMode: MainViewModel = hiltViewModel()
 ) {
 
-    val tabItems = remember { getTabItems(navController) }
-    var selectedTabIndex by rememberSaveable { mutableStateOf(0) }
     val getCategoryId by viewMode.userState.collectAsStateWithLifecycle()
+    val tabItems = remember {
+            getTabItems(navController,
+            category = getCategoryId
+        )
+    }
+    var selectedTabIndex by rememberSaveable { mutableStateOf(0) }
+
 
     LaunchedEffect(Unit){
         viewMode.updateUserId()

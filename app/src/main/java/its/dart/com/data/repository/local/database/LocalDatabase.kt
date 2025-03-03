@@ -55,6 +55,9 @@ interface LocalDatabase {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun persistPromoter(task: PromoterEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun persistAllPromoter(task: List<PromoterEntity>)
+
     @Query("SELECT * FROM promoter order by id desc")
     fun getPromoters(): Flow<List<PromoterEntity>>
 
@@ -62,8 +65,38 @@ interface LocalDatabase {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun persistMerchants(task: MerchantEntity)
 
-    @Query("SELECT * FROM promoter order by id desc")
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun persistAllMerchants(task: List<MerchantEntity>)
+
+    @Query("SELECT * FROM merchant order by id desc")
     fun getMerchants(): Flow<List<MerchantEntity>>
+
+    //deleting
+    @Query("DELETE FROM logins")
+    suspend fun deleteAllLogins()
+
+    @Query("DELETE FROM product")
+    suspend fun deleteAllProduct()
+
+    @Query("DELETE FROM customers")
+    suspend fun deleteAllCustomers()
+
+    @Query("DELETE FROM tasks")
+    suspend fun deleteAllTask()
+
+    @Query("DELETE FROM promoter")
+    suspend fun deleteAllPromoter()
+
+    @Query("DELETE FROM merchant")
+    suspend fun deleteAllMerchant()
+
+//    //Search Promoter
+//    @Query("SELECT * FROM promoter WHERE outlet_name LIKE '%' || :search || '%' OR contact_phone LIKE '%' || :search || '%' ")
+//    suspend fun searchPromoter(search: String): List<PromoterEntity>
+//
+//    //search Merchant
+//    @Query("SELECT * FROM promoter WHERE outlet_name LIKE '%' || :search || '%' OR contact_phone LIKE '%' || :search || '%' ")
+//    suspend fun searchMerchant(search: String): List<MerchantEntity>
 
 }
 

@@ -26,6 +26,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import its.dart.com.presentation.ui.theme.appColorBlack
 import its.dart.com.presentation.ui.theme.robotoFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,10 +45,11 @@ fun CustomTextField(
     Column(modifier = modifier) {
         Text(
             text = label,
-            style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.padding(bottom = 4.dp),
-            fontSize = 20.sp,
-            fontWeight = FontWeight.W900
+            fontSize = 15.sp,
+            color = appColorBlack,
+            fontWeight = FontWeight.W200,
+            fontFamily = robotoFamily
         )
         OutlinedTextField(
             value = value,

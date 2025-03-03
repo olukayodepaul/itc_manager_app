@@ -39,6 +39,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
+import its.dart.com.presentation.ui.theme.appColorBlack
 import its.dart.com.presentation.ui.theme.robotoFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,10 +63,11 @@ fun DropdownLists(
 
     Text(
         text = label,
-        style = MaterialTheme.typography.bodyMedium,
         modifier = Modifier.padding(bottom = 4.dp),
-        fontSize = 20.sp,
-        fontWeight = FontWeight.W900
+        fontSize = 15.sp,
+        color = appColorBlack,
+        fontWeight = FontWeight.W200,
+        fontFamily = robotoFamily
     )
 
     Box(modifier = Modifier.fillMaxWidth()) {

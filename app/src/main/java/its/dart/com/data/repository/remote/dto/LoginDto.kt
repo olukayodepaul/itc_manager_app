@@ -1,5 +1,6 @@
 package its.dart.com.data.repository.remote.dto
 
+import androidx.room.PrimaryKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -76,7 +77,7 @@ data class AddCustomerResDTO(
     @SerialName("status") val status: Int,
     @SerialName("message") val message: String,
     @SerialName("time") val time: String,
-    val id: Int
+    val id: Int //unro
 )
 
 @Serializable
@@ -153,14 +154,26 @@ data class PackPlacementDTO(
     @SerialName("free_pack_placement_tgt_super")  val freePackPlacementTGTSuper : String= "",
     @SerialName("free_pack_placement_tgt_mlt")  val freePackPlacementTGTMLT : String= "",
     @SerialName("free_pack_placement_exec")  val freePackPlacementExec : String= "",
-    @SerialName("qty_bought")  val qtyBought : String= "",
     @SerialName("bike_sales")  val bikeSales : String= "",
     @SerialName("sales_man_id")  val salesManID : String= "",
+    @SerialName("super_uom")  val tTGTSuperSalesMadeUOM : String= "",
+    @SerialName("super")  val tTGTSuperSalesMade : String= "",
+    @SerialName("menthol_uom")  val tTGTMLTSalesMadeUOM : String= "",
+    @SerialName("menthol")  val tTGTMLTSalesMade : String= "",
+    @SerialName("exec_uom")  val execKSSalesMadeUOM : String= "",
+    @SerialName("exec")  val execKSSalesMade : String= "",
+    @SerialName("exec_click_uom")  val execCKSalesMadeUOM : String= "",
+    @SerialName("exec_click")  val execCKSalesMade : String= "",
 )
+
 
 
 @Serializable
 data class DailyActivityViewDTO(
+    val urno: Int = 0,
+    @SerialName("supervisor_category_id") val supervisorCategoryId: Int,
+    @SerialName("supervisor_id") val supervisorId: Int,
+    @SerialName("customer_id") val customerId: Int = 0,
     @SerialName("tgt_super_stock_out") val tTGTSuperStockOut: String,
     @SerialName("tgt_mlt_stock_out") val tTGTMLTStockOut: String,
     @SerialName("exec_ks_stock_out") val execKSStockOut: String,
@@ -186,4 +199,44 @@ data class DailyActivityViewDTO(
     @SerialName("exec_ck_sampling") val execCKSampling: String
 )
 
+@Serializable
+data class DailyCustomerDTO(
+    val urno: Int = 0,
+    @SerialName("supervisor_category_id") val supervisorCategoryId: Int,
+    @SerialName("supervisor_id") val supervisorId: Int,
+    @SerialName("customer_id") val customerId: Int = 0,
+    @SerialName("consumer_name") val consumerName: String,
+    @SerialName("phone_number") val phoneNumber: String,
+    @SerialName("gender") val gender: String,
+    @SerialName("age") val age: String,
+    @SerialName("sample_super") val sampleSuper: String,
+    @SerialName("sample_menthol") val sampleMenthol: String,
+    @SerialName("sample_exec") val sampleExec: String,
+    @SerialName("sample_exec_click") val sampleExecClick: String,
+    @SerialName("any_sales") val anySales: String,
+    @SerialName("personal_brands") val personalBrands: String,
+    @SerialName("qty_sold_super_uom") val qtySoldSuperUOM: String,
+    @SerialName("qty_sold_super") val qtySoldSuper: String,
+    @SerialName("qty_sold_menthol_uom") val qtySoldMentholUOM: String,
+    @SerialName("qty_sold_menthol") val qtySoldMenthol: String,
+    @SerialName("qty_sold_exec_uom") val qtySoldExecUOM: String,
+    @SerialName("qty_sold_exec") val qtySoldExec: String,
+    @SerialName("qty_sold_exec_click_uom") val qtySoldExecClickUOM: String,
+    @SerialName("qty_sold_exec_click") val qtySoldExecClick: String,
+    @SerialName("pmb_lth") val PMBLTH: String,
+    @SerialName("pmb_pen") val PMBPEN: String,
+    @SerialName("pmb_wb") val PMBWB: String,
+    @SerialName("comment") val comment: String,
+    val acknowledge: String
+)
 
+@Serializable
+data class MerchantDTO(
+    val urno: Int,
+    val latitude: String,
+    val longitude: String,
+    val outlet_name: String,
+    val outlet_address: String,
+    val contact_phone: String,
+    val outlet_type: String
+)

@@ -30,35 +30,43 @@ class PackPlacementViewModel @Inject constructor(
         eventHandler(event)
     }
 
-    private fun updatePackPlacementState(update: PackPlacementState.() -> PackPlacementState) {
+    private fun updateUi(update: PackPlacementState.() -> PackPlacementState) {
         _uiState.value = _uiState.value.update()
     }
 
 
     private fun eventHandler(event: PackPlacementEvent) {
             when (event) {
-                is PackPlacementEvent.SkuHandler -> updatePackPlacementState{copy(skuHandler = event.skuHandler)}
-                is PackPlacementEvent.FreePackPlacementTGTSuper -> updatePackPlacementState{copy(freePackPlacementTGTSuper = event.freePackPlacementTGTSuper)}
-                is PackPlacementEvent.FreePackPlacementTGTMLT -> updatePackPlacementState{copy(freePackPlacementTGTMLT = event.freePackPlacementTGTMLT)}
-                is PackPlacementEvent.FreePackPlacementExec -> updatePackPlacementState{copy(freePackPlacementExec = event.freePackPlacementExec)}
-                is PackPlacementEvent.QtyBought -> updatePackPlacementState{copy(qtyBought = event.qtyBought)}
-                is PackPlacementEvent.BikeSales -> updatePackPlacementState{copy(bikeSales = event.bikeSales)}
-                is PackPlacementEvent.SalesManID -> updatePackPlacementState{copy(salesManID = event.salesManID)}
-                is PackPlacementEvent.HideOptionalDialog -> updatePackPlacementState{copy(confirmDialog = false)}
-                is PackPlacementEvent.ShowSuccessfulDialog -> updatePackPlacementState{copy(success = true)}
-                is PackPlacementEvent.OnSetCustomerIdAndURNO -> updatePackPlacementState{copy(urno = event.urno, customerId = event.customerId)}
-                is PackPlacementEvent.OnShowAndHideErrorMessage -> updatePackPlacementState{copy(showAndHideErrorMessage = event.disMiss)}
+                is PackPlacementEvent.SkuHandler -> updateUi{copy(skuHandler = event.skuHandler)}
+                is PackPlacementEvent.FreePackPlacementTGTSuper -> updateUi{copy(freePackPlacementTGTSuper = event.freePackPlacementTGTSuper)}
+                is PackPlacementEvent.FreePackPlacementTGTMLT -> updateUi{copy(freePackPlacementTGTMLT = event.freePackPlacementTGTMLT)}
+                is PackPlacementEvent.FreePackPlacementExec -> updateUi{copy(freePackPlacementExec = event.freePackPlacementExec)}
+                is PackPlacementEvent.BikeSales -> updateUi{copy(bikeSales = event.bikeSales)}
+                is PackPlacementEvent.SalesManID -> updateUi{copy(salesManID = event.salesManID)}
+                is PackPlacementEvent.HideOptionalDialog -> updateUi{copy(confirmDialog = false)}
+                is PackPlacementEvent.ShowSuccessfulDialog -> updateUi{copy(success = true)}
+                is PackPlacementEvent.OnSetCustomerIdAndURNO -> updateUi{copy(urno = event.urno, customerId = event.customerId)}
+                is PackPlacementEvent.OnShowAndHideErrorMessage -> updateUi{copy(showAndHideErrorMessage = event.disMiss)}
+                is PackPlacementEvent.OnTGTSuperSalesMade -> updateUi{copy(tTGTSuperSalesMade = event.tTGTSuperSalesMade)}
+                is PackPlacementEvent.OnTGTMLTSalesMade -> updateUi{copy(tTGTMLTSalesMade = event.tTGTMLTSalesMade)}
+                is PackPlacementEvent.OnExecKSSalesMade ->updateUi{ copy(execKSSalesMade = event.execKSSalesMade)}
+                is PackPlacementEvent.OnExecCKSalesMade -> updateUi{copy(execCKSalesMade = event.execCKSalesMade)}
+                is PackPlacementEvent.OnTGTSuperSalesMadeUOM -> updateUi{copy(tTGTSuperSalesMadeUOM = event.tTGTSuperSalesMadeUOM)}
+                is PackPlacementEvent.OnTGTMLTSalesMadeUOM -> updateUi{copy(tTGTMLTSalesMadeUOM = event.tTGTMLTSalesMadeUOM)}
+                is PackPlacementEvent.OnExecKSSalesMadeUOM -> updateUi{copy(execKSSalesMadeUOM = event.execKSSalesMadeUOM)}
+                is PackPlacementEvent.OnExecCKSalesMadeUOM -> updateUi{copy(execCKSalesMadeUOM = event.execCKSalesMadeUOM)}
                 is PackPlacementEvent.ShowOptionalDialog -> {
                     if (!isValidState(_uiState.value)) {
-                        updatePackPlacementState{copy(
+                        updateUi{copy(
                             showAndHideErrorMessage = true,
                             errorMessage = "All fields are required! You must provide all inputs before adding a pack placement."
                         )}
                     } else {
-                        updatePackPlacementState{copy(confirmDialog = true)}
+                        updateUi{copy(confirmDialog = true, showAndHideErrorMessage = false)}
                     }
                 }
                 is PackPlacementEvent.OnConfirmEvent -> {
+                    updateUi { copy(loaders = true, confirmDialog = false) }
                     onConfirmEvent()
                 }
             }
@@ -66,14 +74,12 @@ class PackPlacementViewModel @Inject constructor(
 
     private fun onConfirmEvent() = viewModelScope.launch {
         try {
-            updatePackPlacementState { copy(loaders = true) }
             val getServerResponse = remoteRepository.taskPackPlacement(isBody())
-
             getServerResponse.onSuccess { data ->
                 if (data.status == 200) {
-                    updatePackPlacementState { copy(loaders = false, success = true) }
+                    updateUi { copy(loaders = false, success = true) }
                 } else {
-                    updatePackPlacementState {
+                    updateUi {
                         copy(
                             loaders = false,
                             showAndHideErrorMessage = true,
@@ -82,7 +88,7 @@ class PackPlacementViewModel @Inject constructor(
                     }
                 }
             }.onFailure { error ->
-                updatePackPlacementState {
+                updateUi {
                     copy(
                         loaders = false,
                         showAndHideErrorMessage = true,
@@ -91,7 +97,7 @@ class PackPlacementViewModel @Inject constructor(
                 }
             }
         } catch (e: Exception) {
-            updatePackPlacementState {
+            updateUi {
                 copy(
                     loaders = false,
                     showAndHideErrorMessage = true,
@@ -105,10 +111,7 @@ class PackPlacementViewModel @Inject constructor(
         return state.skuHandler.isNotBlank() &&
                 state.freePackPlacementTGTSuper.isNotBlank() &&
                 state.freePackPlacementTGTMLT.isNotBlank() &&
-                state.freePackPlacementExec.isNotBlank() &&
-                state.qtyBought.isNotBlank() && state.qtyBought.all { it.isDigit() } &&
-                state.bikeSales.isNotBlank() && state.bikeSales.all { it.isDigit() } &&
-                state.salesManID.isNotBlank() && state.salesManID.all { it.isDigit() }
+                state.freePackPlacementExec.isNotBlank()
     }
 
     private suspend fun isBody(): PackPlacementDTO {
@@ -125,11 +128,22 @@ class PackPlacementViewModel @Inject constructor(
                 freePackPlacementTGTSuper = state.freePackPlacementTGTSuper,
                 freePackPlacementTGTMLT = state.freePackPlacementTGTMLT,
                 freePackPlacementExec = state.freePackPlacementExec,
-                qtyBought = state.qtyBought,
                 bikeSales = state.bikeSales,
-                salesManID = state.salesManID
+                salesManID = state.salesManID,
+                tTGTSuperSalesMadeUOM = state.tTGTSuperSalesMadeUOM,
+                tTGTSuperSalesMade = state.tTGTSuperSalesMade,
+                tTGTMLTSalesMadeUOM = state.tTGTMLTSalesMadeUOM,
+                tTGTMLTSalesMade = state.tTGTMLTSalesMade,
+                execKSSalesMadeUOM = state.execKSSalesMadeUOM,
+                execKSSalesMade = state.execKSSalesMade,
+                execCKSalesMadeUOM = state.execCKSalesMadeUOM,
+                execCKSalesMade = state.execKSSalesMade
+
             )
         }
     }
+
+
+
 
 }

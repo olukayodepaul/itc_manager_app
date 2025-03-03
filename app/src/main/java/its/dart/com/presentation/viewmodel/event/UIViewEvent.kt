@@ -102,7 +102,6 @@ sealed class PackPlacementEvent {
     data class FreePackPlacementTGTSuper(val freePackPlacementTGTSuper: String): PackPlacementEvent()
     data class FreePackPlacementTGTMLT(val freePackPlacementTGTMLT: String): PackPlacementEvent()
     data class FreePackPlacementExec(val freePackPlacementExec: String): PackPlacementEvent()
-    data class QtyBought(val qtyBought: String) : PackPlacementEvent()
     data class BikeSales(val bikeSales: String): PackPlacementEvent()
     data class SalesManID(val salesManID: String): PackPlacementEvent()
     class OnShowAndHideErrorMessage(val disMiss: Boolean) : PackPlacementEvent()
@@ -112,8 +111,14 @@ sealed class PackPlacementEvent {
     data object ShowOptionalDialog: PackPlacementEvent()
     data object HideOptionalDialog: PackPlacementEvent()
     data object ShowSuccessfulDialog: PackPlacementEvent()
-
-
+    data class OnTGTSuperSalesMadeUOM(val tTGTSuperSalesMadeUOM: String) : PackPlacementEvent()
+    data class OnTGTSuperSalesMade(val tTGTSuperSalesMade: String) : PackPlacementEvent()
+    data class OnTGTMLTSalesMadeUOM(val tTGTMLTSalesMadeUOM: String) : PackPlacementEvent()
+    data class OnTGTMLTSalesMade(val tTGTMLTSalesMade: String) : PackPlacementEvent()
+    data class OnExecKSSalesMadeUOM(val execKSSalesMadeUOM: String) : PackPlacementEvent()
+    data class OnExecKSSalesMade(val execKSSalesMade: String) : PackPlacementEvent()
+    data class OnExecCKSalesMadeUOM(val execCKSalesMadeUOM: String) : PackPlacementEvent()
+    data class OnExecCKSalesMade(val execCKSalesMade: String) : PackPlacementEvent()
 }
 
 sealed class DailyRetailActivityEvent {
@@ -163,6 +168,9 @@ sealed class DailyRetailActivityEvent {
     data object SyncDataToServer: DailyRetailActivityEvent()
     data object HideSuccessfulDialog: DailyRetailActivityEvent()
 
+
+    class OnSetCustomerIdAndURNO(val urno: Int, val customerId: Int) : DailyRetailActivityEvent()
+
 }
 
 
@@ -189,4 +197,15 @@ sealed class DailyActivityForm{
     data class OnPMBPEN(val PMBPEN: String) : DailyActivityForm()
     data class OnPMBWB(val PMBWB: String) : DailyActivityForm()
     data class OnComment(val comment: String) : DailyActivityForm()
+    data class OnAcknowledge(val acknowledge: String): DailyActivityForm()
+
+
+    class OnShowAndHideErrorMessage(val disMiss: Boolean) : DailyActivityForm()
+
+    //button event
+    data object OnConfirmEvent: DailyActivityForm()
+    data object HideOptionalDialog: DailyActivityForm()
+    data object SyncDataToServer: DailyActivityForm()
+    data object HideSuccessfulDialog: DailyActivityForm()
+    class OnSetCustomerIdAndURNO(val urno: Int, val customerId: Int) : DailyActivityForm()
 }

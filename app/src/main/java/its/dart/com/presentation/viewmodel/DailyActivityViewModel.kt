@@ -4,18 +4,25 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import its.dart.com.data.repository.remote.dto.DailyActivityViewDTO
+import its.dart.com.domain.preference.PreferenceInt
 import its.dart.com.domain.repository.remote.DailyActivityInt
 import its.dart.com.presentation.viewmodel.event.DailyRetailActivityEvent
+import its.dart.com.presentation.viewmodel.event.PackPlacementEvent
 import its.dart.com.presentation.viewmodel.state.DailyRetailActivityState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
 @HiltViewModel
-class DailyActivityViewModel @Inject constructor(val remoteRepo: DailyActivityInt): ViewModel() {
+class DailyActivityViewModel @Inject constructor(
+    val remoteRepo: DailyActivityInt,
+    private val sharePreference: PreferenceInt
+): ViewModel() {
 
     private val _uiState = MutableStateFlow(DailyRetailActivityState())
     val uiState: StateFlow<DailyRetailActivityState> = _uiState.asStateFlow()
@@ -67,6 +74,7 @@ class DailyActivityViewModel @Inject constructor(val remoteRepo: DailyActivityIn
                 is DailyRetailActivityEvent.OnConfirmEvent-> updateUI{copy(confirmDialog = true)}
                 is DailyRetailActivityEvent.HideOptionalDialog-> updateUI{copy(confirmDialog = false)}
                 is DailyRetailActivityEvent.HideSuccessfulDialog-> updateUI{copy(success = false)}
+                is DailyRetailActivityEvent.OnSetCustomerIdAndURNO -> updateUI{copy(urno = event.urno, customerId = event.customerId)}
                 is DailyRetailActivityEvent.SyncDataToServer-> syncDataToServer()
             }
     }
@@ -75,7 +83,7 @@ class DailyActivityViewModel @Inject constructor(val remoteRepo: DailyActivityIn
 
         try {
             updateUI { copy(loaders = true) }
-            val getServerResponse = remoteRepo.taskPackPlacement(isBody())
+            val getServerResponse = remoteRepo.taskDailyRetail(isBody())
 
             getServerResponse.onSuccess { data ->
                 if (data.status == 200) {
@@ -110,33 +118,40 @@ class DailyActivityViewModel @Inject constructor(val remoteRepo: DailyActivityIn
         }
     }
 
-    private fun isBody(): DailyActivityViewDTO {
+    private suspend fun isBody(): DailyActivityViewDTO {
         val state = _uiState.value
-        return DailyActivityViewDTO(
-            tTGTSuperStockOut = state.tTGTSuperStockOut,
-            tTGTMLTStockOut = state.tTGTMLTStockOut,
-            execKSStockOut = state.execKSStockOut,
-            execCKStockOut = state.execCKStockOut,
-            tTGTSuperSalesMadeUOM = state.tTGTSuperSalesMadeUOM,
-            tTGTSuperSalesMade = state.tTGTSuperSalesMade,
-            tTGTMLTSalesMadeUOM = state.tTGTMLTSalesMadeUOM,
-            tTGTMLTSalesMade = state.tTGTMLTSalesMade,
-            execKSSalesMadeUOM = state.execKSSalesMadeUOM,
-            execKSSalesMade = state.execKSSalesMade,
-            execCKSalesMadeUOM = state.execCKSalesMadeUOM,
-            execCKSalesMade = state.execCKSalesMade,
-            itcSalesMan = state.itcSalesMan,
-            tTGTSuperRewardUOM = state.tTGTSuperRewardUOM,
-            tTGTSuperReward = state.tTGTSuperReward,
-            tTGTMLTRewardUOM = state.tTGTMLTRewardUOM,
-            tTGTMLTReward = state.tTGTMLTReward,
-            execKSRewardUOM = state.execKSRewardUOM,
-            execKSReward = state.execKSReward,
-            execCKRewardUOM = state.execCKRewardUOM,
-            execCKReward = state.execCKReward,
-            execKSSampling = state.execKSSampling,
-            execCKSampling = state.execCKSampling
-        )
+        return withContext(Dispatchers.IO) {
+            val supervisorCategoryId = sharePreference.getInt("sysCategory", 0)
+            val supervisorId = sharePreference.getInt("id", 0)
+            DailyActivityViewDTO(
+                urno = state.urno,
+                supervisorCategoryId = supervisorCategoryId,
+                supervisorId = supervisorId,
+                customerId = state.customerId,
+                tTGTSuperStockOut = state.tTGTSuperStockOut,
+                tTGTMLTStockOut = state.tTGTMLTStockOut,
+                execKSStockOut = state.execKSStockOut,
+                execCKStockOut = state.execCKStockOut,
+                tTGTSuperSalesMadeUOM = state.tTGTSuperSalesMadeUOM,
+                tTGTSuperSalesMade = state.tTGTSuperSalesMade,
+                tTGTMLTSalesMadeUOM = state.tTGTMLTSalesMadeUOM,
+                tTGTMLTSalesMade = state.tTGTMLTSalesMade,
+                execKSSalesMadeUOM = state.execKSSalesMadeUOM,
+                execKSSalesMade = state.execKSSalesMade,
+                execCKSalesMadeUOM = state.execCKSalesMadeUOM,
+                execCKSalesMade = state.execCKSalesMade,
+                itcSalesMan = state.itcSalesMan,
+                tTGTSuperRewardUOM = state.tTGTSuperRewardUOM,
+                tTGTSuperReward = state.tTGTSuperReward,
+                tTGTMLTRewardUOM = state.tTGTMLTRewardUOM,
+                tTGTMLTReward = state.tTGTMLTReward,
+                execKSRewardUOM = state.execKSRewardUOM,
+                execKSReward = state.execKSReward,
+                execCKRewardUOM = state.execCKRewardUOM,
+                execCKReward = state.execCKReward,
+                execKSSampling = state.execKSSampling,
+                execCKSampling = state.execCKSampling
+            )
+        }
     }
-
 }

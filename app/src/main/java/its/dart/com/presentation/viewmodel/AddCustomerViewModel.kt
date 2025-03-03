@@ -1,5 +1,6 @@
 package its.dart.com.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,6 +31,9 @@ class AddCustomerViewModel @Inject constructor(
 
     private var _customersState = MutableStateFlow<List<PromoterEntity>>(emptyList())
     val customersState: StateFlow<List<PromoterEntity>> = _customersState.asStateFlow()
+
+    private var _merchantState = MutableStateFlow<List<MerchantEntity>>(emptyList())
+    val merchantState: StateFlow<List<MerchantEntity>> = _merchantState.asStateFlow()
 
     private var _repId = MutableStateFlow(0)
     val repId: StateFlow<Int> = _repId.asStateFlow()
@@ -91,7 +95,7 @@ class AddCustomerViewModel @Inject constructor(
             val post = createCustomerRequest(userId, systemCategory.toString())
             val fetchCloudData = remoteRepo.postCustomer(post)
 
-            if(fetchCloudData.status==200){
+            if(fetchCloudData.status==200) {
                 if(systemCategory == 4){
                     updateState { copy(success = true) }
                 }else{
@@ -126,12 +130,20 @@ class AddCustomerViewModel @Inject constructor(
         }
     }
 
-
-
     fun fetchPromoterCustomers() {
         viewModelScope.launch {
             localRepo.getOtherPromoters().collect{ result->
                 _customersState.value = result
+            }
+        }
+    }
+
+    fun fetchMerchantCustomers() {
+        Log.d("epokhai 2", "")
+        viewModelScope.launch {
+            localRepo.getOtherMerchant().collect{ result->
+                Log.d("epokhai 3", result.toString())
+                _merchantState.value = result
             }
         }
     }

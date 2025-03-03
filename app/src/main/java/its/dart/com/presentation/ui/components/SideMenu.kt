@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import android.net.Uri
+import android.util.Log
 import androidx.compose.material.icons.filled.DataArray
 import androidx.compose.material.icons.filled.DataObject
 import androidx.compose.material.icons.filled.DataSaverOn
@@ -29,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import its.dart.com.data.repository.local.entity.MerchantEntity
 import its.dart.com.data.repository.local.entity.PromoterEntity
 import its.dart.com.domain.repository.remote.model.AllCustomersModel
 
@@ -141,6 +143,53 @@ fun DropdownMenuWithDetail(
                     navController.navigate("PackPlacementPage/${details.id}/${details.outlet_name}/${details.urno}")
                 }
             )
+            DropdownMenuItem(
+                text = { Text(text = "Order") },
+                leadingIcon = { Icon(Icons.Outlined.ShoppingCart, contentDescription = "") },
+                onClick = {
+                    expanded = false
+                    navController.navigate("order/${details.id}/${details.outlet_name}/${details.urno}")
+                }
+            )
+        }
+    }
+}
+
+
+
+
+@Composable
+fun MerchantDropdownMenu(
+    navController: NavHostController,
+    details:  MerchantEntity
+) {
+    var expanded by rememberSaveable { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier.wrapContentSize(Alignment.TopEnd)
+    ) {
+        IconButton(onClick = { expanded = !expanded }) {
+            Icon(
+                Icons.Default.MoreVert,
+                tint = Color.Gray.copy(alpha = 1f),
+                contentDescription = "More options",
+                modifier = Modifier.size(20.dp)
+            )
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.wrapContentSize()
+                .background(Color.White)
+                .border(1.dp, Color.LightGray),
+        ) {
+            DropdownMenuItem(
+                text = { Text(text = "Location Finder") },
+                leadingIcon = { Icon(Icons.Outlined.LocationSearching, contentDescription = null) },
+                onClick = { expanded = false }
+            )
+
             DropdownMenuItem(
                 text = { Text(text = "Order") },
                 leadingIcon = { Icon(Icons.Outlined.ShoppingCart, contentDescription = "") },
