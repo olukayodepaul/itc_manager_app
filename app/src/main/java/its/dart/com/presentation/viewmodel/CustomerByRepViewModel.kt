@@ -58,9 +58,7 @@ class CustomerByRepViewModel @Inject constructor(
             _search.value = ""
             try {
                 _customersState.value = GenericState.Loading
-
                 val customerCount = local.getCustomer(option, userId).first()
-
                 if (customerCount == 0) {
                     val daysOfTheWeek = option - getDayAsNumber()
                     val result = cloud.invokeCustomer(userId, daysOfTheWeek, option)
@@ -83,8 +81,7 @@ class CustomerByRepViewModel @Inject constructor(
     fun searchEvent(search: String, repId: Int, setToDefault: Int) {
         _search.value = search
         viewModelScope.launch {
-
-            if(setToDefault == 2){
+            if(setToDefault == 2) {
                 local.getCustomers(_optionState.value , repId).collectLatest { customerEntities ->
                     _customersState.value = GenericState.Success(
                         customerEntities.toAllCustomersModel().toList()
@@ -103,7 +100,6 @@ class CustomerByRepViewModel @Inject constructor(
                     }
                 }
             }
-
         }
     }
 

@@ -3,6 +3,7 @@ package its.dart.com.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import its.dart.com.domain.preference.PreferenceInt
 import its.dart.com.domain.repository.remote.TaskRemote
 import its.dart.com.domain.repository.local.TasksRepository
 import its.dart.com.domain.repository.remote.model.TaskRequestModel
@@ -18,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class TaskViewModel @Inject constructor(
     private val localRep: TasksRepository,
-    private val remoteRepo: TaskRemote
+    private val remoteRepo: TaskRemote,
+    private val sharePreference: PreferenceInt
 ) : ViewModel() {
 
     private val _taskUpdate = MutableStateFlow(TaskViewState())
@@ -58,7 +60,7 @@ class TaskViewModel @Inject constructor(
                 _taskUpdate.value = _taskUpdate.value.copy(dialogLoader = true)
 
                 val request = TaskRequestModel(
-                    userId = 2,
+                    userId = sharePreference.getInt(key="id", defaultValue = 0),
                     taskId = taskId,
                     lat = "0.2",
                     lng = "0.5",
@@ -70,9 +72,9 @@ class TaskViewModel @Inject constructor(
 
                 val cache = TasksModel.builder()
                     .setTaskId(result.taskId.toInt())
-                    .setLatitude("0.0")
-                    .setLongitude("0.0")
-                    .setUserId(1)
+                    .setLatitude("0.2")
+                    .setLongitude("0.5")
+                    .setUserId(sharePreference.getInt(key="id", defaultValue = 0))
                     .setTimeAgo(result.time)
                     .build()
 

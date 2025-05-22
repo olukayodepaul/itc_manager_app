@@ -16,7 +16,7 @@ fun NavigationText(
     onClick: () -> Unit = {},
     text: String = "Reset Password",
     fontWeight: FontWeight = FontWeight(900),
-    color: Color = Color(0xFF008b00),
+    color: Color = Color(0xFF000000),
     fontSize: Int = 17
 ) {
     Text(

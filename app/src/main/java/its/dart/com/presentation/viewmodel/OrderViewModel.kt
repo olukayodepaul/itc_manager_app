@@ -1,16 +1,13 @@
 package its.dart.com.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import its.dart.com.data.repository.local.entity.SalesRepsEntity
 import its.dart.com.data.repository.remote.dto.OrderBodyDTO
 import its.dart.com.data.repository.remote.dto.OrderDTO
 import its.dart.com.domain.preference.PreferenceInt
 import its.dart.com.domain.repository.remote.OrderInt
 import its.dart.com.domain.repository.remote.model.ProductModel
-import its.dart.com.domain.repository.remote.model.RepsModel
 import its.dart.com.domain.usecases.OrderUseCases
 import its.dart.com.presentation.viewmodel.state.GenericState
 import its.dart.com.presentation.viewmodel.state.OrderState
@@ -59,18 +56,20 @@ class OrderViewModel  @Inject constructor(
     }
 
     fun getUiState(urno: Int, repId: Int) {
+        var name: Array<Int> = arrayOf(1, 2, 3, 4, 5,);
+
         _order.value = _order.value.copy(urno = urno, repId = repId)
     }
 
-    fun disMissSuccessfulDialog(){
+    fun disMissSuccessfulDialog() {
         _order.value = _order.value.copy(success = false)
     }
 
-    fun disMissBottomSheet(dismiss: Boolean){
+    fun disMissBottomSheet(dismiss: Boolean) {
         _order.value = _order.value.copy(showAndHideErrorMessage = dismiss)
     }
 
-    fun showConfirmDialog(){
+    fun showConfirmDialog() {
         _order.value = _order.value.copy(confirmDialog = true)
     }
 
@@ -94,6 +93,7 @@ class OrderViewModel  @Inject constructor(
     fun onDisMissConfirm() {
         _order.value = _order.value.copy(confirmDialog = false)
     }
+
 
     fun onSubmit() {
         viewModelScope.launch {
@@ -123,19 +123,19 @@ class OrderViewModel  @Inject constructor(
                     body = result,
                 )
                 remoteRepository.taskRequest(serverRequest)
-                    .onSuccess { result ->
+                    .onSuccess { _ ->
                         _order.value = _order.value.copy(
-                                confirmDialog = false,
-                                loaders = false,
-                                success = true
-                            )
+                            confirmDialog = false,
+                            loaders = false,
+                            success = true
+                        )
                     }
                     .onFailure { error ->
                         _order.value = _order.value.copy(
-                                showAndHideErrorMessage = true,
-                                loaders = false,
-                                errorMessage = error.message.toString()
-                            )
+                            showAndHideErrorMessage = true,
+                            loaders = false,
+                            errorMessage = error.message.toString()
+                        )
                     }
             }
         }

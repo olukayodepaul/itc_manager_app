@@ -196,8 +196,20 @@ fun First(
         ),
         shape = RoundedCornerShape(12.dp)
     )
+
     Text(
-        text = "Is the frequency of visits sufficient for your needs?",
+        text = "Do the reps give you promo items or Gratis?",
+        style = MaterialTheme.typography.bodyMedium,
+        modifier = Modifier.padding(bottom = 4.dp)
+    )
+    DropDownMenu(
+        options = listOf("Yes", "No"),
+        selectedOption = uiState.recivePromoItem,
+        onOptionSelected = { viewModel.onEvent(SurveyEvent.OnRecivePromoItem(it)) }
+    )
+
+    Text(
+        text = "",
         style = MaterialTheme.typography.bodyMedium,
         modifier = Modifier.padding(bottom = 4.dp)
     )
@@ -206,6 +218,7 @@ fun First(
         selectedOption = uiState.salesRepVisitSequence,
         onOptionSelected = { viewModel.onEvent(SurveyEvent.SalesRepVisitSequence(it)) }
     )
+
     Spacer(modifier = Modifier.height(8.dp))
     Text(
         text = "Do you feel the sales representative is proactive?",

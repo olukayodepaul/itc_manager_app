@@ -27,6 +27,10 @@ sealed class AddCustomerViewEvent{
     data object OnErrorClear: AddCustomerViewEvent()
     data object OnSuccessFulReset: AddCustomerViewEvent()
     class OnShowAndHideErrorMessage(val disMiss: Boolean) : AddCustomerViewEvent()
+    class OnSearchEventMerchant(val searchState: String, val setToDefault:Int = 0): AddCustomerViewEvent()
+    data object OnResetSearchMerchant: AddCustomerViewEvent()
+    class OnSearchEventPromoter(val searchState: String, val setToDefault:Int = 0): AddCustomerViewEvent()
+    data object OnResetSearchPromoter: AddCustomerViewEvent()
 }
 
 data class OptionData(
@@ -51,6 +55,8 @@ sealed class SurveyEvent {
     data class SalesRepVisitDate(val salesRepVisitDate: String) : SurveyEvent()
     data class SalesRepVisitSequence(val salesRepVisitSequence: String) : SurveyEvent()
     data class SalesRepVisitProactive(val salesRepVisitProactive: String) : SurveyEvent()
+
+    data class OnRecivePromoItem(val recivePromoItem: String) : SurveyEvent()
 
     // Second Two
     data class HowSatisfy(val howSatisfy: String) : SurveyEvent()

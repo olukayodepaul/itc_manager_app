@@ -114,7 +114,9 @@ data class SurveyStateDTO(
     val urno: String = "",
     @SerialName("supervisor_category_id") val supervisorCategoryId: String = "",
     @SerialName("supervisor_id") val supervisorId: String = "",
-    @SerialName("rep_id") val repId: Int = 0
+    @SerialName("rep_id") val repId: Int = 0,
+    @SerialName("recive_promo_item") val recivePromoItem: String = "",
+
 )
 
 //save Response

@@ -45,6 +45,9 @@ data class SurveyState(
     val salesRepVisitSequence: String = "",
     val salesRepVisitProactive: String = "",
 
+
+    val recivePromoItem: String = "",
+
     //two
     val howSatisfy: String = "",
     val regularVisit: String = "",

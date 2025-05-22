@@ -9,4 +9,8 @@ interface OtherCustomer {
     suspend fun persistOtherPromoters(task: PromoterEntity)
     suspend fun persistOtherMerchants(task: MerchantEntity)
     fun getOtherMerchant(): Flow<List<MerchantEntity>>
+    suspend fun searchMerchantByDefault(): List<MerchantEntity>
+    suspend fun searchMerchant(search: String): List<MerchantEntity>
+    suspend fun searchPromoterByDefault(): List<PromoterEntity>
+    suspend fun searchPromoter(search: String): List<PromoterEntity>
 }

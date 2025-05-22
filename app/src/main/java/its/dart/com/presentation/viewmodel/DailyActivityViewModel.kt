@@ -35,6 +35,8 @@ class DailyActivityViewModel @Inject constructor(
         _uiState.value = _uiState.value.update()
     }
 
+
+
     private fun eventHandler(event: DailyRetailActivityEvent) {
             when (event) {
                 // Stock Out Events

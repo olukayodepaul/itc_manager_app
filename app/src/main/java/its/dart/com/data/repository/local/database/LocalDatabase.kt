@@ -94,9 +94,21 @@ interface LocalDatabase {
 //    @Query("SELECT * FROM promoter WHERE outlet_name LIKE '%' || :search || '%' OR contact_phone LIKE '%' || :search || '%' ")
 //    suspend fun searchPromoter(search: String): List<PromoterEntity>
 //
-//    //search Merchant
-//    @Query("SELECT * FROM promoter WHERE outlet_name LIKE '%' || :search || '%' OR contact_phone LIKE '%' || :search || '%' ")
-//    suspend fun searchMerchant(search: String): List<MerchantEntity>
+
+    //search Merchant
+    @Query("SELECT * FROM merchant order by id desc")
+    suspend fun searchMerchantByDefault(): List<MerchantEntity>
+
+    @Query("SELECT * FROM merchant WHERE outlet_name LIKE '%' || :search || '%' OR contact_phone LIKE '%' || :search || '%' ")
+    suspend fun searchMerchant(search: String): List<MerchantEntity>
+
+
+    @Query("SELECT * FROM promoter order by id desc")
+    suspend fun searchPromoterByDefault(): List<PromoterEntity>
+
+    @Query("SELECT * FROM promoter WHERE outlet_name LIKE '%' || :search || '%' OR contact_phone LIKE '%' || :search || '%' ")
+    suspend fun searchPromoter(search: String): List<PromoterEntity>
+
 
 }
 

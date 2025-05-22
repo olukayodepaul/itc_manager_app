@@ -1,6 +1,5 @@
 package its.dart.com.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,6 +33,9 @@ class AddCustomerViewModel @Inject constructor(
 
     private var _merchantState = MutableStateFlow<List<MerchantEntity>>(emptyList())
     val merchantState: StateFlow<List<MerchantEntity>> = _merchantState.asStateFlow()
+
+    private val _search = MutableStateFlow("")
+    val search: StateFlow<String> = _search.asStateFlow()
 
     private var _repId = MutableStateFlow(0)
     val repId: StateFlow<Int> = _repId.asStateFlow()
@@ -127,6 +129,40 @@ class AddCustomerViewModel @Inject constructor(
             is AddCustomerViewEvent.OnErrorClear->{ updateState { copy(errorMessage = "")}}
             is AddCustomerViewEvent.OnSuccessFulReset->updateState { copy(success = false) }
             is AddCustomerViewEvent.OnShowAndHideErrorMessage-> updateState { copy(showAndHideErrorMessage = event.disMiss) }
+            is AddCustomerViewEvent.OnSearchEventMerchant-> searchEventMerchant(event.searchState, event.setToDefault)
+            is AddCustomerViewEvent.OnResetSearchMerchant->{_search.value = ""}
+            is AddCustomerViewEvent.OnSearchEventPromoter-> searchEventPromoter(event.searchState, event.setToDefault)
+            is AddCustomerViewEvent.OnResetSearchPromoter->{_search.value = ""}
+        }
+    }
+
+    private fun searchEventPromoter(search: String, setToDefault: Int) {
+        _search.value = search
+        viewModelScope.launch {
+            if(setToDefault == 0) {
+                if (search.isNotEmpty()) {
+                    _customersState.value = localRepo.searchPromoter(search).toList()
+                }else{
+                    _customersState.value = localRepo.searchPromoterByDefault().toList()
+                }
+            }else{
+                _customersState.value = localRepo.searchPromoterByDefault().toList()
+            }
+        }
+    }
+
+    private fun searchEventMerchant(search: String, setToDefault: Int) {
+        _search.value = search
+        viewModelScope.launch {
+            if(setToDefault == 0) {
+                if (search.isNotEmpty()) {
+                    _merchantState.value = localRepo.searchMerchant(search).toList()
+                }else{
+                    _merchantState.value = localRepo.searchMerchantByDefault().toList()
+                }
+            }else{
+                _merchantState.value = localRepo.searchMerchantByDefault().toList()
+            }
         }
     }
 
@@ -139,10 +175,8 @@ class AddCustomerViewModel @Inject constructor(
     }
 
     fun fetchMerchantCustomers() {
-        Log.d("epokhai 2", "")
         viewModelScope.launch {
             localRepo.getOtherMerchant().collect{ result->
-                Log.d("epokhai 3", result.toString())
                 _merchantState.value = result
             }
         }

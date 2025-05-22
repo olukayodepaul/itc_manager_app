@@ -26,4 +26,20 @@ class OtherCustomerImpl @Inject constructor(private val localDatabase: LocalData
         return localDatabase.getMerchants()
     }
 
+    override suspend fun searchMerchantByDefault(): List<MerchantEntity> {
+        return localDatabase.searchMerchantByDefault()
+    }
+
+    override suspend fun searchMerchant(search: String): List<MerchantEntity> {
+        return localDatabase.searchMerchant(search)
+    }
+
+    override suspend fun searchPromoterByDefault(): List<PromoterEntity> {
+        return localDatabase.searchPromoterByDefault()
+    }
+
+    override suspend fun searchPromoter(search: String): List<PromoterEntity> {
+        return localDatabase.searchPromoter(search)
+    }
+
 }

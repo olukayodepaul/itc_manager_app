@@ -67,6 +67,7 @@ class SurveyViewModel @Inject constructor(
             is SurveyEvent.OnConfirm->onConfirm()
             is SurveyEvent.OnclickButton -> onClick()
             is SurveyEvent.OnOkClick -> onOkClick()
+            is SurveyEvent.OnRecivePromoItem->updateSurveyState { copy(recivePromoItem = event.recivePromoItem) }
         }
     }
 
@@ -109,7 +110,8 @@ class SurveyViewModel @Inject constructor(
                 urno = survey.urno,
                 supervisorCategoryId = sharePreference.getInt(key="sysCategory", defaultValue = 0).toString(),
                 supervisorId = sharePreference.getInt(key="id", defaultValue = 0).toString(),
-                repId = survey.repId
+                repId = survey.repId,
+                recivePromoItem = survey.recivePromoItem
             )
 
             //bottom sheet for error.

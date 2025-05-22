@@ -23,8 +23,7 @@ object NetworkModule {
     fun provideKtorClient(): HttpClient {
         return HttpClient {
             install(DefaultRequest) {
-                //url("http://159.65.30.221:9300")
-                url("https://f278-102-89-32-223.ngrok-free.app")
+                url("http://159.65.30.221:9300")
                 header("Content-Type", "application/json")
             }
             install(ContentNegotiation) {

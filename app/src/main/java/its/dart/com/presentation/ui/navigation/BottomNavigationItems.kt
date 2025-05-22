@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavHostController
 import its.dart.com.presentation.ui.screens.AttendantScreen
+import its.dart.com.presentation.ui.screens.ErrorScreen
 import its.dart.com.presentation.ui.screens.Promo
 import its.dart.com.presentation.ui.screens.SalesRepScreen
 import its.dart.com.presentation.ui.screens.WholeSellerScreen
@@ -42,19 +43,19 @@ fun getTabItems(navController: NavHostController, category: Int): List<TabItem> 
             title = "Supervisor",
             unselectedIcon = Icons.Outlined.Shop,
             selectedIcon = Icons.Filled.Shop,
-            content = { if(category==3) SalesRepScreen(navController) else  null}
+            content = { if(category==4) SalesRepScreen(navController) else  ErrorScreen()}
         ),
         TabItem(
             title = "Promoter",
             unselectedIcon = Icons.Outlined.CardGiftcard,
             selectedIcon = Icons.Filled.CardGiftcard,
-            content = { if(category==6) Promo(navController) else null}
+            content = { if(category==6) Promo(navController) else ErrorScreen()}
         ),
         TabItem(
             title = "Merchant",
             unselectedIcon = Icons.Outlined.ShoppingCart,
             selectedIcon = Icons.Filled.ShoppingCart,
-            content = { if(category==5) WholeSellerScreen(navController) else null }
+            content = { if(category==5) WholeSellerScreen(navController) else ErrorScreen() }
         )
     )
 }

@@ -122,4 +122,9 @@ dependencies {
 
     //material icon for the application
     implementation("androidx.compose.material:material-icons-extended:1.7.7")
+
+
+    //google map
+    implementation("com.google.maps.android:maps-compose:2.15.0")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
 }
