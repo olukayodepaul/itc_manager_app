@@ -1,5 +1,6 @@
 package its.dart.com.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -56,8 +57,6 @@ class OrderViewModel  @Inject constructor(
     }
 
     fun getUiState(urno: Int, repId: Int) {
-        var name: Array<Int> = arrayOf(1, 2, 3, 4, 5,);
-
         _order.value = _order.value.copy(urno = urno, repId = repId)
     }
 
@@ -120,8 +119,13 @@ class OrderViewModel  @Inject constructor(
                     ).toString(),
                     supervisorId = sharePreference.getInt(key = "id", defaultValue = 0).toString(),
                     repId = order.value.repId,
-                    body = result,
+                    data = result,
+                    lat = 0.0,
+                    lng = 0.0
                 )
+
+                Log.d("check_logger_epo", serverRequest.toString())
+
                 remoteRepository.taskRequest(serverRequest)
                     .onSuccess { _ ->
                         _order.value = _order.value.copy(

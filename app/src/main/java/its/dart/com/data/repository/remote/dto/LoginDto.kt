@@ -133,7 +133,9 @@ data class OrderDTO(
     @SerialName("supervisor_category_id") val supervisorCategoryId: String,
     @SerialName("supervisor_id") val supervisorId: String,
     @SerialName("rep_id") val repId: Int = 0,
-    val body : List<OrderBodyDTO>
+    val data : List<OrderBodyDTO>,
+    var lat: Double = 0.0,
+    var lng: Double = 0.0
 )
 
 @Serializable
