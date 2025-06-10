@@ -1,6 +1,5 @@
 package its.dart.com.data.repository.remote
 
-import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
@@ -20,7 +19,6 @@ class OrderImpl @Inject constructor(private val httpClient: HttpClient) : OrderI
                 contentType(ContentType.Application.Json)
                 setBody(body)
             }
-            Log.d("epokai", "${response.body<SurveyStateResDTO>()}")
             response.body<SurveyStateResDTO>()
         }
     }
