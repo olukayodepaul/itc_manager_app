@@ -1,6 +1,5 @@
 package its.dart.com.data.repository.remote
 
-import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -33,7 +32,6 @@ class LoginRemoteDataImpl @Inject constructor(private val httpClient: HttpClient
     override suspend fun getMerchantAndPromoterCustomers(category_id: String, user_id: String): List<MerchantDTO> {
         return try {
             val response = httpClient.get("/v3/all/merchant") {
-                Log.d("epokhai 1", "here2")
                 url {
                     parameter("category_id", category_id)
                     parameter("user_id", user_id)
