@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.ln
 
 @HiltViewModel
 class SurveyViewModel @Inject constructor(
@@ -111,7 +112,9 @@ class SurveyViewModel @Inject constructor(
                 supervisorCategoryId = sharePreference.getInt(key="sysCategory", defaultValue = 0).toString(),
                 supervisorId = sharePreference.getInt(key="id", defaultValue = 0).toString(),
                 repId = survey.repId,
-                recivePromoItem = survey.recivePromoItem
+                recivePromoItem = survey.recivePromoItem,
+                lat = 0.0,
+                lng = 0.0
             )
 
             //bottom sheet for error.

@@ -116,6 +116,8 @@ data class SurveyStateDTO(
     @SerialName("supervisor_id") val supervisorId: String = "",
     @SerialName("rep_id") val repId: Int = 0,
     @SerialName("recive_promo_item") val recivePromoItem: String = "",
+    val lat: Double = 0.0,
+    val lng: Double = 0.0
 
 )
 
