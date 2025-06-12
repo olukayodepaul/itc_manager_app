@@ -118,7 +118,6 @@ data class SurveyStateDTO(
     @SerialName("recive_promo_item") val recivePromoItem: String = "",
     val lat: Double = 0.0,
     val lng: Double = 0.0
-
 )
 
 //save Response

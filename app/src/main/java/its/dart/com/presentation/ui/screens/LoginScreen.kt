@@ -166,3 +166,15 @@ fun LoginButton(
         text = "Login",
     )
 }
+
+
+@Composable
+fun ButtonPost(
+    click: ()->Unit
+) {
+    CButton(
+        buttonState = true,
+        onClick = click,
+        text = "Post",
+    )
+}

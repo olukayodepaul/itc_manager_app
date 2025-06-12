@@ -122,7 +122,7 @@ fun CustomerSurveyScreen(
             Fourth(viewModel = viewModel)
             Fifth(viewModel = viewModel)
 
-            LoginButton(
+            ButtonPost(
                 click = {
                     viewModel.onEvent(SurveyEvent.OnclickButton)
                 }
